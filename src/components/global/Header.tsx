@@ -12,7 +12,7 @@ export default function Header() {
         className="max-h-screen min-h-screen object-cover"
       />
       <div className="absolute inset-0 h-screen flex flex-col justify-center items-center gap-14 ">
-        <h1 className="flex justify-center items-center text-5xl sm:text-6xl font-bold text-gray-100 text-center">
+        <h1 className="text-5xl sm:text-6xl font-bold text-white text-center mt-50">
           Simplifiez votre comptabilité. Créez des factures gratuites en
           quelques clics
         </h1>

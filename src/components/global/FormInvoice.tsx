@@ -1,6 +1,5 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-import InvoicePro from "./InvoicePro";
 import InvoiceSimple from "./InvoiceSimple";
 
 export default function FormInvoice() {
@@ -14,10 +13,6 @@ export default function FormInvoice() {
         </TabsList>
         <TabsContent value="account">
           <InvoiceSimple />
-        </TabsContent>
-        <TabsContent value="password">
-          {/* INVOICE PRO */}
-          <InvoicePro />
         </TabsContent>
       </Tabs>
     </div>

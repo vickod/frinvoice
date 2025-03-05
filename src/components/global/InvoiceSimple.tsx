@@ -1,5 +1,7 @@
 "use client";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Card,
   CardContent,
@@ -35,9 +37,6 @@ export default function InvoiceSimple() {
   );
   const [selectedDueDate, setSelectedDueDate] = useState<Date | undefined>();
   const [isTvaIncluded, setIsTvaIncluded] = useState(false);
-  const handleSwitchChange = (checked: boolean) => {
-    setIsTvaIncluded(checked);
-  };
   const [price, setPrice] = useState("");
   const [quantity, setQuantity] = useState("");
   const [tva, setTva] = useState("");
@@ -46,6 +45,9 @@ export default function InvoiceSimple() {
   const [paymentMethodSelected, setPaymentMethodSelected] =
     useState("notInclude");
 
+  const handleSwitchChange = (checked: boolean) => {
+    setIsTvaIncluded(checked);
+  };
   const calculateTotal =
     isTvaIncluded && Number(tva) > 0
       ? ((Number(quantity) || 0) * (Number(price) || 0) * Number(tva)) / 100 +
@@ -56,18 +58,72 @@ export default function InvoiceSimple() {
   const calculateTotHtva = (Number(quantity) || 0) * (Number(price) || 0);
   console.log(isTvaIncluded);
 
-  type FormFields = {
-    name: string;
-    email: string;
-  };
+  const schema = z.object({
+    name: z
+      .string()
+      .regex(/^[A-Za-z\s]+$/, "Veuillez saisir un nom valide")
+      .min(2, "Nom invalide"),
+    address: z.string().optional(),
+    // cp: z.number().optional(),
+    // city: z.string().optional(),
+    // country: z.string().optional(),
+    // email: z.string().email("email non valide").optional(),
+    // tva: z.string().optional(),
+    // iban: z.string().optional(),
+
+    // clientName: z
+    //   .string()
+    //   .regex(/^[A-Za-z\s]+$/, "Veuillez saisir un nom valide")
+    //   .min(2, "Nom invalide"),
+    // clientAddress: z.string(),
+    // clientCp: z.number(),
+    // clientCity: z.string(),
+    // clientCountry: z.string(),
+    // clientEmail: z.string(),
+    // clienttva: z.string(),
+  });
+
+  type FormFields = z.infer<typeof schema>;
+
+  // type FormFields = {
+  //   name: string;
+  //   address: string;
+  //   cp: number;
+  //   city: string;
+  //   country: string;
+  //   email: string;
+  //   tva: string;
+  //   iban: string;
+
+  //   clientName: string;
+  //   clientAddress: string;
+  //   clientCp: number;
+  //   clientCity: string;
+  //   clientCountry: string;
+  //   clientEmail: string;
+  //   clienttva: string;
+  // };
 
   const {
     register,
     handleSubmit,
-    formState: { errors },
-  } = useForm<FormFields>();
+    formState: { errors, isSubmitting },
+    reset,
+    getValues,
+  } = useForm<FormFields>({
+    resolver: zodResolver(schema),
+  });
 
-  const onSubmit: SubmitHandler<FormFields> = (data) => {
+  const onSubmit: SubmitHandler<FormFields> = async (data) => {
+    // try {
+    //   const response = await fetch("/api/submit-form", {
+    //     method: "POST",
+    //     headers: {
+    //       "content-type": "application/json",
+    //     },
+    //     body: JSON.stringify(data),
+    //   });
+    // } catch (e) {}
     console.log(data);
   };
 
@@ -83,84 +139,65 @@ export default function InvoiceSimple() {
             <div className="flex flex-col gap-4 w-1/2">
               <Label className="text-lg font-bold">Prestataire:</Label>
               <div className="flex gap-2">
-                <Label className="whitespace-nowrap text-neutral-600">
-                  Nom complet:<span className="text-red-500">*</span>
-                </Label>
                 <Input
-                  {...register("name", {
-                    required: "vous devez saisir le nom",
-                  })}
+                  placeholder="Le nom de votre entreprise"
+                  {...register("name")}
                 />
               </div>
               {errors.name && (
                 <p className="text-red-500">{errors.name.message}</p>
               )}
               <div className="flex gap-2">
-                <Label className="text-neutral-600">Adresse:</Label>
-                <Input placeholder="rue + numéro" />
+                <Input
+                  placeholder="Adresse: rue + numéro"
+                  {...register("address")}
+                />
               </div>
+              {errors.address && (
+                <p className="text-red-500">{errors.address.message}</p>
+              )}
+              <div className="flex gap-2">
+                <Input placeholder="Code postal" />
 
-              <div className="flex gap-2">
-                <Label className="whitespace-nowrap text-neutral-600">
-                  Code postal:
-                </Label>
-                <Input />
-                <Label className="text-neutral-600">Ville:</Label>
-                <Input />
+                <Input placeholder="Ville" />
               </div>
               <div className="flex gap-2">
-                <Label className="text-neutral-600">Pays:</Label>
-                <Input />
+                <Input placeholder="Pays" />
               </div>
               <div className="flex gap-2">
-                <Label className="text-neutral-600">Email:</Label>
-                <Input />
+                <Input placeholder="Email" />
+              </div>
+              {/* {errors.email && (
+                <p className="text-red-500">{errors.email.message}</p>
+              )} */}
+              <div className="flex gap-2">
+                <Input placeholder="№ de TVA" />
               </div>
               <div className="flex gap-2">
-                <Label className="whitespace-nowrap text-neutral-600">
-                  № de TVA:
-                </Label>
-                <Input />
-              </div>
-              <div className="flex gap-2">
-                <Label className="text-neutral-600">IBAN:</Label>
-                <Input />
+                <Input placeholder="IBAN" />
               </div>
             </div>
             <div className="flex flex-col gap-4 w-1/2">
               <Label className="text-lg font-bold">Client:</Label>
               <div className="flex gap-2">
-                <Label className="whitespace-nowrap text-neutral-600">
-                  Nom complet:<span className="text-red-500">*</span>
-                </Label>
-                <Input />
+                <Input placeholder="Nom" />
               </div>
               <div className="flex gap-2">
-                <Label className="text-neutral-600">Adresse:</Label>
-                <Input placeholder="rue + numéro" />
+                <Input placeholder="Adresse: rue + numéro" />
               </div>
 
               <div className="flex gap-2">
-                <Label className="whitespace-nowrap text-neutral-600">
-                  Code postal:
-                </Label>
-                <Input />
-                <Label className="text-neutral-600">Ville:</Label>
-                <Input />
+                <Input placeholder="Code postal" />
+                <Input placeholder="Ville" />
               </div>
               <div className="flex gap-2">
-                <Label className="text-neutral-600">Pays:</Label>
-                <Input />
+                <Input placeholder="Pays" />
               </div>
               <div className="flex gap-2">
-                <Label className="text-neutral-600">Email:</Label>
-                <Input />
+                <Input placeholder="Email" />
               </div>
               <div className="flex gap-2">
-                <Label className="whitespace-nowrap text-neutral-600">
-                  № de TVA:
-                </Label>
-                <Input />
+                <Input placeholder="№ de TVA" />
               </div>
             </div>
           </div>
@@ -424,7 +461,9 @@ export default function InvoiceSimple() {
             <Label>Commentaires</Label>
             <Textarea />
           </div>
-          <Button type="submit">Submit</Button>
+          <div className="flex mt-8 justify-end">
+            <Button type="submit">Submit</Button>
+          </div>
         </form>
       </CardContent>
     </Card>

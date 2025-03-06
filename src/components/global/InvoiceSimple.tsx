@@ -30,6 +30,9 @@ import { CalendarIcon } from "lucide-react";
 import { Calendar } from "../ui/calendar";
 import { Switch } from "../ui/switch";
 import { formatCurrency } from "@/utils/formatCurrency";
+import { FormFieldsType, schema } from "@/lib/zodSchemas";
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas-pro";
 
 export default function InvoiceSimple() {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(
@@ -58,77 +61,57 @@ export default function InvoiceSimple() {
   const calculateTotHtva = (Number(quantity) || 0) * (Number(price) || 0);
   console.log(isTvaIncluded);
 
-  const schema = z.object({
-    name: z
-      .string()
-      .regex(/^[A-Za-z\s]+$/, "Veuillez saisir un nom valide")
-      .min(2, "Nom invalide"),
-    address: z.string().optional(),
-    // cp: z.number().optional(),
-    // city: z.string().optional(),
-    // country: z.string().optional(),
-    // email: z.string().email("email non valide").optional(),
-    // tva: z.string().optional(),
-    // iban: z.string().optional(),
-
-    // clientName: z
-    //   .string()
-    //   .regex(/^[A-Za-z\s]+$/, "Veuillez saisir un nom valide")
-    //   .min(2, "Nom invalide"),
-    // clientAddress: z.string(),
-    // clientCp: z.number(),
-    // clientCity: z.string(),
-    // clientCountry: z.string(),
-    // clientEmail: z.string(),
-    // clienttva: z.string(),
-  });
-
-  type FormFields = z.infer<typeof schema>;
-
-  // type FormFields = {
-  //   name: string;
-  //   address: string;
-  //   cp: number;
-  //   city: string;
-  //   country: string;
-  //   email: string;
-  //   tva: string;
-  //   iban: string;
-
-  //   clientName: string;
-  //   clientAddress: string;
-  //   clientCp: number;
-  //   clientCity: string;
-  //   clientCountry: string;
-  //   clientEmail: string;
-  //   clienttva: string;
-  // };
-
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
     reset,
-    getValues,
-  } = useForm<FormFields>({
+    setError,
+  } = useForm<FormFieldsType>({
     resolver: zodResolver(schema),
   });
 
-  const onSubmit: SubmitHandler<FormFields> = async (data) => {
-    // try {
-    //   const response = await fetch("/api/submit-form", {
-    //     method: "POST",
-    //     headers: {
-    //       "content-type": "application/json",
-    //     },
-    //     body: JSON.stringify(data),
-    //   });
-    // } catch (e) {}
-    console.log(data);
+  const onSubmit: SubmitHandler<FormFieldsType> = async (
+    data: FormFieldsType
+  ) => {
+    console.log("Données soumises:", data);
+    const response = await fetch("api/formInvoice", {
+      method: "POST",
+      body: JSON.stringify({
+        name: data.name,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const responseData = await response.json();
+    if (!response.ok) {
+      alert("erreur de soumission du formulaire");
+      return;
+    }
+    if (responseData.errors) {
+      const errors = responseData.errors;
+      if (errors.name) {
+        setError("name", {
+          type: "server",
+          message: errors.name,
+        });
+      }
+    }
+    const input = document.getElementById("pdf-content");
+    if (input) {
+      const canvas = await html2canvas(input);
+      const imgData = canvas.toDataURL("image/png");
+      const pdf = new jsPDF();
+      const imgWidth = 210; // Largeur page A4
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+      pdf.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight);
+      pdf.save("facture.pdf");
+    }
   };
 
   return (
-    <Card>
+    <Card id="pdf-content">
       <CardHeader>
         <CardTitle></CardTitle>
         <CardDescription></CardDescription>
@@ -150,12 +133,12 @@ export default function InvoiceSimple() {
               <div className="flex gap-2">
                 <Input
                   placeholder="Adresse: rue + numéro"
-                  {...register("address")}
+                  // {...register("address")}
                 />
               </div>
-              {errors.address && (
+              {/* {errors.address && (
                 <p className="text-red-500">{errors.address.message}</p>
-              )}
+              )} */}
               <div className="flex gap-2">
                 <Input placeholder="Code postal" />
 

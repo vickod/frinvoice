@@ -2,17 +2,7 @@
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
+import { Drawer, DrawerTrigger } from "@/components/ui/drawer";
 
 import {
   Card,
@@ -43,8 +33,7 @@ import { Calendar } from "../ui/calendar";
 import { Switch } from "../ui/switch";
 import { formatCurrency } from "@/utils/formatCurrency";
 import { FormFieldsType, schema } from "@/lib/zodSchemas";
-import jsPDF from "jspdf";
-import html2canvas from "html2canvas-pro";
+
 import PdfContent from "./PdfContent";
 
 export default function InvoiceSimple() {
@@ -117,28 +106,10 @@ export default function InvoiceSimple() {
     setFormData({
       name: data.name,
     });
-    // setTimeout(async () => {
-    //   const input = document.getElementById("pdf-content");
-    //   if (input) {
-    //     const canvas = await html2canvas(input, {
-    //       useCORS: true,
-    //       scale: 2,
-    //     });
-    //     const imgData = canvas.toDataURL("image/png");
-    //     const pdf = new jsPDF();
-    //     const imgWidth = 210; // Largeur page A4
-    //     const imgHeight = (canvas.height * imgWidth) / canvas.width;
-    //     pdf.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight);
-    //     pdf.save("facture.pdf");
-    //   }
-    // }, 500);
   };
 
   return (
     <>
-      <div>
-        <div id="pdf-content"></div>
-      </div>
       <Card>
         <CardHeader>
           <CardTitle></CardTitle>
@@ -473,12 +444,12 @@ export default function InvoiceSimple() {
               <Textarea />
             </div>
             <div className="flex mt-8 justify-end">
-              <AlertDialog>
-                <AlertDialogTrigger asChild>
+              <Drawer>
+                <DrawerTrigger asChild>
                   <Button type="submit">Submit</Button>
-                </AlertDialogTrigger>
+                </DrawerTrigger>
                 {formData && <PdfContent name={formData.name} />}
-              </AlertDialog>
+              </Drawer>
             </div>
           </form>
         </CardContent>

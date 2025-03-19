@@ -22,34 +22,29 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 import { Button } from "../ui/button";
-import jsPDF from "jspdf";
-import html2canvas from "html2canvas-pro";
 import { useReactToPrint } from "react-to-print";
 import { useRef } from "react";
-
-export default function PdfContent({ name }: FormFieldsType) {
+import { Label } from "../ui/label";
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
+export default function PdfContent({
+  name,
+  address,
+  cp,
+  city,
+  country,
+  email,
+  tva,
+  iban,
+  clientName,
+  clientAddress,
+  clientCp,
+  clientCity,
+  clientCountry,
+  clientEmail,
+}: FormFieldsType) {
   const contentRef = useRef<HTMLDivElement>(null);
   const reactToPrintFn = useReactToPrint({ contentRef });
-
-  //   const onSubmit = async () => {
-  //     const input = document.getElementById("pdf-content");
-  //     if (input) {
-  //       try {
-  //         const canvas = await html2canvas(input, {
-  //           useCORS: true,
-  //           scale: 2,
-  //         });
-  //         const imgData = canvas.toDataURL("image/png");
-  //         const pdf = new jsPDF();
-  //         const imgWidth = 210; // Largeur page A4
-  //         const imgHeight = (canvas.height * imgWidth) / canvas.width;
-  //         pdf.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight);
-  //         pdf.save("facture.pdf");
-  //       } catch (error) {
-  //         console.log(error);
-  //       }
-  //     }
-  //   };
+  console.log();
 
   return (
     <>
@@ -57,7 +52,10 @@ export default function PdfContent({ name }: FormFieldsType) {
         <div className="h-full overflow-y-scroll">
           <div>
             <DrawerHeader className="">
-              <DrawerTitle></DrawerTitle>
+              <VisuallyHidden>
+                <DrawerTitle>Titre accessible mais masqué</DrawerTitle>
+              </VisuallyHidden>
+
               <DrawerDescription asChild className="mx-auto h-full  ">
                 <div
                   className="bg-white p-10 rounded shadow-md  flex flex-col justify-between  "
@@ -73,11 +71,14 @@ export default function PdfContent({ name }: FormFieldsType) {
                         </div>
                         <div>
                           <p className="font-bold">{name}</p>
-                          <p>Rue de la ville 44</p>
-                          <p>3000 Bruxelles, Belgique</p>
-                          <p>exempple@mail.com</p>
-                          <p>123-456-789</p>
-                          <p>BE 4444 6666 8888</p>
+                          <p>{address && address}</p>
+                          <p>
+                            {cp == 0 || cp == undefined ? "" : cp} {city},{" "}
+                            {country}
+                          </p>
+                          <p>{email && email}</p>
+                          {/* <p>123-456-789</p> */}
+                          {/* <p>BE 4444 6666 8888</p> */}
                         </div>
                       </div>
                       <div className="w-1/2 flex flex-col items-end">
@@ -85,12 +86,18 @@ export default function PdfContent({ name }: FormFieldsType) {
                           <h1 className="font-bold text-xl text-neutral-500">
                             Client:
                           </h1>
-                          <p className="font-bold">{name}</p>
-                          <p>Rue de la ville 44</p>
-                          <p>3000, Bruxelles</p>
-                          <p>Belgique</p>
-                          <p>exempple@mail.com</p>
-                          <p>123-456-789</p>
+                          <p className="font-bold">
+                            {clientName && clientName}
+                          </p>
+                          <p>{clientAddress && clientAddress}</p>
+                          <p>
+                            {clientCp && clientCp}{" "}
+                            {clientCity && clientCity + ","}{" "}
+                            {clientCountry && clientCountry}
+                          </p>
+
+                          <p>{clientEmail && clientEmail}</p>
+                          {/* <p>123-456-789</p> */}
                         </div>
                       </div>
                     </div>
@@ -108,12 +115,16 @@ export default function PdfContent({ name }: FormFieldsType) {
                         <div className="text-black">
                           <p>
                             <span className="font-bold">Emis le:</span>{" "}
-                            17/03/2025
+                            02/02/2022
                           </p>
-                          <p>
+                          {/* <p>
                             <span className="font-bold">Echeance :</span>{" "}
-                            17/04/2025
-                          </p>
+                            {selectedDueDateH
+                              ? new Intl.DateTimeFormat("fr-BE", {
+                                  dateStyle: "long",
+                                }).format(selectedDueDateH)
+                              : ""}
+                          </p> */}
                         </div>
                       </div>
                     </div>
@@ -143,25 +154,12 @@ export default function PdfContent({ name }: FormFieldsType) {
                             <TableCell>21%</TableCell>
                             <TableCell className="text-right">10498$</TableCell>
                           </TableRow>
-                          <TableRow className="text-black">
-                            <TableCell className="break-words whitespace-normal pr-6 ">
-                              Lorem ipsum dolor sit amet consectetur adipisicing
-                              elit. Omnis dignissimos nihil in voluptates
-                              accusantium fuga veniam impedit. Tempore a ipsum
-                              quisquam commodi hic dolorum maiores eius in,
-                              distinctio rem. Totam?
-                            </TableCell>
-                            <TableCell>5249</TableCell>
-                            <TableCell>2</TableCell>
-                            <TableCell>21%</TableCell>
-                            <TableCell className="text-right">10498$</TableCell>
-                          </TableRow>
                         </TableBody>
                       </Table>
                     </div>
-                    <div className="mt-8 flex justify-between">
+                    <div className="mt-16 flex justify-between items-end">
                       <div className="w-1/2">
-                        <h1>Echeance de payement</h1>
+                        <Label className="py-2">Echeance de payement</Label>
                         <p>
                           Lorem ipsum dolor sit amet consectetur adipisicing
                           elit. Aperiam esse soluta itaque explicabo voluptas
@@ -203,16 +201,15 @@ export default function PdfContent({ name }: FormFieldsType) {
                   </div>
                   <div className="border-t pt-4 flex gap-8 justify-around">
                     <div>
-                      <h1 className="font-bold">{name}</h1>
+                      <h1 className="font-bold">{name && name}</h1>
                       <p>
-                        <span className="font-bold">№ TVA</span> 123-4567-7889
+                        <span className="font-bold">№ TVA</span> {tva && tva}
                       </p>
                     </div>
                     <div>
                       <h1 className="font-bold">Mode de paiement</h1>
                       <p>
-                        <span className="font-bold">IBAN</span>{" "}
-                        BE12-4567-7889-4566
+                        <span className="font-bold">IBAN</span> {iban && iban}
                       </p>
                     </div>
                   </div>
@@ -239,3 +236,25 @@ export default function PdfContent({ name }: FormFieldsType) {
     </>
   );
 }
+
+// import jsPDF from "jspdf";
+// import html2canvas from "html2canvas-pro";
+//   const onSubmit = async () => {
+//     const input = document.getElementById("pdf-content");
+//     if (input) {
+//       try {
+//         const canvas = await html2canvas(input, {
+//           useCORS: true,
+//           scale: 2,
+//         });
+//         const imgData = canvas.toDataURL("image/png");
+//         const pdf = new jsPDF();
+//         const imgWidth = 210; // Largeur page A4
+//         const imgHeight = (canvas.height * imgWidth) / canvas.width;
+//         pdf.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight);
+//         pdf.save("facture.pdf");
+//       } catch (error) {
+//         console.log(error);
+//       }
+//     }
+//   };

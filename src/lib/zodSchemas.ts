@@ -3,27 +3,41 @@ import {z} from "zod"
 
 export const schema = z.object({
     name: z
-      .string()
-      .regex(/^[A-Za-z\s]+$/, "Veuillez saisir un nom valide")
-      .min(2, "Nom invalide"),
-    // address: z.string().optional(),
-    // cp: z.number().optional(),
-    // city: z.string().optional(),
-    // country: z.string().optional(),
-    // email: z.string().email("email non valide").optional(),
-    // tva: z.string().optional(),
-    // iban: z.string().optional(),
+      .string().min(2, "Nom invalide").regex(/^[A-Za-z\s]+$/, "Veuillez saisir un nom valide"),
+    address: z.string().min(2, "Adresse invalide").regex(/^[A-Za-zÀ-ÖØ-öø-ÿ\s]+\s\d+$/,"L'adresse doit contenir la rue et le numero."),
+    cp: z.string().min(1,"Code postal invalide").regex(/^\d+$/, "Le code postal doit etre composé de chiffres").transform((val) => Number(val)).refine((val) => val !== 0, {
+      message: "Code postal invalide",
+    }),
+    city: z.string().min(2, "Ville invalide").regex(/^[A-Za-z\s]+$/, "Veuillez saisir une ville valide"),
+    country: z.string().min(2, "Pays invalide").regex(/^[A-Za-z\s]+$/, "Veuillez saisir un pays valide"),
 
-    // clientName: z
-    //   .string()
-    //   .regex(/^[A-Za-z\s]+$/, "Veuillez saisir un nom valide")
-    //   .min(2, "Nom invalide"),
-    // clientAddress: z.string(),
-    // clientCp: z.number(),
-    // clientCity: z.string(),
-    // clientCountry: z.string(),
-    // clientEmail: z.string(),
-    // clienttva: z.string(),
+    email: z
+    .string()
+    .optional(),
+    // .refine((value) => !value || z.string().email().safeParse(value).success, {
+    //   message: "Email non valide",
+    // }),
+    tva: z.string().optional(),
+    iban: z.string().optional(),
+
+
+
+
+
+    clientName: z
+      .string().min(2, "Nom invalide").regex(/^[A-Za-z\s]+$/, "Veuillez saisir un nom valide"),
+    clientAddress: z.string().min(2, "Adresse invalide").regex(/^[A-Za-zÀ-ÖØ-öø-ÿ\s]+\s\d+$/,"L'adresse doit contenir la rue et le numero."),
+    clientCp: z.string().min(1,"Code postal invalide").regex(/^\d+$/, "Le code postal doit etre composé de chiffres").transform((val) => Number(val)).refine((val) => val !== 0, {
+      message: "Code postal invalide",
+    }),
+    clientCity: z.string().min(2, "Ville invalide").regex(/^[A-Za-z\s]+$/, "Veuillez saisir une ville valide"),
+    clientCountry: z.string().min(2, "Pays invalide").regex(/^[A-Za-z\s]+$/, "Veuillez saisir un pays valide"),
+    
+    clientEmail: z.string().optional(),
+
+   
+
+ 
   });
 
   export type FormFieldsType = z.infer<typeof schema>;

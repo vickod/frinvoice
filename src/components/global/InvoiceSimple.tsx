@@ -1,5 +1,5 @@
 "use client";
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Drawer, DrawerTrigger } from "@/components/ui/drawer";
@@ -21,7 +21,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import {
   Popover,
   PopoverContent,
@@ -35,12 +35,13 @@ import { formatCurrency } from "@/utils/formatCurrency";
 import { FormFieldsType, schema } from "@/lib/zodSchemas";
 
 import PdfContent from "./PdfContent";
-
+import { Controller } from "react-hook-form";
+import { TiDeleteOutline } from "react-icons/ti";
 export default function InvoiceSimple() {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(
     new Date()
   );
-  const [logo, setLogo] = useState<string | null>(null);
+  const [isFileLoaded, setIsFileLoaded] = useState(false);
   const [selectedDueDate, setSelectedDueDate] = useState<Date | undefined>();
   const [isTvaIncluded, setIsTvaIncluded] = useState(false);
   const [price, setPrice] = useState("");
@@ -52,6 +53,7 @@ export default function InvoiceSimple() {
   const [paymentMethodSelected, setPaymentMethodSelected] =
     useState("notInclude");
   const [formData, setFormData] = useState<{
+    logoEnt: File | undefined;
     name: string;
     address: string;
     cp: number;
@@ -68,14 +70,10 @@ export default function InvoiceSimple() {
     clientEmail: string | undefined;
   } | null>(null);
 
-  const handleLogoUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        setLogo(reader.result as string);
-      };
-      reader.readAsDataURL(file);
+  const fileLogoInputRef = useRef<HTMLInputElement | null>(null);
+  const handleRemoveFile = () => {
+    if (fileLogoInputRef.current) {
+      fileLogoInputRef.current.value = "";
     }
   };
 
@@ -98,25 +96,19 @@ export default function InvoiceSimple() {
     formState: { errors, isSubmitting },
     reset,
     setError,
+    setValue,
   } = useForm<FormFieldsType>({
     resolver: zodResolver(schema),
-    defaultValues: {
-      // selectedDateH: null,
-    },
+    mode: "onTouched",
   });
 
-  const onSubmit: SubmitHandler<FormFieldsType> = async (
-    data: FormFieldsType
-  ) => {
-    // if (Object.keys(errors).length > 0) {
-    //   console.error("Il y a des erreurs dans le formulaire :", errors);
-    //   return; // Empêche la soumission
-    // }
+  const onSubmit: SubmitHandler<FormFieldsType> = async (data) => {
     console.log("Données soumises:", data);
-    console.log(data);
+
     const response = await fetch("api/formInvoice", {
       method: "POST",
       body: JSON.stringify({
+        logoEnt: data.logoEnt,
         name: data.name,
         address: data.address,
         cp: Number(data.cp),
@@ -165,6 +157,7 @@ export default function InvoiceSimple() {
     }
 
     setFormData({
+      logoEnt: data.logoEnt,
       name: data.name,
       address: data.address,
       cp: Number(data.cp),
@@ -181,6 +174,25 @@ export default function InvoiceSimple() {
       clientEmail: data.clientEmail,
     });
   };
+  const handleFileChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    onChange: (value: File | null) => void
+  ) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setIsFileLoaded(true);
+      onChange(file);
+    } else {
+      setIsFileLoaded(false);
+    }
+  };
+  const handleRemoveFileInternal = () => {
+    if (fileLogoInputRef.current) {
+      fileLogoInputRef.current.value = "";
+    }
+    setIsFileLoaded(false);
+    setValue("logoEnt", undefined);
+  };
 
   return (
     <>
@@ -192,23 +204,52 @@ export default function InvoiceSimple() {
         <CardContent className="w-full">
           <form onSubmit={handleSubmit(onSubmit)} className="w-full">
             <div className="flex max-md:flex-col justify-center items-center mb-8 ">
-              {logo && (
+              {/* {logo && (
                 <div className="mr-4">
                   <img src={logo} alt="Logo" className="mt-4 w-60 h-auto " />
                 </div>
-              )}
+              )} */}
               <div className="w-full flex flex-col gap-4 justify-start max-md:mt-5">
                 <Label className="max-md:text-center block mb-2 font-bold whitespace-nowrap">
                   Ajouter le logo de l'entreprise:
                 </Label>
-                <input
+                {/* <input
                   type="file"
                   accept="image/*"
-                  onChange={handleLogoUpload}
+                  // onChange={handleLogoUpload}
+                  {...register("logoEnt")}
+                  name="logoEnt"
                   className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:border file:border-gray-300 file:rounded file:bg-gray-100 file:text-sm"
-                />
+                /> */}
+                <div className="flex ">
+                  <Controller
+                    name="logoEnt"
+                    control={control}
+                    render={({ field }) => (
+                      <input
+                        type="file"
+                        accept="image/*"
+                        ref={fileLogoInputRef}
+                        onChange={(e) => handleFileChange(e, field.onChange)} // Assure que le champ contient un `File`
+                        className="block w-fit lg:w-1/3 text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:border file:border-gray-300 file:rounded file:bg-gray-100 file:text-sm"
+                        // className="border whitespace-break-spaces size-44 file:border file:p-2 file:center"
+                      />
+                    )}
+                  />
+                  {isFileLoaded && (
+                    <button
+                      className="w-fit ml-2"
+                      onClick={handleRemoveFileInternal}
+                    >
+                      <TiDeleteOutline className="size-6 text-red-400" />
+                    </button>
+                  )}
+                </div>
               </div>
             </div>
+            {errors.logoEnt && (
+              <p className="text-red-500">{errors.logoEnt.message}</p>
+            )}
 
             <div className="flex max-md:flex-col max-md:gap-12 md:justify-between w-full ">
               <div className="flex flex-col gap-4 md:w-1/3 w-full">
@@ -405,33 +446,17 @@ export default function InvoiceSimple() {
                       </Button>
                     </PopoverTrigger>
                     <PopoverContent>
-                      {/* <Calendar
+                      <Calendar
                         mode="single"
                         selected={selectedDate}
                         onSelect={setSelectedDate}
                         fromDate={new Date()}
-                        {...register("selectedDateH")}
-                      /> */}
-                      {/* <Controller
-                        name="selectedDateH"
-                        control={control}
-                        render={({ field }) => (
-                          <Calendar
-                            mode="single"
-                            selected={field.value} // Gère la date à partir du formulaire
-                            onSelect={(date) => {
-                              field.onChange(date); // Met à jour React Hook Form
-                              setSelectedDate(date); // Met à jour l'affichage local
-                            }}
-                            fromDate={new Date()}
-                          />
-                        )}
-                      /> */}
+                      />
                     </PopoverContent>
                   </Popover>
                 </div>
 
-                {/* <div className="flex gap-2 justify-between">
+                <div className="flex gap-2 justify-between">
                   <Label className="whitespace-nowrap text-neutral-600">
                     Due le:
                   </Label>
@@ -452,11 +477,10 @@ export default function InvoiceSimple() {
                         selected={selectedDueDate}
                         onSelect={setSelectedDueDate}
                         fromDate={new Date()}
-                        {...register("selectedDueDateH")}
                       />
                     </PopoverContent>
                   </Popover>
-                </div> */}
+                </div>
               </div>
             </div>
 
@@ -588,6 +612,7 @@ export default function InvoiceSimple() {
                 </DrawerTrigger>
                 {formData && (
                   <PdfContent
+                    logoEnt={formData.logoEnt}
                     name={formData.name}
                     address={formData.address}
                     cp={formData.cp}

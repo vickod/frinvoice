@@ -23,10 +23,12 @@ import {
 } from "@/components/ui/drawer";
 import { Button } from "../ui/button";
 import { useReactToPrint } from "react-to-print";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Label } from "../ui/label";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
+import { loadEnvFile } from "process";
 export default function PdfContent({
+  logoEnt,
   name,
   address,
   cp,
@@ -42,9 +44,21 @@ export default function PdfContent({
   clientCountry,
   clientEmail,
 }: FormFieldsType) {
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const reactToPrintFn = useReactToPrint({ contentRef });
-  console.log();
+
+  useEffect(() => {
+    if (logoEnt && logoEnt !== undefined) {
+      const objectUrl = URL.createObjectURL(logoEnt); // Génère l'URL seulement si logoEnt existe
+      setPreviewUrl(objectUrl);
+      return () => URL.revokeObjectURL(objectUrl); // Nettoyage de l'URL temporaire
+    } else {
+      setPreviewUrl(null); // Réinitialise l'aperçu quand l'image est retirée
+    }
+  }, [logoEnt]);
+
+  console.log("pdf content:", logoEnt);
 
   return (
     <>
@@ -66,9 +80,16 @@ export default function PdfContent({
                   <div>
                     <div className="w-full flex justify-between text-black border-b pb-4">
                       <div className="w-1/2 flex gap-2">
-                        <div className=" ">
-                          <Image src={Logo} alt="" className="size-36" />
-                        </div>
+                        {previewUrl && (
+                          <div className=" ">
+                            <img
+                              src={previewUrl}
+                              alt="logo image"
+                              className="max-w-60 w-auto h-auto max-h-36 min-w-32 min-h-32"
+                            />
+                          </div>
+                        )}
+
                         <div>
                           <p className="font-bold">{name}</p>
                           <p>{address && address}</p>

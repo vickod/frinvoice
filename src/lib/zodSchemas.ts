@@ -2,6 +2,12 @@
 import {z} from "zod"
 
 export const schema = z.object({
+    logoEnt: z
+    .instanceof(File)
+    .optional()
+    .refine((file) => !file || file.type.startsWith("image/"), {
+      message: "Le fichier doit être une image valide.",
+    }),
     name: z
       .string().min(2, "Nom invalide").regex(/^[A-Za-z\s]+$/, "Veuillez saisir un nom valide"),
     address: z.string().min(2, "Adresse invalide").regex(/^[A-Za-zÀ-ÖØ-öø-ÿ\s]+\s\d+$/,"L'adresse doit contenir la rue et le numero."),

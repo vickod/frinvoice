@@ -1,9 +1,7 @@
 "use client";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Drawer, DrawerTrigger } from "@/components/ui/drawer";
-
 import {
   Card,
   CardContent,
@@ -13,45 +11,29 @@ import {
 } from "@/components/ui/card";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
-import { useState, useRef } from "react";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import { useState } from "react";
 import { Button } from "../ui/button";
-import { CalendarIcon } from "lucide-react";
-import { Calendar } from "../ui/calendar";
-import { Switch } from "../ui/switch";
-import { formatCurrency } from "@/utils/formatCurrency";
 import { FormFieldsType, schema } from "@/lib/zodSchemas";
-
 import PdfContent from "./PdfContent";
-import { Controller } from "react-hook-form";
-import { TiDeleteOutline } from "react-icons/ti";
+import FileInput from "./formInvoice/FileInput";
+import OptionalFields from "./formInvoice/OptionalFields";
+import SummaryCard from "./formInvoice/SummaryCard";
+import InvoiceDetails from "./formInvoice/InvoiceDetails";
 export default function InvoiceSimple() {
-  const [selectedDate, setSelectedDate] = useState<Date | undefined>(
-    new Date()
-  );
-  const [isFileLoaded, setIsFileLoaded] = useState(false);
-  const [selectedDueDate, setSelectedDueDate] = useState<Date | undefined>();
-  const [isTvaIncluded, setIsTvaIncluded] = useState(false);
-  const [price, setPrice] = useState("");
-  const [quantity, setQuantity] = useState("");
-  const [tva, setTva] = useState("");
-  const [currency, setCurrency] = useState("EUR");
-  const [isPaid, setIsPaid] = useState("notInclude");
+  // const [selectedDate, setSelectedDate] = useState<Date | undefined>(
+  //   new Date()
+  // );
 
-  const [paymentMethodSelected, setPaymentMethodSelected] =
-    useState("notInclude");
+  // const [selectedDueDate, setSelectedDueDate] = useState<Date | undefined>();
+  // const [price, setPrice] = useState("");
+  // const [quantity, setQuantity] = useState("");
+
+  // const [tva, setTva] = useState("");
+  // const [currency, setCurrency] = useState("EUR");
+  // const [isPaid, setIsPaid] = useState("notInclude");
+  // const [paymentMethod, setPaymentMethod] = useState("notInclude");
+  // const [isTvaIncluded, setIsTvaIncluded] = useState(false);
+
   const [formData, setFormData] = useState<{
     logoEnt: File | undefined;
     name: string;
@@ -68,26 +50,11 @@ export default function InvoiceSimple() {
     clientCity: string;
     clientCountry: string;
     clientEmail: string | undefined;
+    invoiceNumber: string | undefined;
+    createdDate: Date;
+    dueDate: Date | undefined;
+    description: string;
   } | null>(null);
-
-  const fileLogoInputRef = useRef<HTMLInputElement | null>(null);
-  const handleRemoveFile = () => {
-    if (fileLogoInputRef.current) {
-      fileLogoInputRef.current.value = "";
-    }
-  };
-
-  const handleSwitchChange = (checked: boolean) => {
-    setIsTvaIncluded(checked);
-  };
-  const calculateTotal =
-    isTvaIncluded && Number(tva) > 0
-      ? ((Number(quantity) || 0) * (Number(price) || 0) * Number(tva)) / 100 +
-        (Number(quantity) || 0) * (Number(price) || 0)
-      : (Number(quantity) || 0) * (Number(price) || 0);
-  const calculateTVA =
-    ((Number(quantity) || 0) * (Number(price) || 0) * Number(tva)) / 100;
-  const calculateTotHtva = (Number(quantity) || 0) * (Number(price) || 0);
 
   const {
     register,
@@ -100,10 +67,17 @@ export default function InvoiceSimple() {
   } = useForm<FormFieldsType>({
     resolver: zodResolver(schema),
     mode: "onTouched",
+    defaultValues: {
+      invoiceNumber: "",
+      createdDate: new Date(),
+      dueDate: undefined,
+      description: "",
+      price: 0,
+    },
   });
 
   const onSubmit: SubmitHandler<FormFieldsType> = async (data) => {
-    console.log("Données soumises:", data);
+    console.log(data.price);
 
     const response = await fetch("api/formInvoice", {
       method: "POST",
@@ -123,6 +97,10 @@ export default function InvoiceSimple() {
         clientCity: data.clientCity,
         clientCountry: data.clientCountry,
         clientEmail: data.clientEmail,
+        invoiceNumber: data.invoiceNumber,
+        createdDate: data.createdDate,
+        dueDate: data.dueDate,
+        description: data.description,
       }),
       headers: {
         "Content-Type": "application/json",
@@ -172,26 +150,11 @@ export default function InvoiceSimple() {
       clientCity: data.clientCity,
       clientCountry: data.clientCountry,
       clientEmail: data.clientEmail,
+      invoiceNumber: data.invoiceNumber,
+      createdDate: data.createdDate,
+      dueDate: data.dueDate,
+      description: data.description,
     });
-  };
-  const handleFileChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    onChange: (value: File | null) => void
-  ) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setIsFileLoaded(true);
-      onChange(file);
-    } else {
-      setIsFileLoaded(false);
-    }
-  };
-  const handleRemoveFileInternal = () => {
-    if (fileLogoInputRef.current) {
-      fileLogoInputRef.current.value = "";
-    }
-    setIsFileLoaded(false);
-    setValue("logoEnt", undefined);
   };
 
   return (
@@ -204,47 +167,11 @@ export default function InvoiceSimple() {
         <CardContent className="w-full">
           <form onSubmit={handleSubmit(onSubmit)} className="w-full">
             <div className="flex max-md:flex-col justify-center items-center mb-8 ">
-              {/* {logo && (
-                <div className="mr-4">
-                  <img src={logo} alt="Logo" className="mt-4 w-60 h-auto " />
-                </div>
-              )} */}
               <div className="w-full flex flex-col gap-4 justify-start max-md:mt-5">
                 <Label className="max-md:text-center block mb-2 font-bold whitespace-nowrap">
                   Ajouter le logo de l'entreprise:
                 </Label>
-                {/* <input
-                  type="file"
-                  accept="image/*"
-                  // onChange={handleLogoUpload}
-                  {...register("logoEnt")}
-                  name="logoEnt"
-                  className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:border file:border-gray-300 file:rounded file:bg-gray-100 file:text-sm"
-                /> */}
-                <div className="flex ">
-                  <Controller
-                    name="logoEnt"
-                    control={control}
-                    render={({ field }) => (
-                      <input
-                        type="file"
-                        accept="image/*"
-                        ref={fileLogoInputRef}
-                        onChange={(e) => handleFileChange(e, field.onChange)} // Assure que le champ contient un `File`
-                        className="block w-fit lg:w-1/3 text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:border file:border-gray-300 file:rounded file:bg-gray-100 file:text-sm"
-                        // className="border whitespace-break-spaces size-44 file:border file:p-2 file:center"
-                      />
-                    )}
-                  />
-                  {isFileLoaded && (
-                    <button
-                      className="w-fit ml-2"
-                      onClick={handleRemoveFileInternal}
-                    >
-                      <TiDeleteOutline className="size-6 text-red-400" />
-                    </button>
-                  )}
-                </div>
+                <FileInput control={control} setValue={setValue} />
               </div>
             </div>
             {errors.logoEnt && (
@@ -348,263 +275,41 @@ export default function InvoiceSimple() {
               </div>
             </div>
             <div className="flex max-md:flex-col md:justify-between items-start mt-20 gap-12 ">
-              <div className="flex flex-col gap-4 max-md:w-full md:w-1/2 ">
-                <Label className="text-lg font-bold">Options:</Label>
-                <div className="flex gap-2 ">
-                  <Label className="text-neutral-600">Dévise:</Label>
-                  <Select
-                    defaultValue="EUR"
-                    onValueChange={(value) => setCurrency(value)}
-                  >
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Selectionnez une devise" />
-                    </SelectTrigger>
-                    <SelectContent className="">
-                      <SelectItem value="EUR">European Euro -- EUR</SelectItem>
-                      <SelectItem value="USD">
-                        United State Dollar -- USD
-                      </SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="flex gap-2 ">
-                  <Label className="whitespace-nowrap text-neutral-600">
-                    Statut de paiement:
-                  </Label>
-                  <Select
-                    defaultValue="notInclude"
-                    onValueChange={(value) => setIsPaid(value)}
-                  >
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Selectionnez un statut:" />
-                    </SelectTrigger>
-                    <SelectContent className="">
-                      <SelectItem value="notInclude">Ne pas inclure</SelectItem>
-                      <SelectItem value="topay">A payer</SelectItem>
-                      <SelectItem value="paid">Payé</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="flex gap-2 ">
-                  <Label className="whitespace-nowrap text-neutral-600">
-                    Mode de paiement:
-                  </Label>
-                  <Select
-                    defaultValue="notInclude"
-                    onValueChange={(value) => setPaymentMethodSelected(value)}
-                  >
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Selectionnez une methode" />
-                    </SelectTrigger>
-                    <SelectContent className="">
-                      <SelectItem value="notInclude">Ne pas inclure</SelectItem>
-                      <SelectItem value="virement">Virement</SelectItem>
-                      <SelectItem value="cash">Cash</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <Label htmlFor="tva-mode" className="text-neutral-600">
-                    Inclure le montant de la TVA:
-                  </Label>
-                  <Switch
-                    id="tva-mode"
-                    checked={isTvaIncluded}
-                    onCheckedChange={handleSwitchChange}
-                  />
-                </div>
-              </div>
-
-              <div className="flex flex-col max-md:w-full md:w-1/2 gap-4">
-                <div>
-                  <Label className="text-lg font-bold">Facture:</Label>
-                </div>
-                <div className="flex gap-2 justify-between">
-                  <Label className="whitespace-nowrap text-neutral-600">
-                    № de facture:
-                  </Label>
-                  <Input placeholder="XXXXXXXXXXXXX" className="w-[280px]" />
-                </div>
-                <div className="flex gap-2 justify-between">
-                  <Label className="whitespace-nowrap text-neutral-600">
-                    Créée le:
-                  </Label>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <Button
-                        variant="outline"
-                        className="w-[280px] text-left justify-start"
-                      >
-                        <CalendarIcon />
-                        {selectedDate ? (
-                          new Intl.DateTimeFormat("fr-BE", {
-                            dateStyle: "long",
-                          }).format(selectedDate)
-                        ) : (
-                          <span>Sélectionnez une date</span>
-                        )}
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent>
-                      <Calendar
-                        mode="single"
-                        selected={selectedDate}
-                        onSelect={setSelectedDate}
-                        fromDate={new Date()}
-                      />
-                    </PopoverContent>
-                  </Popover>
-                </div>
-
-                <div className="flex gap-2 justify-between">
-                  <Label className="whitespace-nowrap text-neutral-600">
-                    Due le:
-                  </Label>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <Button
-                        variant="outline"
-                        className="w-[280px] text-left justify-start"
-                      >
-                        <CalendarIcon />
-
-                        <span>Date d'échéance</span>
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent>
-                      <Calendar
-                        mode="single"
-                        selected={selectedDueDate}
-                        onSelect={setSelectedDueDate}
-                        fromDate={new Date()}
-                      />
-                    </PopoverContent>
-                  </Popover>
-                </div>
-              </div>
+              {/* <OptionalFields
+                setCurrency={setCurrency}
+                setPaymentMethod={setPaymentMethod}
+                setIsPaid={setIsPaid}
+                isTvaIncluded={isTvaIncluded}
+                setIsTvaIncluded={setIsTvaIncluded}
+              /> */}
+              <InvoiceDetails
+                control={control}
+                invoiceNumberName="invoiceNumber"
+                createdDateName="createdDate"
+                dueDateName="dueDate"
+                // selectedDate={selectedDate}
+                // setSelectedDate={setSelectedDate}
+                // selectedDueDate={selectedDueDate}
+                // setSelectedDueDate={setSelectedDueDate}
+              />
             </div>
+            <SummaryCard
+              descriptionName="description"
+              priceName="price"
+              control={control}
+              errors={errors}
+              //price={price}
+              //setPrice={setPrice}
+              // quantity={quantity}
+              // setQuantity={setQuantity}
+              // isTvaIncluded={isTvaIncluded}
+              // tva={tva}
+              // setTva={setTva}
+              // currency={currency}
+              // isPaid={isPaid}
+              // paymentMethod={paymentMethod}
+            />
 
-            <div className="mt-20 flex  max-lg:flex-col w-full md:gap-6">
-              <div className="flex flex-col gap-2 lg:w-4/10 lg:col-span-6 w-full">
-                <Label>
-                  Déscription:<span className="text-red-500">*</span>
-                </Label>
-                <Textarea className="w-full" />
-              </div>
-              <div className="lg:w-6/10 w-full max-lg:mt-8 flex max-md:flex-col max-md:gap-6 justify-between">
-                <div className="flex flex-col gap-2 md:w-2/8">
-                  <Label className="whitespace-nowrap">
-                    Prix unitaire:<span className="text-red-500">*</span>
-                  </Label>
-                  <Input
-                    type="number"
-                    className=""
-                    placeholder="0"
-                    value={price}
-                    onChange={(e) => setPrice(e.target.value)}
-                  />
-                </div>
-                <div className="flex flex-col gap-2 md:w-1/8">
-                  <Label>
-                    Quantité:<span className="text-red-500">*</span>
-                  </Label>
-                  <Input
-                    type="number"
-                    className=""
-                    placeholder="0"
-                    value={quantity}
-                    onChange={(e) => setQuantity(e.target.value)}
-                  />
-                </div>
-                {isTvaIncluded && (
-                  <div className="flex flex-col gap-2 md:w-1/8">
-                    <Label>
-                      TVA:<span className="text-red-500">*</span>
-                    </Label>
-
-                    <Input
-                      type="number"
-                      className=""
-                      placeholder="0 %"
-                      value={tva}
-                      onChange={(e) => setTva(e.target.value)}
-                    />
-                  </div>
-                )}
-
-                <div className="flex flex-col gap-2 md:w-2/8">
-                  <Label>Total:</Label>
-                  <Input
-                    className=""
-                    disabled
-                    value={formatCurrency({
-                      amount: calculateTotal,
-                      currency: currency as any,
-                    })}
-                  />
-                </div>
-              </div>
-            </div>
-
-            <div className="mt-20 md:w-1/3 flex md:justify-self-end flex-col gap-4 ">
-              {isTvaIncluded && (
-                <>
-                  <div className="w-full flex justify-between border-b">
-                    <span>Sous-total HTVA</span>
-                    <span>
-                      {formatCurrency({
-                        amount: calculateTotHtva,
-                        currency: currency as any,
-                      })}
-                    </span>
-                  </div>
-                  <div className="w-full flex justify-between border-b ">
-                    <span>TVA ({tva ? tva : 0}%)</span>
-                    <span>
-                      {formatCurrency({
-                        amount: calculateTVA,
-                        currency: currency as any,
-                      })}
-                    </span>
-                  </div>
-                </>
-              )}
-
-              <div className="w-full flex justify-between ">
-                <span className="font-bold">Total</span>
-                <span className="font-bold">
-                  {formatCurrency({
-                    amount: calculateTotal,
-                    currency: currency as any,
-                  })}
-                </span>
-              </div>
-              <div className="flex flex-col mt-20">
-                {isPaid !== "notInclude" && (
-                  <div className="flex justify-between">
-                    <p className="text-neutral-600">Statut de paiement:</p>
-                    <p>{isPaid === "paid" ? "Payé" : "A payer"}</p>
-                  </div>
-                )}
-                {paymentMethodSelected !== "notInclude" && (
-                  <div className="flex justify-between">
-                    <p className="text-neutral-600">Methode de paiement:</p>
-                    <p>
-                      {paymentMethodSelected === "cash"
-                        ? "cash"
-                        : paymentMethodSelected === "virement"
-                        ? "Virement"
-                        : "non specifié"}
-                    </p>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            <div className="mt-10 flex flex-col gap-2">
-              <Label>Commentaires</Label>
-              <Textarea />
-            </div>
             <div className="flex mt-8 justify-end">
               <Drawer>
                 <DrawerTrigger asChild>
@@ -627,6 +332,10 @@ export default function InvoiceSimple() {
                     clientCity={formData.clientCity}
                     clientCountry={formData.clientCountry}
                     clientEmail={formData.clientEmail}
+                    invoiceNumber={formData.invoiceNumber}
+                    createdDate={formData.createdDate}
+                    dueDate={formData.dueDate}
+                    description={formData.description}
                   />
                 )}
               </Drawer>

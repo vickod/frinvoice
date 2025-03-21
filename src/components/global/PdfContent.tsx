@@ -43,6 +43,9 @@ export default function PdfContent({
   clientCity,
   clientCountry,
   clientEmail,
+  invoiceNumber,
+  createdDate,
+  dueDate,
 }: FormFieldsType) {
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const contentRef = useRef<HTMLDivElement>(null);
@@ -50,15 +53,13 @@ export default function PdfContent({
 
   useEffect(() => {
     if (logoEnt && logoEnt !== undefined) {
-      const objectUrl = URL.createObjectURL(logoEnt); // Génère l'URL seulement si logoEnt existe
+      const objectUrl = URL.createObjectURL(logoEnt);
       setPreviewUrl(objectUrl);
-      return () => URL.revokeObjectURL(objectUrl); // Nettoyage de l'URL temporaire
+      return () => URL.revokeObjectURL(objectUrl);
     } else {
-      setPreviewUrl(null); // Réinitialise l'aperçu quand l'image est retirée
+      setPreviewUrl(null);
     }
   }, [logoEnt]);
-
-  console.log("pdf content:", logoEnt);
 
   return (
     <>
@@ -72,14 +73,14 @@ export default function PdfContent({
 
               <DrawerDescription asChild className="mx-auto h-full  ">
                 <div
-                  className="bg-white p-10 rounded shadow-md  flex flex-col justify-between  "
+                  className="bg-white p-10 rounded shadow-md  flex flex-col justify-between border-t "
                   style={{ width: "794px", minHeight: "1123px" }}
                   id="pdf-content"
                   ref={contentRef}
                 >
                   <div>
                     <div className="w-full flex justify-between text-black border-b pb-4">
-                      <div className="w-1/2 flex gap-2">
+                      <div className="w-2/3 flex gap-2">
                         {previewUrl && (
                           <div className=" ">
                             <img
@@ -102,7 +103,7 @@ export default function PdfContent({
                           {/* <p>BE 4444 6666 8888</p> */}
                         </div>
                       </div>
-                      <div className="w-1/2 flex flex-col items-end">
+                      <div className="w-1/3 flex flex-col items-end">
                         <div>
                           <h1 className="font-bold text-xl text-neutral-500">
                             Client:
@@ -129,23 +130,37 @@ export default function PdfContent({
                             <span className="text-black">F</span>acture
                             <span className="text-black font-normal">
                               {" "}
-                              FA555-444{" "}
+                              {invoiceNumber && invoiceNumber}{" "}
                             </span>
                           </h1>
                         </div>
                         <div className="text-black">
                           <p>
-                            <span className="font-bold">Emis le:</span>{" "}
-                            02/02/2022
+                            <span className="font-bold">Emis le :</span>{" "}
+                            <span>
+                              {createdDate
+                                ? new Intl.DateTimeFormat("fr-FR", {
+                                    year: "numeric",
+                                    month: "long",
+                                    day: "numeric",
+                                  }).format(createdDate)
+                                : ""}
+                            </span>
                           </p>
-                          {/* <p>
-                            <span className="font-bold">Echeance :</span>{" "}
-                            {selectedDueDateH
-                              ? new Intl.DateTimeFormat("fr-BE", {
-                                  dateStyle: "long",
-                                }).format(selectedDueDateH)
-                              : ""}
-                          </p> */}
+                          <p>
+                            {dueDate && (
+                              <>
+                                <span className="font-bold">Échéance le :</span>{" "}
+                                <span>
+                                  {new Intl.DateTimeFormat("fr-FR", {
+                                    year: "numeric",
+                                    month: "long",
+                                    day: "numeric",
+                                  }).format(dueDate)}
+                                </span>
+                              </>
+                            )}
+                          </p>
                         </div>
                       </div>
                     </div>

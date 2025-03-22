@@ -19,21 +19,8 @@ import FileInput from "./formInvoice/FileInput";
 import OptionalFields from "./formInvoice/OptionalFields";
 import SummaryCard from "./formInvoice/SummaryCard";
 import InvoiceDetails from "./formInvoice/InvoiceDetails";
+import UsersDetails from "./formInvoice/UsersDetails";
 export default function InvoiceSimple() {
-  // const [selectedDate, setSelectedDate] = useState<Date | undefined>(
-  //   new Date()
-  // );
-
-  // const [selectedDueDate, setSelectedDueDate] = useState<Date | undefined>();
-  // const [price, setPrice] = useState("");
-  // const [quantity, setQuantity] = useState("");
-
-  // const [tva, setTva] = useState("");
-  // const [currency, setCurrency] = useState("EUR");
-  // const [isPaid, setIsPaid] = useState("notInclude");
-  // const [paymentMethod, setPaymentMethod] = useState("notInclude");
-  // const [isTvaIncluded, setIsTvaIncluded] = useState(false);
-
   const [formData, setFormData] = useState<{
     logoEnt: File | undefined;
     name: string;
@@ -42,8 +29,6 @@ export default function InvoiceSimple() {
     city: string;
     country: string;
     email: string | undefined;
-    tva: string | undefined;
-    iban: string | undefined;
     clientName: string;
     clientAddress: string;
     clientCp: number;
@@ -54,6 +39,15 @@ export default function InvoiceSimple() {
     createdDate: Date;
     dueDate: Date | undefined;
     description: string;
+    price: number;
+    quantity: number;
+    tva: number;
+    comments: string | undefined;
+    total: string;
+    currency: string;
+    paymentStatus: string;
+    paymentMethod: string;
+    isTvaIncluded: boolean;
   } | null>(null);
 
   const {
@@ -73,11 +67,19 @@ export default function InvoiceSimple() {
       dueDate: undefined,
       description: "",
       price: 0,
+      quantity: 0,
+      tva: 0,
+      comments: "",
+      total: "0",
+      currency: "EUR",
+      paymentStatus: "notIncluded",
+      paymentMethod: "notIncluded",
+      isTvaIncluded: false,
     },
   });
 
   const onSubmit: SubmitHandler<FormFieldsType> = async (data) => {
-    console.log(data.price);
+    console.log(data.isTvaIncluded);
 
     const response = await fetch("api/formInvoice", {
       method: "POST",
@@ -89,8 +91,6 @@ export default function InvoiceSimple() {
         city: data.city,
         country: data.country,
         email: data.email,
-        tva: data.tva,
-        iban: data.iban,
         clientName: data.clientName,
         clientAddress: data.clientAddress,
         clientCp: Number(data.clientCp),
@@ -101,6 +101,15 @@ export default function InvoiceSimple() {
         createdDate: data.createdDate,
         dueDate: data.dueDate,
         description: data.description,
+        price: data.price,
+        quantity: data.quantity,
+        tva: data.tva,
+        comments: data.comments,
+        total: data.total,
+        currency: data.currency,
+        paymentStatus: data.paymentStatus,
+        paymentMethod: data.paymentMethod,
+        isTvaIncluded: data.isTvaIncluded,
       }),
       headers: {
         "Content-Type": "application/json",
@@ -142,8 +151,6 @@ export default function InvoiceSimple() {
       city: data.city,
       country: data.country,
       email: data.email,
-      tva: data.tva,
-      iban: data.iban,
       clientName: data.clientName,
       clientAddress: data.clientAddress,
       clientCp: Number(data.clientCp),
@@ -154,6 +161,15 @@ export default function InvoiceSimple() {
       createdDate: data.createdDate,
       dueDate: data.dueDate,
       description: data.description,
+      price: data.price,
+      quantity: data.quantity,
+      tva: data.tva,
+      comments: data.comments,
+      total: data.total,
+      currency: data.currency,
+      paymentStatus: data.paymentStatus,
+      paymentMethod: data.paymentMethod,
+      isTvaIncluded: data.isTvaIncluded,
     });
   };
 
@@ -178,136 +194,32 @@ export default function InvoiceSimple() {
               <p className="text-red-500">{errors.logoEnt.message}</p>
             )}
 
-            <div className="flex max-md:flex-col max-md:gap-12 md:justify-between w-full ">
-              <div className="flex flex-col gap-4 md:w-1/3 w-full">
-                <Label className="text-lg font-bold">Prestataire:</Label>
-                <div className="flex gap-2">
-                  <Input
-                    placeholder="Le nom de votre entreprise"
-                    {...register("name")}
-                  />
-                </div>
-                {errors.name && (
-                  <p className="text-red-500">{errors.name.message}</p>
-                )}
-                <div className="flex gap-2">
-                  <Input
-                    placeholder="Adresse: rue + numéro"
-                    {...register("address")}
-                  />
-                </div>
-                {errors.address && (
-                  <p className="text-red-500">{errors.address.message}</p>
-                )}
-                <div className="flex gap-2">
-                  <Input placeholder="Code postal" {...register("cp")} />
+            <UsersDetails register={register} errors={errors} />
 
-                  <Input placeholder="Ville" {...register("city")} />
-                </div>
-                {errors.cp && (
-                  <p className="text-red-500">{errors.cp.message}</p>
-                )}
-                {errors.city && (
-                  <p className="text-red-500">{errors.city.message}</p>
-                )}
-                <div className="flex gap-2">
-                  <Input placeholder="Pays" {...register("country")} />
-                </div>
-                {errors.country && (
-                  <p className="text-red-500">{errors.country.message}</p>
-                )}
-                <div className="flex gap-2">
-                  <Input placeholder="Email" {...register("email")} />
-                </div>
-                {errors.email && (
-                  <p className="text-red-500">{errors.email.message}</p>
-                )}
-                <div className="flex gap-2">
-                  <Input placeholder="№ de TVA" {...register("tva")} />
-                </div>
-                <div className="flex gap-2">
-                  <Input placeholder="IBAN" {...register("iban")} />
-                </div>
-              </div>
-              <div className="flex flex-col gap-4 md:w-1/3 w-full ">
-                <Label className="text-lg font-bold">Client:</Label>
-                <div className="flex gap-2">
-                  <Input placeholder="Nom" {...register("clientName")} />
-                </div>
-                {errors.clientName && (
-                  <p className="text-red-500">{errors.clientName.message}</p>
-                )}
-                <div className="flex gap-2">
-                  <Input
-                    placeholder="Adresse: rue + numéro"
-                    {...register("clientAddress")}
-                  />
-                </div>
-                {errors.clientAddress && (
-                  <p className="text-red-500">{errors.clientAddress.message}</p>
-                )}
-
-                <div className="flex gap-2">
-                  <Input placeholder="Code postal" {...register("clientCp")} />
-                  <Input placeholder="Ville" {...register("clientCity")} />
-                </div>
-                {errors.clientCp && (
-                  <p className="text-red-500">{errors.clientCp.message}</p>
-                )}
-                {errors.clientCity && (
-                  <p className="text-red-500">{errors.clientCity.message}</p>
-                )}
-                <div className="flex gap-2">
-                  <Input placeholder="Pays" {...register("clientCountry")} />
-                </div>
-                {errors.clientCountry && (
-                  <p className="text-red-500">{errors.clientCountry.message}</p>
-                )}
-                <div className="flex gap-2">
-                  <Input placeholder="Email" {...register("clientEmail")} />
-                </div>
-                {errors.clientEmail && (
-                  <p className="text-red-500">{errors.clientEmail.message}</p>
-                )}
-                {/* <div className="flex gap-2">
-                  <Input placeholder="№ de TVA" />
-                </div> */}
-              </div>
-            </div>
             <div className="flex max-md:flex-col md:justify-between items-start mt-20 gap-12 ">
-              {/* <OptionalFields
-                setCurrency={setCurrency}
-                setPaymentMethod={setPaymentMethod}
-                setIsPaid={setIsPaid}
-                isTvaIncluded={isTvaIncluded}
-                setIsTvaIncluded={setIsTvaIncluded}
-              /> */}
+              <OptionalFields
+                control={control}
+                currencyName="currency"
+                paymentStatusName="paymentStatus"
+                paymentMethodName="paymentMethod"
+                isTvaIncludedName="isTvaIncluded"
+              />
               <InvoiceDetails
                 control={control}
                 invoiceNumberName="invoiceNumber"
                 createdDateName="createdDate"
                 dueDateName="dueDate"
-                // selectedDate={selectedDate}
-                // setSelectedDate={setSelectedDate}
-                // selectedDueDate={selectedDueDate}
-                // setSelectedDueDate={setSelectedDueDate}
               />
             </div>
             <SummaryCard
               descriptionName="description"
               priceName="price"
+              quantityName="quantity"
+              tvaName="tva"
+              commentsName="comments"
+              register={register}
               control={control}
               errors={errors}
-              //price={price}
-              //setPrice={setPrice}
-              // quantity={quantity}
-              // setQuantity={setQuantity}
-              // isTvaIncluded={isTvaIncluded}
-              // tva={tva}
-              // setTva={setTva}
-              // currency={currency}
-              // isPaid={isPaid}
-              // paymentMethod={paymentMethod}
             />
 
             <div className="flex mt-8 justify-end">
@@ -324,8 +236,6 @@ export default function InvoiceSimple() {
                     city={formData.city}
                     country={formData.country}
                     email={formData.email}
-                    tva={formData.tva}
-                    iban={formData.iban}
                     clientName={formData.clientName}
                     clientAddress={formData.clientAddress}
                     clientCp={formData.clientCp}
@@ -336,6 +246,15 @@ export default function InvoiceSimple() {
                     createdDate={formData.createdDate}
                     dueDate={formData.dueDate}
                     description={formData.description}
+                    price={formData.price}
+                    quantity={formData.quantity}
+                    tva={formData.tva}
+                    comments={formData.comments}
+                    total={formData.total}
+                    currency={formData.currency}
+                    paymentStatus={formData.paymentStatus}
+                    paymentMethod={formData.paymentMethod}
+                    isTvaIncluded={formData.isTvaIncluded}
                   />
                 )}
               </Drawer>

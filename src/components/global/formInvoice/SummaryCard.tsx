@@ -17,9 +17,13 @@ type SummaryCardProps = {
   // isPaid: string;
   // paymentMethod: string;
   descriptionName: string;
+  register: any;
   control: any;
   errors: any;
   priceName: string;
+  quantityName: string;
+  tvaName: string;
+  commentsName: string;
 };
 
 export default function SummaryCard({
@@ -28,15 +32,19 @@ export default function SummaryCard({
   // quantity,
   // setQuantity,
   // isTvaIncluded,
-  // tva,
+
   // setTva,
   // currency,
   // isPaid,
   // paymentMethod,
   descriptionName,
+  register,
   control,
   errors,
   priceName,
+  quantityName,
+  tvaName,
+  commentsName,
 }: SummaryCardProps) {
   // const calculateTotal =
   //   isTvaIncluded && Number(tva) > 0
@@ -78,9 +86,14 @@ export default function SummaryCard({
                   min="0"
                   className=""
                   placeholder="0"
-                  // value={price}
-                  // onChange={(e) => setPrice(e.target.value)}
                   {...field}
+                  onChange={(e) =>
+                    field.onChange(
+                      e.target.value === ""
+                        ? undefined
+                        : parseFloat(e.target.value)
+                    )
+                  }
                 />
               )}
             />
@@ -88,45 +101,78 @@ export default function SummaryCard({
           {errors.price && (
             <p className="text-red-500">{errors.price.message}</p>
           )}
-          {/* <div className="flex flex-col gap-2 md:w-1/8">
+          <div className="flex flex-col gap-2 md:w-1/8">
             <Label>
               Quantité:<span className="text-red-500">*</span>
             </Label>
-            <Input
-              type="number"
-              className=""
-              placeholder="0"
-              value={quantity}
-              onChange={(e) => setQuantity(e.target.value)}
+            <Controller
+              name={quantityName}
+              control={control}
+              render={({ field }) => (
+                <Input
+                  type="number"
+                  className=""
+                  placeholder="0"
+                  // value={quantity}
+                  {...field}
+                  onChange={(e) =>
+                    field.onChange(
+                      e.target.value === ""
+                        ? undefined
+                        : parseFloat(e.target.value)
+                    )
+                  }
+                />
+              )}
             />
           </div>
-          {isTvaIncluded && (
-            <div className="flex flex-col gap-2 md:w-1/8">
-              <Label>
-                TVA:<span className="text-red-500">*</span>
-              </Label>
+          {errors.quantity && (
+            <p className="text-red-500">{errors.quantity.message}</p>
+          )}
+          {/* {isTvaIncluded && ( */}
+          <div className="flex flex-col gap-2 md:w-1/8">
+            <Label>
+              TVA:<span className="text-red-500">*</span>
+            </Label>
+            <Controller
+              name={tvaName}
+              control={control}
+              render={({ field }) => (
+                <Input
+                  type="number"
+                  min="0"
+                  max="100"
+                  className=""
+                  placeholder="0 %"
+                  // value={tva}
+                  // onChange={(e) => setTva(e.target.value)}
+                  {...field}
+                  onChange={(e) =>
+                    field.onChange(
+                      e.target.value === ""
+                        ? undefined
+                        : parseFloat(e.target.value)
+                    )
+                  }
+                />
+              )}
+            />
+          </div>
+          {errors.tva && <p className="text-red-500">{errors.tva.message}</p>}
+          {/* )} */}
 
-              <Input
-                type="number"
-                className=""
-                placeholder="0 %"
-                value={tva}
-                onChange={(e) => setTva(e.target.value)}
-              />
-            </div>
-          )} */}
-
-          {/* <div className="flex flex-col gap-2 md:w-2/8">
+          <div className="flex flex-col gap-2 md:w-2/8">
             <Label>Total:</Label>
             <Input
               className=""
               disabled
-              value={formatCurrency({
-                amount: calculateTotal,
-                currency: currency as any,
-              })}
+              {...register("total")}
+              // value={formatCurrency({
+              //   amount: calculateTotal,
+              //   currency: currency as any,
+              // })}
             />
-          </div> */}
+          </div>
         </div>
       </div>
 
@@ -187,7 +233,11 @@ export default function SummaryCard({
 
       <div className="mt-10 flex flex-col gap-2">
         <Label>Commentaires</Label>
-        <Textarea />
+        <Controller
+          name={commentsName}
+          control={control}
+          render={({ field }) => <Textarea {...field} />}
+        />
       </div>
     </div>
   );

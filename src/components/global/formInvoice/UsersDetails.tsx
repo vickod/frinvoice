@@ -43,7 +43,7 @@ export default function UsersDetails({ register, errors }: UsersDetailsProps) {
         </div>
         {errors.email && <p className="text-red-500">{errors.email.message}</p>}
         <div className="flex gap-2">
-          <Input placeholder="№ de TVA" {...register("tva")} />
+          <Input placeholder="№ de TVA" {...register("numberTva")} />
         </div>
         <div className="flex gap-2">
           <Input placeholder="IBAN" {...register("iban")} />

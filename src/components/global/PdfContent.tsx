@@ -1,7 +1,4 @@
 import { FormFieldsType } from "@/lib/zodSchemas";
-import Image from "next/image";
-import Logo from "../../../public/logo.png";
-
 import {
   Table,
   TableBody,
@@ -26,7 +23,7 @@ import { useReactToPrint } from "react-to-print";
 import { useEffect, useRef, useState } from "react";
 import { Label } from "../ui/label";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
-import { loadEnvFile } from "process";
+import { formatCurrency } from "@/utils/formatCurrency";
 export default function PdfContent({
   logoEnt,
   name,
@@ -35,7 +32,7 @@ export default function PdfContent({
   city,
   country,
   email,
-  tva,
+  numberTva,
   iban,
   clientName,
   clientAddress,
@@ -46,6 +43,18 @@ export default function PdfContent({
   invoiceNumber,
   createdDate,
   dueDate,
+  description,
+  price,
+  quantity,
+  tva,
+  comments,
+  total,
+  amoutTva,
+  totalHtva,
+  currency,
+  paymentStatus,
+  paymentMethod,
+  isTvaIncluded,
 }: FormFieldsType) {
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const contentRef = useRef<HTMLDivElement>(null);
@@ -60,6 +69,10 @@ export default function PdfContent({
       setPreviewUrl(null);
     }
   }, [logoEnt]);
+
+  console.log("depuis pdf TVA ", amoutTva);
+  console.log("depuis pdf TOTAL HTVA", totalHtva);
+  console.log("depuis pdf TOTAL", total);
 
   return (
     <>
@@ -117,9 +130,7 @@ export default function PdfContent({
                             {clientCity && clientCity + ","}{" "}
                             {clientCountry && clientCountry}
                           </p>
-
                           <p>{clientEmail && clientEmail}</p>
-                          {/* <p>123-456-789</p> */}
                         </div>
                       </div>
                     </div>
@@ -172,74 +183,121 @@ export default function PdfContent({
                             <TableHead className="w-4/9">Description</TableHead>
                             <TableHead>Prix unitaire</TableHead>
                             <TableHead>Quantite</TableHead>
-                            <TableHead>TVA</TableHead>
+                            {isTvaIncluded && <TableHead>TVA</TableHead>}
                             <TableHead className="text-right">Total</TableHead>
                           </TableRow>
                         </TableHeader>
                         <TableBody>
                           <TableRow className="text-black">
                             <TableCell className="break-words whitespace-normal pr-6 ">
-                              Lorem ipsum dolor sit amet consectetur adipisicing
-                              elit. Omnis dignissimos nihil in voluptates
-                              accusantium fuga veniam impedit. Tempore a ipsum
-                              quisquam commodi hic dolorum maiores eius in,
-                              distinctio rem. Totam?
+                              {description && description}
                             </TableCell>
-                            <TableCell>5249</TableCell>
-                            <TableCell>2</TableCell>
-                            <TableCell>21%</TableCell>
-                            <TableCell className="text-right">10498$</TableCell>
+                            <TableCell>{price && price}</TableCell>
+                            <TableCell>{quantity && quantity}</TableCell>
+                            {isTvaIncluded && (
+                              <TableCell>{tva && tva}%</TableCell>
+                            )}
+                            <TableCell className="text-right">
+                              {formatCurrency({
+                                amount: total && total,
+                                currency: currency && (currency as any),
+                              })}
+                            </TableCell>
                           </TableRow>
                         </TableBody>
                       </Table>
                     </div>
                     <div className="mt-16 flex justify-between items-end">
-                      <div className="w-1/2">
-                        <Label className="py-2">Echeance de payement</Label>
-                        <p>
-                          Lorem ipsum dolor sit amet consectetur adipisicing
-                          elit. Aperiam esse soluta itaque explicabo voluptas
-                          dolores
-                        </p>
+                      <div className="w-1/2 flex flex-col gap-2">
+                        {/* <Label className="w-fit  rounded-2xl">
+                          Echeance de paiement le{" "}
+                          {dueDate && (
+                            <>
+                              {" "}
+                              <span className="font-bold">
+                                {new Intl.DateTimeFormat("fr-FR", {
+                                  year: "numeric",
+                                  month: "long",
+                                  day: "numeric",
+                                }).format(dueDate)}
+                              </span>
+                            </>
+                          )}
+                        </Label> */}
+                        <div className="mt-2 w-full flex flex-col gap-2">
+                          {paymentMethod !== "notIncluded" && (
+                            <p className="">
+                              <span>Mode de paiement : </span>
+                              <span className="font-bold">
+                                {paymentMethod === "cash"
+                                  ? "Espèces"
+                                  : "Virement"}
+                              </span>
+                            </p>
+                          )}
+                          <p>
+                            {paymentStatus === "paid"
+                              ? "Aucun solde restant dû."
+                              : "A regler"}
+                          </p>
+                        </div>
                       </div>
                       <div className="w-1/2 flex justify-end ">
                         <div className="w-2/3 flex flex-col gap-4 text-black">
-                          <div className="flex justify-between border-b">
-                            <p className="text-right text-black">
-                              <span className="">Total HTVA:</span>
-                            </p>
-                            <p>10498$</p>
-                          </div>
-                          <div className="flex justify-between border-b">
-                            <p className="text-right text-black">
-                              <span className="">TVA:</span>
-                            </p>
-                            <p>2204.58$</p>
-                          </div>
+                          {isTvaIncluded && (
+                            <>
+                              <div className="flex justify-between border-b">
+                                <p className="text-right text-black">
+                                  <span className="">Total HTVA:</span>
+                                </p>
+                                <p>
+                                  {" "}
+                                  {formatCurrency({
+                                    amount: totalHtva && totalHtva,
+                                    currency: currency && (currency as any),
+                                  })}
+                                </p>
+                              </div>
+                              <div className="flex justify-between border-b">
+                                <p className="text-right text-black">
+                                  <span className="">TVA:</span>
+                                </p>
+                                <p>
+                                  {" "}
+                                  {formatCurrency({
+                                    amount: amoutTva && amoutTva,
+                                    currency: currency && (currency as any),
+                                  })}
+                                </p>
+                              </div>
+                            </>
+                          )}
+
                           <div className="flex justify-between">
                             <p className="text-right text-black">
-                              <span className="font-bold">Total TVAC:</span>
+                              <span className="font-bold">Total:</span>
                             </p>
-                            <p className="font-bold">12702.58$</p>
+                            <p className="font-bold">
+                              {" "}
+                              {formatCurrency({
+                                amount: total && total,
+                                currency: currency && (currency as any),
+                              })}
+                            </p>
                           </div>
                         </div>
                       </div>
                     </div>
                     <div className="mt-8">
-                      <p className="text-xs">
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                        Nulla labore esse at iste ullam veniam perspiciatis,
-                        modi blanditiis praesentium excepturi facere neque
-                        optio. Molestiae rem dolor debitis corrupti error
-                        beatae!
-                      </p>
+                      <p className="text-xs">{comments && comments}</p>
                     </div>
                   </div>
                   <div className="border-t pt-4 flex gap-8 justify-around">
                     <div>
                       <h1 className="font-bold">{name && name}</h1>
                       <p>
-                        <span className="font-bold">№ TVA</span> {tva && tva}
+                        <span className="font-bold">№ TVA</span>{" "}
+                        {numberTva && numberTva}
                       </p>
                     </div>
                     <div>
@@ -272,25 +330,3 @@ export default function PdfContent({
     </>
   );
 }
-
-// import jsPDF from "jspdf";
-// import html2canvas from "html2canvas-pro";
-//   const onSubmit = async () => {
-//     const input = document.getElementById("pdf-content");
-//     if (input) {
-//       try {
-//         const canvas = await html2canvas(input, {
-//           useCORS: true,
-//           scale: 2,
-//         });
-//         const imgData = canvas.toDataURL("image/png");
-//         const pdf = new jsPDF();
-//         const imgWidth = 210; // Largeur page A4
-//         const imgHeight = (canvas.height * imgWidth) / canvas.width;
-//         pdf.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight);
-//         pdf.save("facture.pdf");
-//       } catch (error) {
-//         console.log(error);
-//       }
-//     }
-//   };

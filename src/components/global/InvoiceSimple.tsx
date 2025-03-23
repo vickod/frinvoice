@@ -20,6 +20,7 @@ import OptionalFields from "./formInvoice/OptionalFields";
 import SummaryCard from "./formInvoice/SummaryCard";
 import InvoiceDetails from "./formInvoice/InvoiceDetails";
 import UsersDetails from "./formInvoice/UsersDetails";
+import { getTotal, getTotalHtva, getTva } from "@/utils/Calculations";
 export default function InvoiceSimple() {
   const [formData, setFormData] = useState<{
     logoEnt: File | undefined;
@@ -29,6 +30,8 @@ export default function InvoiceSimple() {
     city: string;
     country: string;
     email: string | undefined;
+    numberTva: string | undefined;
+    iban: string | undefined;
     clientName: string;
     clientAddress: string;
     clientCp: number;
@@ -43,7 +46,9 @@ export default function InvoiceSimple() {
     quantity: number;
     tva: number;
     comments: string | undefined;
-    total: string;
+    total: number;
+    amoutTva: number;
+    totalHtva: number;
     currency: string;
     paymentStatus: string;
     paymentMethod: string;
@@ -58,6 +63,7 @@ export default function InvoiceSimple() {
     reset,
     setError,
     setValue,
+    watch,
   } = useForm<FormFieldsType>({
     resolver: zodResolver(schema),
     mode: "onTouched",
@@ -70,16 +76,30 @@ export default function InvoiceSimple() {
       quantity: 0,
       tva: 0,
       comments: "",
-      total: "0",
+      total: 0,
+      amoutTva: 0,
+      totalHtva: 0,
       currency: "EUR",
-      paymentStatus: "notIncluded",
+      paymentStatus: "topay",
       paymentMethod: "notIncluded",
       isTvaIncluded: false,
     },
   });
+  const price = watch("price");
+  const quantity = watch("quantity");
+  const tva = watch("tva");
+  const isTvaIncluded = watch("isTvaIncluded");
+  const currency = watch("currency");
+
+  const total = getTotal({ price, quantity, tva, isTvaIncluded });
+  const amoutTva = getTva({ price, quantity, tva, isTvaIncluded });
+  const totalHtva = getTotalHtva({ price, quantity });
 
   const onSubmit: SubmitHandler<FormFieldsType> = async (data) => {
-    console.log(data.isTvaIncluded);
+    console.log(data);
+    console.log("depuis parent HTVA", totalHtva);
+    console.log("depuis parent TVA", amoutTva);
+    console.log("depuis parent TOTAL ", total);
 
     const response = await fetch("api/formInvoice", {
       method: "POST",
@@ -91,6 +111,8 @@ export default function InvoiceSimple() {
         city: data.city,
         country: data.country,
         email: data.email,
+        numberTva: data.numberTva,
+        iban: data.iban,
         clientName: data.clientName,
         clientAddress: data.clientAddress,
         clientCp: Number(data.clientCp),
@@ -105,7 +127,9 @@ export default function InvoiceSimple() {
         quantity: data.quantity,
         tva: data.tva,
         comments: data.comments,
-        total: data.total,
+        total: total && total,
+        amoutTva: amoutTva && amoutTva,
+        totalHtva: totalHtva && totalHtva,
         currency: data.currency,
         paymentStatus: data.paymentStatus,
         paymentMethod: data.paymentMethod,
@@ -151,6 +175,8 @@ export default function InvoiceSimple() {
       city: data.city,
       country: data.country,
       email: data.email,
+      numberTva: data.numberTva,
+      iban: data.iban,
       clientName: data.clientName,
       clientAddress: data.clientAddress,
       clientCp: Number(data.clientCp),
@@ -165,7 +191,9 @@ export default function InvoiceSimple() {
       quantity: data.quantity,
       tva: data.tva,
       comments: data.comments,
-      total: data.total,
+      total: total && total,
+      amoutTva: amoutTva && amoutTva,
+      totalHtva: totalHtva && totalHtva,
       currency: data.currency,
       paymentStatus: data.paymentStatus,
       paymentMethod: data.paymentMethod,
@@ -220,6 +248,12 @@ export default function InvoiceSimple() {
               register={register}
               control={control}
               errors={errors}
+              total={total}
+              amoutTva={amoutTva}
+              tva={tva}
+              totalHtva={totalHtva}
+              isTvaIncluded={isTvaIncluded}
+              currency={currency}
             />
 
             <div className="flex mt-8 justify-end">
@@ -236,6 +270,8 @@ export default function InvoiceSimple() {
                     city={formData.city}
                     country={formData.country}
                     email={formData.email}
+                    numberTva={formData.numberTva}
+                    iban={formData.iban}
                     clientName={formData.clientName}
                     clientAddress={formData.clientAddress}
                     clientCp={formData.clientCp}
@@ -251,6 +287,8 @@ export default function InvoiceSimple() {
                     tva={formData.tva}
                     comments={formData.comments}
                     total={formData.total}
+                    amoutTva={formData.amoutTva}
+                    totalHtva={formData.totalHtva}
                     currency={formData.currency}
                     paymentStatus={formData.paymentStatus}
                     paymentMethod={formData.paymentMethod}

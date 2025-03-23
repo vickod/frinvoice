@@ -6,16 +6,6 @@ import { Controller } from "react-hook-form";
 import { number } from "zod";
 
 type SummaryCardProps = {
-  //price: string;
-  //setPrice: React.Dispatch<React.SetStateAction<string>>;
-  // quantity: string;
-  // setQuantity: React.Dispatch<React.SetStateAction<string>>;
-  // isTvaIncluded: boolean;
-  // tva: string;
-  // setTva: React.Dispatch<React.SetStateAction<string>>;
-  // currency: string;
-  // isPaid: string;
-  // paymentMethod: string;
   descriptionName: string;
   register: any;
   control: any;
@@ -24,19 +14,15 @@ type SummaryCardProps = {
   quantityName: string;
   tvaName: string;
   commentsName: string;
+  total: number;
+  amoutTva: number;
+  totalHtva: number;
+  isTvaIncluded: boolean;
+  currency: string;
+  tva: number;
 };
 
 export default function SummaryCard({
-  // price,
-  //setPrice,
-  // quantity,
-  // setQuantity,
-  // isTvaIncluded,
-
-  // setTva,
-  // currency,
-  // isPaid,
-  // paymentMethod,
   descriptionName,
   register,
   control,
@@ -45,16 +31,13 @@ export default function SummaryCard({
   quantityName,
   tvaName,
   commentsName,
+  total,
+  amoutTva,
+  totalHtva,
+  isTvaIncluded,
+  currency,
+  tva,
 }: SummaryCardProps) {
-  // const calculateTotal =
-  //   isTvaIncluded && Number(tva) > 0
-  //     ? ((Number(quantity) || 0) * (Number(price) || 0) * Number(tva)) / 100 +
-  //       (Number(quantity) || 0) * (Number(price) || 0)
-  //     : (Number(quantity) || 0) * (Number(price) || 0);
-  // const calculateTVA =
-  //   ((Number(quantity) || 0) * (Number(price) || 0) * Number(tva)) / 100;
-  // const calculateTotHtva = (Number(quantity) || 0) * (Number(price) || 0);
-
   return (
     <div>
       <div className="mt-20 flex  max-lg:flex-col w-full md:gap-6">
@@ -81,9 +64,6 @@ export default function SummaryCard({
               control={control}
               render={({ field }) => (
                 <Input
-                  type="number"
-                  step="0.01"
-                  min="0"
                   className=""
                   placeholder="0"
                   {...field}
@@ -110,9 +90,6 @@ export default function SummaryCard({
               control={control}
               render={({ field }) => (
                 <Input
-                  type="number"
-                  className=""
-                  placeholder="0"
                   // value={quantity}
                   {...field}
                   onChange={(e) =>
@@ -129,37 +106,34 @@ export default function SummaryCard({
           {errors.quantity && (
             <p className="text-red-500">{errors.quantity.message}</p>
           )}
-          {/* {isTvaIncluded && ( */}
-          <div className="flex flex-col gap-2 md:w-1/8">
-            <Label>
-              TVA:<span className="text-red-500">*</span>
-            </Label>
-            <Controller
-              name={tvaName}
-              control={control}
-              render={({ field }) => (
-                <Input
-                  type="number"
-                  min="0"
-                  max="100"
-                  className=""
-                  placeholder="0 %"
-                  // value={tva}
-                  // onChange={(e) => setTva(e.target.value)}
-                  {...field}
-                  onChange={(e) =>
-                    field.onChange(
-                      e.target.value === ""
-                        ? undefined
-                        : parseFloat(e.target.value)
-                    )
-                  }
-                />
-              )}
-            />
-          </div>
-          {errors.tva && <p className="text-red-500">{errors.tva.message}</p>}
-          {/* )} */}
+          {isTvaIncluded && (
+            <div className="flex flex-col gap-2 md:w-1/8">
+              <Label>
+                TVA:<span className="text-red-500">*</span>
+              </Label>
+              <Controller
+                name={tvaName}
+                control={control}
+                render={({ field }) => (
+                  <Input
+                    className=""
+                    placeholder="0 %"
+                    // value={tva}
+                    // onChange={(e) => setTva(e.target.value)}
+                    {...field}
+                    onChange={(e) =>
+                      field.onChange(
+                        e.target.value === ""
+                          ? undefined
+                          : parseFloat(e.target.value)
+                      )
+                    }
+                  />
+                )}
+              />
+            </div>
+            // {errors.tva && <p className="text-red-500">{errors.tva.message}</p>}
+          )}
 
           <div className="flex flex-col gap-2 md:w-2/8">
             <Label>Total:</Label>
@@ -167,23 +141,23 @@ export default function SummaryCard({
               className=""
               disabled
               {...register("total")}
-              // value={formatCurrency({
-              //   amount: calculateTotal,
-              //   currency: currency as any,
-              // })}
+              value={formatCurrency({
+                amount: total && !isNaN(Number(total)) ? total : 0,
+                currency: currency as any,
+              })}
             />
           </div>
         </div>
       </div>
 
-      {/* <div className="mt-20 md:w-1/3 flex md:justify-self-end flex-col gap-4 ">
+      <div className="mt-20 md:w-1/3 flex md:justify-self-end flex-col gap-4 ">
         {isTvaIncluded && (
           <>
             <div className="w-full flex justify-between border-b">
               <span>Sous-total HTVA</span>
               <span>
                 {formatCurrency({
-                  amount: calculateTotHtva,
+                  amount: totalHtva,
                   currency: currency as any,
                 })}
               </span>
@@ -192,7 +166,7 @@ export default function SummaryCard({
               <span>TVA ({tva ? tva : 0}%)</span>
               <span>
                 {formatCurrency({
-                  amount: calculateTVA,
+                  amount: amoutTva,
                   currency: currency as any,
                 })}
               </span>
@@ -204,12 +178,12 @@ export default function SummaryCard({
           <span className="font-bold">Total</span>
           <span className="font-bold">
             {formatCurrency({
-              amount: calculateTotal,
+              amount: total,
               currency: currency as any,
             })}
           </span>
         </div>
-        <div className="flex flex-col mt-20">
+        {/* <div className="flex flex-col mt-20">
           {isPaid !== "notInclude" && (
             <div className="flex justify-between">
               <p className="text-neutral-600">Statut de paiement:</p>
@@ -228,8 +202,8 @@ export default function SummaryCard({
               </p>
             </div>
           )}
-        </div>
-      </div> */}
+        </div> */}
+      </div>
 
       <div className="mt-10 flex flex-col gap-2">
         <Label>Commentaires</Label>

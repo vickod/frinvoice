@@ -68,7 +68,7 @@ export default function OptionalFields({
                 <SelectValue placeholder="Selectionnez un statut:" />
               </SelectTrigger>
               <SelectContent className="">
-                <SelectItem value="notIncluded">Ne pas inclure</SelectItem>
+                {/* <SelectItem value="notIncluded">Ne pas inclure</SelectItem> */}
                 <SelectItem value="topay">A payer</SelectItem>
                 <SelectItem value="paid">Payé</SelectItem>
               </SelectContent>
@@ -94,8 +94,8 @@ export default function OptionalFields({
               </SelectTrigger>
               <SelectContent className="">
                 <SelectItem value="notIncluded">Ne pas inclure</SelectItem>
-                <SelectItem value="virement">Virement</SelectItem>
-                <SelectItem value="cash">Cash</SelectItem>
+                <SelectItem value="virement">Par virement</SelectItem>
+                <SelectItem value="cash">En espèces</SelectItem>
               </SelectContent>
             </Select>
           )}

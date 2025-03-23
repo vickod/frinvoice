@@ -15,7 +15,8 @@ export const schema = z.object({
     country: z.string().min(2, "Pays invalide").regex(/^[A-Za-z\s]+$/, "Veuillez saisir un pays valide"),
 
     email: z.string().optional(),
-
+    numberTva: z.string().optional(),
+    iban:z.string().optional(),
     clientName: z.string().min(2, "Nom invalide").regex(/^[A-Za-z\s]+$/, "Veuillez saisir un nom valide"),
     clientAddress: z.string().min(2, "Adresse invalide").regex(/^[A-Za-zÀ-ÖØ-öø-ÿ\s]+\s\d+$/,"L'adresse doit contenir la rue et le numero."),
     clientCp: z.string().min(1,"Code postal invalide").regex(/^\d+$/, "Le code postal doit etre composé de chiffres")
@@ -37,7 +38,9 @@ export const schema = z.object({
     
     comments: z.string().optional(),
 
-    total: z.string(),
+    total: z.number(),
+    amoutTva: z.number(),
+    totalHtva: z.number(),
     currency: z.string(),
     paymentStatus: z.string(),
     paymentMethod: z.string(),

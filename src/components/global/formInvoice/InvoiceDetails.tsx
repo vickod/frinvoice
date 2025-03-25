@@ -45,16 +45,12 @@ export default function InvoiceDetails({
           name={invoiceNumberName}
           control={control}
           render={({ field }) => (
-            <Input
-              {...field}
-              placeholder="XXXXXXXXXXXXX"
-              className="w-[280px]"
-            />
+            <Input {...field} placeholder="" className="w-[280px]" />
           )}
         />
       </div>
       <div className="flex gap-2 justify-between">
-        <Label className="whitespace-nowrap text-neutral-600">Créée le:</Label>
+        <Label className="whitespace-nowrap text-neutral-600">Emise le:</Label>
         <Controller
           name={createdDateName}
           control={control}
@@ -63,6 +59,7 @@ export default function InvoiceDetails({
               <PopoverTrigger asChild>
                 <Button
                   variant="outline"
+                  disabled
                   className="w-[280px] text-left justify-between"
                 >
                   <span>{formatDate(field.value)}</span>
@@ -72,8 +69,9 @@ export default function InvoiceDetails({
               <PopoverContent>
                 <Calendar
                   mode="single"
+                  disabled
                   selected={field.value}
-                  onSelect={field.onChange}
+                  // onSelect={field.onChange}
                   fromDate={new Date()}
                 />
               </PopoverContent>

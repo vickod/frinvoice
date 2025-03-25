@@ -9,8 +9,8 @@ type UsersDetailsProps = {
 };
 export default function UsersDetails({ register, errors }: UsersDetailsProps) {
   return (
-    <div className="flex max-md:flex-col max-md:gap-12 md:justify-between w-full ">
-      <div className="flex flex-col gap-4 md:w-1/3 w-full">
+    <div className="flex max-md:flex-col max-md:gap-12 md:justify-between w-full gap-12 ">
+      <div className="flex flex-col gap-4 md:w-1/2 w-full">
         <Label className="text-lg font-bold">Prestataire:</Label>
         <div className="flex gap-2">
           <Input
@@ -49,7 +49,7 @@ export default function UsersDetails({ register, errors }: UsersDetailsProps) {
           <Input placeholder="IBAN" {...register("iban")} />
         </div>
       </div>
-      <div className="flex flex-col gap-4 md:w-1/3 w-full ">
+      <div className="flex flex-col gap-4 md:w-1/2 w-full ">
         <Label className="text-lg font-bold">Client:</Label>
         <div className="flex gap-2">
           <Input placeholder="Nom" {...register("clientName")} />

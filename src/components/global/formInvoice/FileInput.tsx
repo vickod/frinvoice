@@ -2,13 +2,19 @@ import React, { useRef, useState } from "react";
 import { Controller, UseFormSetValue } from "react-hook-form";
 import { TiDeleteOutline } from "react-icons/ti";
 import { FormFieldsType } from "@/lib/zodSchemas";
+import { Label } from "@/components/ui/label";
 
 type FileInputProps = {
   control: any;
   setValue: UseFormSetValue<FormFieldsType>;
+  errors: any;
 };
 
-export default function FileInput({ control, setValue }: FileInputProps) {
+export default function FileInput({
+  control,
+  setValue,
+  errors,
+}: FileInputProps) {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [isFileLoaded, setIsFileLoaded] = useState(false);
 
@@ -34,54 +40,39 @@ export default function FileInput({ control, setValue }: FileInputProps) {
   };
 
   return (
-    <div className="flex items-center">
-      <Controller
-        name="logoEnt"
-        control={control}
-        render={({ field }) => (
-          <input
-            type="file"
-            accept="image/*"
-            ref={fileInputRef}
-            onChange={(e) => handleFileChange(e, field.onChange)}
-            className="block w-1/3 text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:border file:border-gray-300 file:rounded file:bg-gray-100 file:text-sm"
+    <div className="flex max-md:flex-col justify-center items-center mb-8 w-full">
+      <div className="w-full flex flex-col gap-4 justify-start max-md:mt-5">
+        <Label className="text-lg font-bold whitespace-nowrap">
+          Ajouter le logo de l'entreprise:
+        </Label>
+        <div className="flex items-center w-fit">
+          <Controller
+            name="logoEnt"
+            control={control}
+            render={({ field }) => (
+              <input
+                type="file"
+                accept="image/*"
+                ref={fileInputRef}
+                onChange={(e) => handleFileChange(e, field.onChange)}
+                className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:border file:border-gray-300 file:rounded file:bg-gray-100 file:text-sm"
+              />
+            )}
           />
-        )}
-      />
-      {isFileLoaded && (
-        <button
-          type="button"
-          onClick={handleRemoveFile}
-          className="ml-2 px-2 py-1 rounded"
-        >
-          <TiDeleteOutline className="size-6 text-red-500 cursor-pointer" />
-        </button>
+          {isFileLoaded && (
+            <button
+              type="button"
+              onClick={handleRemoveFile}
+              className="ml-2 px-2 py-1 rounded"
+            >
+              <TiDeleteOutline className="size-6 text-red-500 cursor-pointer" />
+            </button>
+          )}
+        </div>
+      </div>
+      {errors.logoEnt && (
+        <p className="text-red-500">{errors.logoEnt.message}</p>
       )}
     </div>
   );
 }
-
-//  <div className="flex ">
-// <Controller
-//   name="logoEnt"
-//   control={control}
-//   render={({ field }) => (
-//     <input
-//       type="file"
-//       accept="image/*"
-//       ref={fileLogoInputRef}
-//       onChange={(e) => handleFileChange(e, field.onChange)} // Assure que le champ contient un `File`
-//       className="block w-fit lg:w-1/3 text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:border file:border-gray-300 file:rounded file:bg-gray-100 file:text-sm"
-//       // className="border whitespace-break-spaces size-44 file:border file:p-2 file:center"
-//     />
-//   )}
-// />
-// {isFileLoaded && (
-//   <button
-//     className="w-fit ml-2"
-//     onClick={handleRemoveFileInternal}
-//   >
-//     <TiDeleteOutline className="size-6 text-red-400" />
-//   </button>
-// )}
-// </div>

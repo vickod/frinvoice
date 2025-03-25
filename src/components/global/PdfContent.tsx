@@ -51,7 +51,7 @@ export default function PdfContent({
   total,
   amoutTva,
   totalHtva,
-  currency,
+  // currency,
   paymentStatus,
   paymentMethod,
   isTvaIncluded,
@@ -76,7 +76,7 @@ export default function PdfContent({
 
   return (
     <>
-      <DrawerContent className="flex flex-col  w-full bg-white p-6 rounded shadow-md">
+      <DrawerContent className="flex flex-col min-h-[90vh]  w-full bg-white p-6 rounded shadow-md">
         <div className="h-full overflow-y-scroll">
           <div>
             <DrawerHeader className="">
@@ -86,7 +86,7 @@ export default function PdfContent({
 
               <DrawerDescription asChild className="mx-auto h-full  ">
                 <div
-                  className="bg-white p-10 rounded shadow-md  flex flex-col justify-between border-t "
+                  className="bg-white p-10 rounded shadow-md  flex flex-col justify-between border "
                   style={{ width: "794px", minHeight: "1123px" }}
                   id="pdf-content"
                   ref={contentRef}
@@ -106,7 +106,7 @@ export default function PdfContent({
 
                         <div>
                           <p className="font-bold">{name}</p>
-                          <p>{address && address}</p>
+                          <p className="">{address && address}</p>
                           <p>
                             {cp == 0 || cp == undefined ? "" : cp} {city},{" "}
                             {country}
@@ -180,7 +180,9 @@ export default function PdfContent({
                       <Table className="w-full">
                         <TableHeader>
                           <TableRow className="bg-zinc-100">
-                            <TableHead className="w-4/9">Description</TableHead>
+                            <TableHead className="w-5/12">
+                              Description
+                            </TableHead>
                             <TableHead>Prix unitaire</TableHead>
                             <TableHead>Quantite</TableHead>
                             {isTvaIncluded && <TableHead>TVA</TableHead>}
@@ -189,7 +191,7 @@ export default function PdfContent({
                         </TableHeader>
                         <TableBody>
                           <TableRow className="text-black">
-                            <TableCell className="break-words whitespace-normal pr-6 ">
+                            <TableCell className=" break-words whitespace-normal pr-6  max-w-60">
                               {description && description}
                             </TableCell>
                             <TableCell>{price && price}</TableCell>
@@ -200,7 +202,39 @@ export default function PdfContent({
                             <TableCell className="text-right">
                               {formatCurrency({
                                 amount: total && total,
-                                currency: currency && (currency as any),
+                                currency: "EUR",
+                              })}
+                            </TableCell>
+                          </TableRow>
+                          <TableRow className="text-black">
+                            <TableCell className=" break-words whitespace-normal pr-6  max-w-60">
+                              {description && description}
+                            </TableCell>
+                            <TableCell>{price && price}</TableCell>
+                            <TableCell>{quantity && quantity}</TableCell>
+                            {isTvaIncluded && (
+                              <TableCell>{tva && tva}%</TableCell>
+                            )}
+                            <TableCell className="text-right">
+                              {formatCurrency({
+                                amount: total && total,
+                                currency: "EUR",
+                              })}
+                            </TableCell>
+                          </TableRow>
+                          <TableRow className="text-black">
+                            <TableCell className=" break-words whitespace-normal pr-6  max-w-60">
+                              {description && description}
+                            </TableCell>
+                            <TableCell>{price && price}</TableCell>
+                            <TableCell>{quantity && quantity}</TableCell>
+                            {isTvaIncluded && (
+                              <TableCell>{tva && tva}%</TableCell>
+                            )}
+                            <TableCell className="text-right">
+                              {formatCurrency({
+                                amount: total && total,
+                                currency: "EUR",
                               })}
                             </TableCell>
                           </TableRow>
@@ -209,21 +243,24 @@ export default function PdfContent({
                     </div>
                     <div className="mt-16 flex justify-between items-end">
                       <div className="w-1/2 flex flex-col gap-2">
-                        {/* <Label className="w-fit  rounded-2xl">
-                          Echeance de paiement le{" "}
-                          {dueDate && (
-                            <>
-                              {" "}
-                              <span className="font-bold">
-                                {new Intl.DateTimeFormat("fr-FR", {
-                                  year: "numeric",
-                                  month: "long",
-                                  day: "numeric",
-                                }).format(dueDate)}
-                              </span>
-                            </>
-                          )}
-                        </Label> */}
+                        {dueDate && (
+                          <Label className="w-fit font-bold ">
+                            Echeance de paiement le{" "}
+                            {dueDate && (
+                              <>
+                                {" "}
+                                <span className="font-bold">
+                                  {new Intl.DateTimeFormat("fr-FR", {
+                                    year: "numeric",
+                                    month: "long",
+                                    day: "numeric",
+                                  }).format(dueDate)}
+                                </span>
+                              </>
+                            )}
+                          </Label>
+                        )}
+
                         <div className="mt-2 w-full flex flex-col gap-2">
                           {paymentMethod !== "notIncluded" && (
                             <p className="">
@@ -235,7 +272,7 @@ export default function PdfContent({
                               </span>
                             </p>
                           )}
-                          <p>
+                          <p className="font-bold">
                             {paymentStatus === "paid"
                               ? "Aucun solde restant dû."
                               : "A regler"}
@@ -254,7 +291,7 @@ export default function PdfContent({
                                   {" "}
                                   {formatCurrency({
                                     amount: totalHtva && totalHtva,
-                                    currency: currency && (currency as any),
+                                    currency: "EUR",
                                   })}
                                 </p>
                               </div>
@@ -266,7 +303,7 @@ export default function PdfContent({
                                   {" "}
                                   {formatCurrency({
                                     amount: amoutTva && amoutTva,
-                                    currency: currency && (currency as any),
+                                    currency: "EUR",
                                   })}
                                 </p>
                               </div>
@@ -281,7 +318,7 @@ export default function PdfContent({
                               {" "}
                               {formatCurrency({
                                 amount: total && total,
-                                currency: currency && (currency as any),
+                                currency: "EUR",
                               })}
                             </p>
                           </div>
@@ -311,20 +348,20 @@ export default function PdfContent({
               </DrawerDescription>
             </DrawerHeader>
           </div>
-          <div>
-            <DrawerFooter className="max-w-[210mm] mx-auto">
-              <div className="flex gap-4 justify-end">
-                <div>
-                  <Button onClick={() => reactToPrintFn()}>Telecharger</Button>
-                </div>
-                <div>
-                  <DrawerClose asChild>
-                    <Button variant="outline">Fermer</Button>
-                  </DrawerClose>
-                </div>
+        </div>
+        <div className="mt-8">
+          <DrawerFooter className="max-w-[210mm] border-t  mx-auto ">
+            <div className="flex gap-4 justify-end ">
+              <div>
+                <Button onClick={() => reactToPrintFn()}>Telecharger</Button>
               </div>
-            </DrawerFooter>
-          </div>
+              <div>
+                <DrawerClose asChild>
+                  <Button variant="outline">Fermer</Button>
+                </DrawerClose>
+              </div>
+            </div>
+          </DrawerFooter>
         </div>
       </DrawerContent>
     </>

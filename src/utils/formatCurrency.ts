@@ -1,6 +1,7 @@
 type formatProps = {
     amount: number;
-    currency: "EUR" | "USD" | "RUB";
+    // currency: "EUR" | "USD" | "RUB";
+    currency: "EUR";
   };
   
   export function formatCurrency({ amount, currency }: formatProps) {

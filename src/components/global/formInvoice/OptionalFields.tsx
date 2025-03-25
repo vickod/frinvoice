@@ -11,7 +11,7 @@ import {
 
 type OptionalFieldsProps = {
   control: any;
-  currencyName: string;
+  // currencyName: string;
   paymentStatusName: string;
   paymentMethodName: string;
   isTvaIncludedName: string;
@@ -19,7 +19,7 @@ type OptionalFieldsProps = {
 
 export default function OptionalFields({
   control,
-  currencyName,
+  // currencyName,
   paymentStatusName,
   paymentMethodName,
   isTvaIncludedName,
@@ -27,7 +27,7 @@ export default function OptionalFields({
   return (
     <div className="flex flex-col gap-4 max-md:w-full md:w-1/2 ">
       <Label className="text-lg font-bold">Options:</Label>
-      <div className="flex gap-2 ">
+      {/* <div className="flex gap-2">
         <Label className="text-neutral-600">Dévise:</Label>
         <Controller
           name={currencyName}
@@ -48,8 +48,8 @@ export default function OptionalFields({
             </Select>
           )}
         />
-      </div>
-      <div className="flex gap-2 ">
+      </div> */}
+      <div className="flex gap-2 justify-between ">
         <Label className="whitespace-nowrap text-neutral-600">
           Statut de paiement:
         </Label>
@@ -60,6 +60,7 @@ export default function OptionalFields({
             <Select
               // defaultValue="notInclude"
               // onValueChange={(value) => setIsPaid(value)}
+
               {...field}
               value={field.value}
               onValueChange={field.onChange}
@@ -76,7 +77,7 @@ export default function OptionalFields({
           )}
         />
       </div>
-      <div className="flex gap-2 ">
+      <div className="flex gap-2 justify-between ">
         <Label className="whitespace-nowrap text-neutral-600">
           Mode de paiement:
         </Label>
@@ -101,7 +102,7 @@ export default function OptionalFields({
           )}
         />
       </div>
-      <div className="flex items-center space-x-2">
+      <div className="flex items-center space-x-2 justify-between">
         <Label htmlFor="tva-mode" className="text-neutral-600">
           Inclure le montant de la TVA:
         </Label>

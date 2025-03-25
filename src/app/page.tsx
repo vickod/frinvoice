@@ -1,15 +1,14 @@
 import Footer from "@/components/global/Footer";
-import FormInvoice from "@/components/global/FormInvoice";
 import Header from "@/components/global/Header";
+import InvoiceSimple from "@/components/global/Invoice";
 import Navbar from "@/components/global/Navbar";
-import Image from "next/image";
 
 export default function Home() {
   return (
     <div>
       <Navbar />
       <Header />
-      <FormInvoice />
+      <InvoiceSimple />
       <Footer />
     </div>
   );

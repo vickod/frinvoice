@@ -1,3 +1,4 @@
+import About from "@/components/global/About";
 import Footer from "@/components/global/Footer";
 import Header from "@/components/global/Header";
 import InvoiceSimple from "@/components/global/Invoice";
@@ -8,7 +9,9 @@ export default function Home() {
     <div>
       <Navbar />
       <Header />
+      <About />
       <InvoiceSimple />
+
       <Footer />
     </div>
   );

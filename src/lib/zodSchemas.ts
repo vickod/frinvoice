@@ -1,11 +1,13 @@
 import {z} from "zod"
 
-const productSchema = z.object({
-  description: z.string().min(1, "La description est obligatoire"),
-  price: z.number().min(0, "Le prix doit être supérieur ou égal à 0"),
-  quantity: z.number().min(1, "La quantité doit être au moins 1"),
-  tva: z.number().min(0, "La TVA doit être positive").max(100, "La TVA ne peut pas dépasser 100"),
-});
+// const productSchema = z.object({
+//   description: z.string().min(1, "La description est obligatoire"),
+//   price: z.number().min(0, "Le prix doit être supérieur ou égal à 0"),
+//   quantity: z.number().min(1, "La quantité doit être au moins 1"),
+//   tva: z.number().min(0, "La TVA doit être positive").max(100, "La TVA ne peut pas dépasser 100"),
+//   total: z.number().min(0),
+  
+// });
 
 export const schema = z.object({
     logoEnt: z
@@ -53,7 +55,7 @@ export const schema = z.object({
     paymentMethod: z.string(),
     isTvaIncluded: z.boolean(),
 
-    products: z.array(productSchema).min(1, "Au moins un produit est requis").max(3, "Un maximum de 3 produits est autorisé"),
+    // products: z.array(productSchema).min(1, "Au moins un produit est requis").max(3, "Un maximum de 3 produits est autorisé"),
    
 
  

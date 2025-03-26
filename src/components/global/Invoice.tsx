@@ -1,5 +1,5 @@
 "use client";
-import { SubmitHandler, useForm, useFieldArray } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Drawer, DrawerTrigger } from "@/components/ui/drawer";
 import {
@@ -83,42 +83,17 @@ export default function InvoiceSimple() {
       paymentStatus: "topay",
       paymentMethod: "notIncluded",
       isTvaIncluded: false,
-      products: [{ description: "", price: 0, quantity: 0, tva: 0 }],
     },
   });
-  // type Product = {
-  //   description: string;
-  //   price: number;
-  //   quantity: number;
-  //   tva: number;
-  // };
-  const { fields, append, remove } = useFieldArray({
-    control,
-    name: "products",
-  });
-  const products = watch("products");
   const price = watch("price");
   const quantity = watch("quantity");
   const tva = watch("tva");
   const isTvaIncluded = watch("isTvaIncluded");
   // const currency = watch("currency");
+
   const total = getTotal({ price, quantity, tva, isTvaIncluded });
   const amoutTva = getTva({ price, quantity, tva, isTvaIncluded });
   const totalHtva = getTotalHtva({ price, quantity });
-
-  const totalGeneral = products.reduce((acc, product) => {
-    const baseTotal = getTotalHtva({
-      price: product.price || 0,
-      quantity: product.quantity || 0,
-    });
-    const tvaAmount = getTva({
-      price: product.price || 0,
-      quantity: product.quantity || 0,
-      tva: product.tva || 0,
-      isTvaIncluded: isTvaIncluded || false,
-    });
-    return acc + baseTotal + tvaAmount;
-  }, 0);
 
   const onSubmit: SubmitHandler<FormFieldsType> = async (data) => {
     console.log(data);
@@ -159,7 +134,6 @@ export default function InvoiceSimple() {
         paymentStatus: data.paymentStatus,
         paymentMethod: data.paymentMethod,
         isTvaIncluded: data.isTvaIncluded,
-        products: data.products,
       }),
       headers: {
         "Content-Type": "application/json",
@@ -230,16 +204,16 @@ export default function InvoiceSimple() {
   return (
     <div
       id="form"
-      className="  min-h-[800px] p-2 md:w-11/12 lg:w-9/12  xl:w-7/12 mx-auto"
+      className="  min-h-[800px] p-2 md:w-11/12 lg:w-9/12  xl:w-7/12 mx-auto mb-20"
     >
-      <h1 className="text-center text-4xl pt-40 pb-20">Facture</h1>
-      <Card>
+      <h1 className="text-center text-5xl pt-40 pb-20 font-bold">Facture</h1>
+      <Card className="shadow-2xl">
         <CardHeader>
           <CardTitle></CardTitle>
           <CardDescription></CardDescription>
         </CardHeader>
-        <CardContent className="w-full">
-          <form onSubmit={handleSubmit(onSubmit)} className="w-full">
+        <CardContent className="w-full ">
+          <form onSubmit={handleSubmit(onSubmit)} className="w-full ">
             <FileInput control={control} setValue={setValue} errors={errors} />
 
             <UsersDetails register={register} errors={errors} />
@@ -259,7 +233,7 @@ export default function InvoiceSimple() {
                 isTvaIncludedName="isTvaIncluded"
               />
             </div>
-            {/* <SummaryCard
+            <SummaryCard
               descriptionName="description"
               priceName="price"
               quantityName="quantity"
@@ -270,94 +244,11 @@ export default function InvoiceSimple() {
               errors={errors}
               total={total}
               amoutTva={amoutTva}
-              totalHtva={totalHtva}
               tva={tva}
+              totalHtva={totalHtva}
               isTvaIncluded={isTvaIncluded}
               // currency={currency}
-            /> */}
-
-            {fields.map((field, index) => (
-              <SummaryCard
-                key={field.id}
-                descriptionName={`products.${index}.description`}
-                priceName={`products.${index}.price`}
-                quantityName={`products.${index}.quantity`}
-                tvaName={`products.${index}.tva`}
-                commentsName="comments"
-                register={register}
-                control={control}
-                errors={errors}
-                total={getTotal({
-                  price: products[index]?.price || 0,
-                  quantity: products[index]?.quantity || 0,
-                  tva: products[index]?.tva || 0,
-                  isTvaIncluded: isTvaIncluded || false,
-                })}
-                amoutTva={getTva({
-                  price: products[index]?.price || 0,
-                  quantity: products[index]?.quantity || 0,
-                  tva: products[index]?.tva || 0,
-                  isTvaIncluded: isTvaIncluded || false,
-                })}
-                totalHtva={getTotalHtva({
-                  price: products[index]?.price || 0,
-                  quantity: products[index]?.quantity || 0,
-                })}
-                isTvaIncluded={isTvaIncluded || false}
-                tva={products[index]?.tva || 0}
-              />
-            ))}
-
-            <div className="flex justify-between mt-4">
-              {fields.length < 3 && (
-                <Button
-                  type="button"
-                  onClick={() =>
-                    append({ description: "", price: 0, quantity: 0, tva: 0 })
-                  }
-                  className="bg-green-500 text-white"
-                >
-                  Ajouter une ligne
-                </Button>
-              )}
-              {fields.length > 1 && (
-                <Button
-                  type="button"
-                  onClick={() => remove(fields.length - 1)}
-                  className="bg-red-500 text-white"
-                >
-                  Supprimer une ligne
-                </Button>
-              )}
-            </div>
-
-            {/* Total général */}
-            <div className="mt-8">
-              <Label>Total Général:</Label>
-              <Input
-                type="text"
-                disabled
-                value={totalGeneral.toFixed(2)}
-                className="bg-gray-100"
-              />
-            </div>
-
-            {/* 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-             */}
+            />
 
             <div className="flex mt-8 justify-end">
               <Drawer>

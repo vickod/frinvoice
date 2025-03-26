@@ -158,7 +158,7 @@ export default function PdfContent({
                                 : ""}
                             </span>
                           </p>
-                          <p>
+                          {/* <p>
                             {dueDate && (
                               <>
                                 <span className="font-bold">Échéance le :</span>{" "}
@@ -171,7 +171,7 @@ export default function PdfContent({
                                 </span>
                               </>
                             )}
-                          </p>
+                          </p> */}
                         </div>
                       </div>
                     </div>
@@ -206,44 +206,12 @@ export default function PdfContent({
                               })}
                             </TableCell>
                           </TableRow>
-                          <TableRow className="text-black">
-                            <TableCell className=" break-words whitespace-normal pr-6  max-w-60">
-                              {description && description}
-                            </TableCell>
-                            <TableCell>{price && price}</TableCell>
-                            <TableCell>{quantity && quantity}</TableCell>
-                            {isTvaIncluded && (
-                              <TableCell>{tva && tva}%</TableCell>
-                            )}
-                            <TableCell className="text-right">
-                              {formatCurrency({
-                                amount: total && total,
-                                currency: "EUR",
-                              })}
-                            </TableCell>
-                          </TableRow>
-                          <TableRow className="text-black">
-                            <TableCell className=" break-words whitespace-normal pr-6  max-w-60">
-                              {description && description}
-                            </TableCell>
-                            <TableCell>{price && price}</TableCell>
-                            <TableCell>{quantity && quantity}</TableCell>
-                            {isTvaIncluded && (
-                              <TableCell>{tva && tva}%</TableCell>
-                            )}
-                            <TableCell className="text-right">
-                              {formatCurrency({
-                                amount: total && total,
-                                currency: "EUR",
-                              })}
-                            </TableCell>
-                          </TableRow>
                         </TableBody>
                       </Table>
                     </div>
                     <div className="mt-16 flex justify-between items-end">
                       <div className="w-1/2 flex flex-col gap-2">
-                        {dueDate && (
+                        {/* {dueDate && (
                           <Label className="w-fit font-bold ">
                             Echeance de paiement le{" "}
                             {dueDate && (
@@ -259,7 +227,7 @@ export default function PdfContent({
                               </>
                             )}
                           </Label>
-                        )}
+                        )} */}
 
                         <div className="mt-2 w-full flex flex-col gap-2">
                           {paymentMethod !== "notIncluded" && (
@@ -272,11 +240,36 @@ export default function PdfContent({
                               </span>
                             </p>
                           )}
-                          <p className="font-bold">
-                            {paymentStatus === "paid"
-                              ? "Aucun solde restant dû."
-                              : "A regler"}
-                          </p>
+                          <div className="">
+                            {paymentStatus === "paid" ? (
+                              <p>Aucun solde restant dû.</p>
+                            ) : (
+                              <p>
+                                Montant dû :{" "}
+                                <span className="font-bold">
+                                  {total.toFixed(2)}
+                                </span>{" "}
+                                €. Merci de régler ce solde
+                                {dueDate && (
+                                  <>
+                                    {" "}
+                                    <span className="block">
+                                      {" "}
+                                      avant le{" "}
+                                      <span className="font-bold">
+                                        {new Intl.DateTimeFormat("fr-FR", {
+                                          year: "numeric",
+                                          month: "long",
+                                          day: "numeric",
+                                        }).format(dueDate)}
+                                        .
+                                      </span>
+                                    </span>
+                                  </>
+                                )}
+                              </p>
+                            )}
+                          </div>
                         </div>
                       </div>
                       <div className="w-1/2 flex justify-end ">
@@ -325,7 +318,7 @@ export default function PdfContent({
                         </div>
                       </div>
                     </div>
-                    <div className="mt-8">
+                    <div className="mt-20">
                       <p className="text-xs">{comments && comments}</p>
                     </div>
                   </div>

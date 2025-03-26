@@ -5,7 +5,7 @@ import { Button } from "../ui/button";
 import Link from "next/link";
 export default function Header() {
   return (
-    <div className="max-h-screen relative">
+    <div className="max-h-screen relative shadow-2xl">
       <Image
         src={F2}
         alt=""

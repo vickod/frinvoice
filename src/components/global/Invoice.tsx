@@ -204,15 +204,15 @@ export default function InvoiceSimple() {
   return (
     <div
       id="form"
-      className="  min-h-[800px] p-2 md:w-11/12 lg:w-9/12  xl:w-7/12 mx-auto mb-20"
+      className="  min-h-[800px] p-2 md:w-11/12 lg:w-9/12  xl:w-9/12 mx-auto mb-20 -mt-40 z-20 relative"
     >
-      <h1 className="text-center text-5xl pt-40 pb-20 font-bold">Facture</h1>
-      <Card className="shadow-2xl">
+      {/* <h1 className="text-center text-5xl pt-40 pb-20 font-bold">Facture</h1> */}
+      <Card className="shadow-2xl ">
         <CardHeader>
           <CardTitle></CardTitle>
           <CardDescription></CardDescription>
         </CardHeader>
-        <CardContent className="w-full ">
+        <CardContent className="w-full  ">
           <form onSubmit={handleSubmit(onSubmit)} className="w-full ">
             <FileInput control={control} setValue={setValue} errors={errors} />
 

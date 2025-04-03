@@ -5,7 +5,7 @@ import React from "react";
 export default function Footer() {
   return (
     <div className=" bg-gray-600">
-      <h1 className="text-2xl font-bold text-center pt-8 mb-8">Contact</h1>
+      <h1 className="text-3xl font-bold text-center pt-8 mb-8 ">Contact</h1>
       <div className=" flex gap-8 justify-center mb-8 ">
         <Link href="">
           <FaGithub

@@ -19,9 +19,13 @@ export default function Navbar() {
           <p className="text-2xl font-bold"> Frinvoice</p>
         </div>
         <div>
-          <ul>
-            <li></li>
-            <li></li>
+          <ul className="flex gap-8">
+            <li className="text-xl">
+              <Link href="#invoice">Créer une facture</Link>
+            </li>
+            <li className="text-xl">
+              <Link href="#benefits">Avantages</Link>
+            </li>
             <li className="text-xl">
               <Link href="#contact">Contact</Link>
             </li>

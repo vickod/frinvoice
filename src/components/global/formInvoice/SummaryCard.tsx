@@ -6,10 +6,10 @@ import { CircleMinus, CirclePlus } from "lucide-react";
 import { Controller } from "react-hook-form";
 
 type SummaryCardProps = {
-  descriptionName: string;
   register: any;
   control: any;
   errors: any;
+  descriptionName: string;
   priceName: string;
   quantityName: string;
   tvaName: string;
@@ -23,10 +23,10 @@ type SummaryCardProps = {
 };
 
 export default function SummaryCard({
-  descriptionName,
   register,
   control,
   errors,
+  descriptionName,
   priceName,
   quantityName,
   tvaName,
@@ -39,8 +39,8 @@ export default function SummaryCard({
   tva,
 }: SummaryCardProps) {
   return (
-    <div>
-      <div className="mt-20 bg-zinc-50 rounded-xl  border">
+    <div className="mt-20">
+      <div className="bg-zinc-50 rounded-xl  border">
         <div className=" flex  max-lg:flex-col w-full md:gap-6 p-4">
           <div className=" w-full max-lg:mt-8 flex max-md:flex-col max-md:gap-6 justify-between gap-4">
             <div className="flex flex-col gap-2 min-w-5/12 max-w-5/12 max-md:min-w-full ">

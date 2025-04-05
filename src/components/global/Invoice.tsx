@@ -21,7 +21,7 @@ import SummaryCard from "./formInvoice/SummaryCard";
 import InvoiceDetails from "./formInvoice/InvoiceDetails";
 import UsersDetails from "./formInvoice/UsersDetails";
 import { getTotal, getTotalHtva, getTva } from "@/utils/Calculations";
-export default function InvoiceSimple() {
+export default function Invoice() {
   const [formData, setFormData] = useState<{
     logoEnt: File | undefined;
     name: string;

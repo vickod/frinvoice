@@ -1,5 +1,5 @@
 "use client";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { SubmitHandler, useFieldArray, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Drawer, DrawerTrigger } from "@/components/ui/drawer";
 import {
@@ -9,8 +9,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Input } from "../ui/input";
-import { Label } from "../ui/label";
 import { useState } from "react";
 import { Button } from "../ui/button";
 import { FormFieldsType, schema } from "@/lib/zodSchemas";
@@ -20,7 +18,6 @@ import OptionalFields from "./formInvoice/OptionalFields";
 import SummaryCard from "./formInvoice/SummaryCard";
 import InvoiceDetails from "./formInvoice/InvoiceDetails";
 import UsersDetails from "./formInvoice/UsersDetails";
-import { getTotal, getTotalHtva, getTva } from "@/utils/Calculations";
 export default function Invoice() {
   const [formData, setFormData] = useState<{
     logoEnt: File | undefined;
@@ -41,18 +38,21 @@ export default function Invoice() {
     invoiceNumber: string | undefined;
     createdDate: Date;
     dueDate: Date | undefined;
-    description: string;
-    price: number;
-    quantity: number;
-    tva: number;
-    comments: string | undefined;
-    total: number;
-    amoutTva: number;
-    totalHtva: number;
     // currency: string;
     paymentStatus: string;
     paymentMethod: string;
     isTvaIncluded: boolean;
+    products: {
+      description: string;
+      price: number;
+      quantity: number;
+      tva: number;
+      total: number;
+    }[];
+    totalHtva: number;
+    totalTva: number;
+    total: number;
+    comments: string | undefined;
   } | null>(null);
 
   const {
@@ -71,35 +71,40 @@ export default function Invoice() {
       invoiceNumber: "",
       createdDate: new Date(),
       dueDate: undefined,
-      description: "",
-      price: 0,
-      quantity: 0,
-      tva: 0,
-      comments: "",
-      total: 0,
-      amoutTva: 0,
-      totalHtva: 0,
       // currency: "EUR",
       paymentStatus: "topay",
       paymentMethod: "notIncluded",
       isTvaIncluded: false,
+      products: [
+        {
+          description: "",
+          price: 0,
+          quantity: 0,
+          tva: 0,
+          total: 0,
+        },
+      ],
+      totalHtva: 0,
+      totalTva: 0,
+      total: 0,
+      comments: "",
     },
   });
-  const price = watch("price");
-  const quantity = watch("quantity");
-  const tva = watch("tva");
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "products",
+  });
+
   const isTvaIncluded = watch("isTvaIncluded");
+  const products = watch("products");
   // const currency = watch("currency");
 
-  const total = getTotal({ price, quantity, tva, isTvaIncluded });
-  const amoutTva = getTva({ price, quantity, tva, isTvaIncluded });
-  const totalHtva = getTotalHtva({ price, quantity });
-
   const onSubmit: SubmitHandler<FormFieldsType> = async (data) => {
-    console.log(data);
-    console.log("depuis parent HTVA", totalHtva);
-    console.log("depuis parent TVA", amoutTva);
-    console.log("depuis parent TOTAL ", total);
+    // try {
+    //   console.log("Données soumises :", data);
+    // } catch (error) {
+    //   console.error("Erreur lors de la soumission :", error);
+    // }
 
     const response = await fetch("api/formInvoice", {
       method: "POST",
@@ -122,18 +127,15 @@ export default function Invoice() {
         invoiceNumber: data.invoiceNumber,
         createdDate: data.createdDate,
         dueDate: data.dueDate,
-        description: data.description,
-        price: data.price,
-        quantity: data.quantity,
-        tva: data.tva,
-        comments: data.comments,
-        total: total && total,
-        amoutTva: amoutTva && amoutTva,
-        totalHtva: totalHtva && totalHtva,
         // currency: data.currency,
         paymentStatus: data.paymentStatus,
         paymentMethod: data.paymentMethod,
         isTvaIncluded: data.isTvaIncluded,
+        products: data.products,
+        comments: data.comments,
+        totalHtva: data.totalHtva,
+        totalTva: data.totalTva,
+        total: data.total,
       }),
       headers: {
         "Content-Type": "application/json",
@@ -186,18 +188,15 @@ export default function Invoice() {
       invoiceNumber: data.invoiceNumber,
       createdDate: data.createdDate,
       dueDate: data.dueDate,
-      description: data.description,
-      price: data.price,
-      quantity: data.quantity,
-      tva: data.tva,
-      comments: data.comments,
-      total: total && total,
-      amoutTva: amoutTva && amoutTva,
-      totalHtva: totalHtva && totalHtva,
       // currency: data.currency,
       paymentStatus: data.paymentStatus,
       paymentMethod: data.paymentMethod,
       isTvaIncluded: data.isTvaIncluded,
+      products: data.products,
+      totalHtva: data.totalHtva,
+      totalTva: data.totalTva,
+      total: data.total,
+      comments: data.comments,
     });
   };
 
@@ -234,19 +233,16 @@ export default function Invoice() {
               />
             </div>
             <SummaryCard
-              descriptionName="description"
-              priceName="price"
-              quantityName="quantity"
-              tvaName="tva"
               commentsName="comments"
               register={register}
               control={control}
               errors={errors}
-              total={total}
-              amoutTva={amoutTva}
-              tva={tva}
-              totalHtva={totalHtva}
+              fields={fields}
+              append={append}
+              remove={remove}
               isTvaIncluded={isTvaIncluded}
+              products={products}
+              setValue={setValue}
               // currency={currency}
             />
 
@@ -275,15 +271,11 @@ export default function Invoice() {
                     invoiceNumber={formData.invoiceNumber}
                     createdDate={formData.createdDate}
                     dueDate={formData.dueDate}
-                    description={formData.description}
-                    price={formData.price}
-                    quantity={formData.quantity}
-                    tva={formData.tva}
-                    comments={formData.comments}
-                    total={formData.total}
-                    amoutTva={formData.amoutTva}
+                    products={formData.products}
                     totalHtva={formData.totalHtva}
-                    // currency={formData.currency}
+                    totalTva={formData.totalTva}
+                    total={formData.total}
+                    comments={formData.comments}
                     paymentStatus={formData.paymentStatus}
                     paymentMethod={formData.paymentMethod}
                     isTvaIncluded={formData.isTvaIncluded}

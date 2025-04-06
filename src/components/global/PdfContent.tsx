@@ -43,14 +43,18 @@ export default function PdfContent({
   invoiceNumber,
   createdDate,
   dueDate,
-  description,
-  price,
-  quantity,
-  tva,
-  comments,
-  total,
-  amoutTva,
+  // description,
+  // price,
+  // quantity,
+  // tva,
+  products,
   totalHtva,
+  totalTva,
+  total,
+  comments,
+  // total,
+  // amoutTva,
+  // totalHtva,
   // currency,
   paymentStatus,
   paymentMethod,
@@ -69,10 +73,6 @@ export default function PdfContent({
       setPreviewUrl(null);
     }
   }, [logoEnt]);
-
-  console.log("depuis pdf TVA ", amoutTva);
-  console.log("depuis pdf TOTAL HTVA", totalHtva);
-  console.log("depuis pdf TOTAL", total);
 
   return (
     <>
@@ -190,22 +190,29 @@ export default function PdfContent({
                           </TableRow>
                         </TableHeader>
                         <TableBody>
-                          <TableRow className="text-black">
-                            <TableCell className=" break-words whitespace-normal pr-6  max-w-60">
-                              {description && description}
-                            </TableCell>
-                            <TableCell>{price && price}</TableCell>
-                            <TableCell>{quantity && quantity}</TableCell>
-                            {isTvaIncluded && (
-                              <TableCell>{tva && tva}%</TableCell>
-                            )}
-                            <TableCell className="text-right">
-                              {formatCurrency({
-                                amount: total && total,
-                                currency: "EUR",
-                              })}
-                            </TableCell>
-                          </TableRow>
+                          {products.map((item, index) => (
+                            <TableRow
+                              key={`article${index}`}
+                              className="text-black"
+                            >
+                              <TableCell className=" break-words whitespace-normal pr-6  max-w-60">
+                                {item.description && item.description}
+                              </TableCell>
+                              <TableCell>{item.price && item.price}</TableCell>
+                              <TableCell>
+                                {item.quantity && item.quantity}
+                              </TableCell>
+                              {isTvaIncluded && (
+                                <TableCell>{item.tva && item.tva}%</TableCell>
+                              )}
+                              <TableCell className="text-right">
+                                {formatCurrency({
+                                  amount: item.total && item.total,
+                                  currency: "EUR",
+                                })}
+                              </TableCell>
+                            </TableRow>
+                          ))}
                         </TableBody>
                       </Table>
                     </div>
@@ -295,7 +302,7 @@ export default function PdfContent({
                                 <p>
                                   {" "}
                                   {formatCurrency({
-                                    amount: amoutTva && amoutTva,
+                                    amount: totalTva && totalTva,
                                     currency: "EUR",
                                   })}
                                 </p>

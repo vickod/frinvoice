@@ -3,38 +3,48 @@ type totalProps = {
     price: number;
     quantity: number;
     tva?: number;
-    isTvaIncluded?: boolean
-}
-
-export function getTotal({price, quantity, tva, isTvaIncluded}: totalProps) {
-    if(price && quantity) {
-        return tva && isTvaIncluded ? ((price * quantity)*tva)/100 + (price * quantity) : price * quantity
+    total?: number;
+  };
+ export function getItemTotal(obj: totalProps, isTvaIncluded: boolean) {
+    if (obj.price && obj.quantity) {
+      return obj.tva && isTvaIncluded
+        ? (obj.price * obj.quantity * obj.tva) / 100 + obj.price * obj.quantity
+        : obj.price * obj.quantity;
     }
-    return 0
-}
+    return 0;
+  }
+ export function getTotalTva(arr: [totalProps], isTvaIncluded: boolean) {
+    let totalTva = 0;
+    arr.forEach((item: totalProps) => {
+      if (item.price && item.quantity && item.tva && isTvaIncluded) {
+        totalTva += item.tva
+          ? (item.price * item.quantity * item.tva) / 100
+          : 0;
+      }
+    });
+    return totalTva;
+  }
+  export function getTotalHtva(arr: [totalProps]) {
+    let totalHtva = 0;
+    arr.forEach((item: totalProps) => {
+      if (item.price && item.quantity) {
+        totalHtva += item.price * item.quantity;
+      }
+    });
+    return totalHtva;
+  }
+  export function getTotal(arr: [totalProps], isTvaIncluded: boolean) {
+    let total = 0;
+    arr.forEach((item: totalProps) => {
+      if (item.price && item.quantity) {
+        total +=
+          item.tva && isTvaIncluded
+            ? (item.price * item.quantity * item.tva) / 100 +
+              item.price * item.quantity
+            : item.price * item.quantity;
+      }
+    });
+    return total;
+  }
 
-export function getTva({price, quantity, tva, isTvaIncluded}: totalProps) {
-    if(price && quantity && tva && isTvaIncluded) {
-        return tva ? ((price * quantity)*tva)/100 : 0
-    }
-    return 0
-}
 
-export function getTotalHtva({price, quantity}: totalProps) {
-    if(price && quantity) {
-        return price * quantity
-    }
-    return 0
-}
-
-
-
-
-  // const calculateTotal =
-  //   isTvaIncluded && Number(tva) > 0
-  //     ? ((Number(quantity) || 0) * (Number(price) || 0) * Number(tva)) / 100 +
-  //       (Number(quantity) || 0) * (Number(price) || 0)
-  //     : (Number(quantity) || 0) * (Number(price) || 0);
-  // const calculateTVA =
-  //   ((Number(quantity) || 0) * (Number(price) || 0) * Number(tva)) / 100;
-  // const calculateTotHtva = (Number(quantity) || 0) * (Number(price) || 0);

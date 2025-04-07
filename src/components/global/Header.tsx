@@ -4,12 +4,14 @@ import F2 from "../../../public/f10.jpg";
 import { Button } from "../ui/button";
 import Link from "next/link";
 export default function Header() {
+  console.log("header RENDERED");
   return (
     <div className="h-[90vh] relative  ">
       <Image
         src={F2}
         alt=""
         className="max-h-[90vh] min-h-[90vh] object-cover "
+        priority
       />
       <div className="absolute inset-0 h-screen flex flex-col justify-center items-center gap-2  ">
         <h1 className="text-5xl sm:text-6xl font-bold text-zinc-50 text-center text-shadow">

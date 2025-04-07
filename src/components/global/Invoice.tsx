@@ -9,7 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { Button } from "../ui/button";
 import { FormFieldsType, schema } from "@/lib/zodSchemas";
 import PdfContent from "./PdfContent";
@@ -94,6 +94,16 @@ export default function Invoice() {
     control,
     name: "products",
   });
+  const handleAppend = useCallback(() => {
+    append({ description: "", price: 0, quantity: 0, tva: 0, total: 0 });
+  }, [append]);
+
+  const handleRemove = useCallback(
+    (index: number) => {
+      remove(index);
+    },
+    [remove]
+  );
 
   const isTvaIncluded = watch("isTvaIncluded");
   const products = watch("products");
@@ -200,6 +210,7 @@ export default function Invoice() {
     });
   };
 
+  console.log("INVOICE RENDERED");
   return (
     <div
       id="invoice"
@@ -238,8 +249,8 @@ export default function Invoice() {
               control={control}
               errors={errors}
               fields={fields}
-              append={append}
-              remove={remove}
+              handleAppend={handleAppend}
+              handleRemove={handleRemove}
               isTvaIncluded={isTvaIncluded}
               products={products}
               setValue={setValue}

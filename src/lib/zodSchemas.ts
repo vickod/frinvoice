@@ -50,7 +50,7 @@ const productSchema = z.object({
       paymentMethod: z.string(),
       isTvaIncluded: z.boolean(),
   
-      products: z.array(productSchema).min(1, "Au moins un produit est requis").max(4, "Un maximum de 3 produits est autorisé"),
+      products: z.array(productSchema).min(1, "Au moins un produit est requis").max(3, "Un maximum de 3 produits est autorisé"),
   
     
     });

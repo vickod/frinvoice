@@ -74,6 +74,7 @@ export default function PdfContent({
     }
   }, [logoEnt]);
 
+  console.log("PDFCONTENT RENDERED");
   return (
     <>
       <DrawerContent className="flex flex-col min-h-[90vh]  w-full bg-white p-6 rounded shadow-md">

@@ -9,7 +9,8 @@ import {
 } from "@/utils/Calculations";
 import { formatCurrency } from "@/utils/formatCurrency";
 import { CircleMinus, CirclePlus } from "lucide-react";
-import { Controller } from "react-hook-form";
+import { useWatch, Controller } from "react-hook-form";
+import React, { useEffect, useMemo } from "react";
 
 type SummaryCardProps = {
   register: any;
@@ -27,8 +28,8 @@ type SummaryCardProps = {
     total: number;
   }>;
   products: any;
-  append: any;
-  remove: any;
+  handleAppend: any;
+  handleRemove: any;
   setValue: any;
 };
 
@@ -39,8 +40,8 @@ export default function SummaryCard({
   commentsName,
   isTvaIncluded,
   fields,
-  append,
-  remove,
+  handleAppend,
+  handleRemove,
   products,
   setValue,
 }: // currency,
@@ -55,6 +56,7 @@ SummaryCardProps) {
   setValue("totalTva", getTotalTva(products, isTvaIncluded));
   setValue("total", getTotal(products, isTvaIncluded));
 
+  console.log("SUMMARYCARD", products);
   return (
     <div className="mt-20">
       {fields.map((item, index) => (
@@ -195,15 +197,7 @@ SummaryCardProps) {
             {fields.length < 3 && index === fields.length - 1 ? (
               <button
                 type="button"
-                onClick={() => {
-                  append({
-                    description: "",
-                    price: 0,
-                    quantity: 0,
-                    tva: 0,
-                    total: 0,
-                  });
-                }}
+                onClick={handleAppend}
                 className="cursor-pointer"
               >
                 <CirclePlus className="bg-white rounded-full text-green-500 relative -left-2 -bottom-2" />
@@ -212,15 +206,7 @@ SummaryCardProps) {
               <button
                 type="button"
                 disabled
-                onClick={() =>
-                  append({
-                    description: "",
-                    price: 0,
-                    quantity: 0,
-                    tva: 0,
-                    total: 0,
-                  })
-                }
+                onClick={handleAppend}
                 className="cursor-default opacity-0"
               >
                 <CirclePlus className="bg-white rounded-full text-green-500 relative -left-2 -bottom-2" />
@@ -229,7 +215,7 @@ SummaryCardProps) {
             {fields.length > 1 && fields.length - 1 === index && (
               <button
                 type="button"
-                onClick={() => remove(index)}
+                onClick={() => handleRemove(index)}
                 className="cursor-pointer"
               >
                 <CircleMinus className="bg-white rounded-full text-red-500 relative left-2 -bottom-2" />
@@ -238,10 +224,6 @@ SummaryCardProps) {
           </div>
         </div>
       ))}
-
-      {/*
-
- */}
 
       <div className="mt-20 md:w-1/3 flex md:justify-self-end flex-col gap-4 ">
         {isTvaIncluded && (

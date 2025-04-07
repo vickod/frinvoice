@@ -39,6 +39,7 @@ export default function FileInput({
     setValue("logoEnt", undefined);
   };
 
+  console.log("FILE INPUT RENDERED");
   return (
     <div className="flex max-md:flex-col justify-center items-center mb-8 w-full">
       <div className="w-full flex flex-col gap-4 justify-start max-md:mt-5">

@@ -24,6 +24,7 @@ export default function OptionalFields({
   paymentMethodName,
   isTvaIncludedName,
 }: OptionalFieldsProps) {
+  console.log("OPTIONAL FIELDS RENDERED");
   return (
     <div className="flex flex-col gap-4 max-md:w-full md:w-1/2 ">
       <Label className="text-lg font-bold">Options:</Label>

@@ -10,7 +10,7 @@ import {
 import { formatCurrency } from "@/utils/formatCurrency";
 import { CircleMinus, CirclePlus } from "lucide-react";
 import { useWatch, Controller } from "react-hook-form";
-import React, { useEffect, useMemo } from "react";
+import React, { useCallback, useEffect, useMemo } from "react";
 
 type SummaryCardProps = {
   register: any;
@@ -32,7 +32,6 @@ type SummaryCardProps = {
   handleRemove: any;
   setValue: any;
 };
-
 export default function SummaryCard({
   register,
   control,
@@ -279,3 +278,4 @@ SummaryCardProps) {
     </div>
   );
 }
+// export default React.memo(SummaryCard);

@@ -76,15 +76,15 @@ export default function Invoice() {
       paymentStatus: "topay",
       paymentMethod: "notIncluded",
       isTvaIncluded: false,
-      products: [
-        {
-          description: "",
-          price: 0,
-          quantity: 0,
-          tva: 0,
-          total: 0,
-        },
-      ],
+      //   products: [
+      //     {
+      //       description: "",
+      //       price: 0,
+      //       quantity: 0,
+      //       tva: 0,
+      //       total: 0,
+      //     },
+      //   ],
       totalHtva: 0,
       totalTva: 0,
       total: 0,

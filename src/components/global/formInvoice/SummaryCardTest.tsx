@@ -1,5 +1,4 @@
 import ProductRow from "./ProductRow";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import {
@@ -11,7 +10,7 @@ import {
 import { formatCurrency } from "@/utils/formatCurrency";
 import { CircleMinus, CirclePlus } from "lucide-react";
 import { useWatch, Controller } from "react-hook-form";
-import React, { useCallback, useEffect, useMemo } from "react";
+import React, { useEffect } from "react";
 
 type SummaryCardProps = {
   register: any;

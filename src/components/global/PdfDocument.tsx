@@ -24,7 +24,7 @@ import { useEffect, useRef, useState } from "react";
 import { Label } from "../ui/label";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { formatCurrency } from "@/utils/formatCurrency";
-export default function PdfContent({
+export default function PdfDocument({
   logoEnt,
   name,
   address,
@@ -43,19 +43,11 @@ export default function PdfContent({
   invoiceNumber,
   createdDate,
   dueDate,
-  // description,
-  // price,
-  // quantity,
-  // tva,
   products,
   totalHtva,
   totalTva,
   total,
-  comments,
-  // total,
-  // amoutTva,
-  // totalHtva,
-  // currency,
+  comment,
   paymentStatus,
   paymentMethod,
   isTvaIncluded,
@@ -77,7 +69,10 @@ export default function PdfContent({
   console.log("PDFCONTENT RENDERED");
   return (
     <>
-      <DrawerContent className="flex flex-col min-h-[90vh]  w-full bg-white p-6 rounded shadow-md">
+      <DrawerContent
+        aria-describedby={undefined}
+        className="flex flex-col min-h-[90vh]  w-full bg-white p-6 rounded shadow-md"
+      >
         <div className="h-full overflow-y-scroll">
           <div>
             <DrawerHeader className="">
@@ -194,7 +189,11 @@ export default function PdfContent({
                           {products.map((item, index) => (
                             <TableRow
                               key={`article${index}`}
-                              className="text-black"
+                              className={
+                                index % 2 === 0
+                                  ? "bg-white text-black"
+                                  : "bg-zinc-50 text-black"
+                              }
                             >
                               <TableCell className=" break-words whitespace-normal pr-6  max-w-60">
                                 {item.description && item.description}
@@ -327,7 +326,7 @@ export default function PdfContent({
                       </div>
                     </div>
                     <div className="mt-20">
-                      <p className="text-xs">{comments && comments}</p>
+                      <p className="text-xs">{comment && comment}</p>
                     </div>
                   </div>
                   <div className="border-t pt-4 flex gap-8 justify-around">

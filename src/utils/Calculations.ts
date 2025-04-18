@@ -14,36 +14,23 @@ type totalProps = {
     return 0;
   }
  export function getTotalTva(arr: totalProps[], isTvaIncluded: boolean) {
-    let totalTva = 0;
-    arr.forEach((item: totalProps) => {
-      if (item.price && item.quantity && item.tva && isTvaIncluded) {
-        totalTva += item.tva
-          ? (item.price * item.quantity * item.tva) / 100
-          : 0;
-      }
-    });
+    const totalTva = arr.reduce((prev,curr)=>{
+      return prev += curr.tva && isTvaIncluded
+        ? (curr.price * curr.quantity * curr.tva) / 100
+        : 0;
+    },0)
     return totalTva;
   }
   export function getTotalHtva(arr: totalProps[]) {
-    let totalHtva = 0;
-    arr.forEach((item: totalProps) => {
-      if (item.price && item.quantity) {
-        totalHtva += item.price * item.quantity;
-      }
-    });
+    const totalHtva = arr.reduce((prev,curr)=>{
+      return prev += curr.price * curr.quantity || 0;
+    },0)
     return totalHtva;
   }
   export function getTotal(arr: totalProps[], isTvaIncluded: boolean) {
-    let total = 0;
-    arr.forEach((item: totalProps) => {
-      if (item.price && item.quantity) {
-        total +=
-          item.tva && isTvaIncluded
-            ? (item.price * item.quantity * item.tva) / 100 +
-              item.price * item.quantity
-            : item.price * item.quantity;
-      }
-    });
+    const total = arr.reduce((prev,curr) =>{
+      return prev += curr?.total || 0;
+    },0)
     return total;
   }
 

@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import { Controller, UseFormSetValue } from "react-hook-form";
 import { TiDeleteOutline } from "react-icons/ti";
 import { FormFieldsType } from "@/lib/zodSchemas";
@@ -10,34 +10,48 @@ type FileInputProps = {
   errors: any;
 };
 
-export default function FileInput({
-  control,
-  setValue,
-  errors,
-}: FileInputProps) {
+const FileInput = ({ control, setValue, errors }: FileInputProps) => {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [isFileLoaded, setIsFileLoaded] = useState(false);
 
-  const handleFileChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    onChange: (value: File | null) => void
-  ) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setIsFileLoaded(true);
-      onChange(file);
-    } else {
-      setIsFileLoaded(false);
-    }
-  };
+  // const handleFileChange = (
+  //   e: React.ChangeEvent<HTMLInputElement>,
+  //   onChange: (value: File | null) => void
+  // ) => {
+  //   const file = e.target.files?.[0];
+  //   if (file) {
+  //     setIsFileLoaded(true);
+  //     onChange(file);
+  //   } else {
+  //     setIsFileLoaded(false);
+  //   }
+  // };
 
-  const handleRemoveFile = () => {
-    if (fileInputRef.current) {
-      fileInputRef.current.value = "";
-    }
+  const handleFileChange = useCallback(
+    (
+      e: React.ChangeEvent<HTMLInputElement>,
+      onChange: (value: File | null) => void
+    ) => {
+      const file = e.target.files?.[0];
+      setIsFileLoaded(!!file);
+      onChange(file || null);
+    },
+    []
+  );
+
+  // const handleRemoveFile = () => {
+  //   if (fileInputRef.current) {
+  //     fileInputRef.current.value = "";
+  //   }
+  //   setIsFileLoaded(false);
+  //   setValue("logoEnt", undefined);
+  // };
+
+  const handleRemoveFile = useCallback(() => {
+    if (fileInputRef.current) fileInputRef.current.value = "";
     setIsFileLoaded(false);
     setValue("logoEnt", undefined);
-  };
+  }, [setValue]);
 
   console.log("FILE INPUT RENDERED");
   return (
@@ -76,4 +90,7 @@ export default function FileInput({
       )}
     </div>
   );
-}
+};
+
+FileInput.displayName = "FileInput";
+export default React.memo(FileInput);

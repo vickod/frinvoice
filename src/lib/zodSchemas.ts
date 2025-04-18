@@ -39,7 +39,7 @@ const productSchema = z.object({
       dueDate: z.date().optional(),
 
       
-      comments: z.string().optional(),
+      comment: z.string().optional(),
       
       totalHtva: z.number().min(0, "Le total HTVA doit être supérieur ou égal à 0"),
       totalTva: z.number().min(0, "Le total de la tva doit être supérieur ou égal à 0"),

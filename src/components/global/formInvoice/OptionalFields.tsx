@@ -26,7 +26,7 @@ export default function OptionalFields({
 }: OptionalFieldsProps) {
   console.log("OPTIONAL FIELDS RENDERED");
   return (
-    <div className="flex flex-col gap-4 max-md:w-full md:w-1/2 ">
+    <div className="flex flex-col gap-4 max-md:w-full md:w-1/2 mb-14 ">
       <Label className="text-lg font-bold">Options:</Label>
       {/* <div className="flex gap-2">
         <Label className="text-neutral-600">Dévise:</Label>

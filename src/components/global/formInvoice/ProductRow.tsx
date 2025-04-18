@@ -4,7 +4,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { formatCurrency } from "@/utils/formatCurrency";
 import { getItemTotal } from "@/utils/Calculations";
-import React from "react";
+import React, { useEffect } from "react";
 
 type ProductRowProps = {
   index: number;
@@ -12,18 +12,37 @@ type ProductRowProps = {
   register: any;
   errors: any;
   isTvaIncluded: boolean;
+  setValue: any;
 };
 
 const ProductRow = React.memo(
-  ({ index, control, register, errors, isTvaIncluded }: ProductRowProps) => {
+  ({
+    index,
+    control,
+    register,
+    errors,
+    isTvaIncluded,
+    setValue,
+  }: ProductRowProps) => {
     const product = useWatch({
       control,
       name: `products.${index}`,
     });
 
+    useEffect(() => {
+      const { price, quantity, tva } = product;
+
+      if (price !== undefined && quantity !== undefined && tva !== undefined) {
+        setValue(
+          `products.${index}.total`,
+          getItemTotal(product, isTvaIncluded)
+        );
+      }
+    }, [product?.price, product?.quantity, product?.tva, isTvaIncluded]);
+
     return (
-      <div className="flex flex-col md:flex-row md:gap-6 p-4">
-        <div className="flex flex-col gap-2 min-w-5/12">
+      <div className=" w-full max-lg:mt-8 flex max-md:flex-col max-md:gap-6 justify-between gap-4">
+        <div className="flex flex-col gap-2 min-w-5/12 max-w-5/12 max-md:min-w-full ">
           <Label>
             Déscription:<span className="text-red-500">*</span>
           </Label>
@@ -45,7 +64,7 @@ const ProductRow = React.memo(
           )}
         </div>
 
-        <div className="flex flex-col gap-2 min-w-2/12">
+        <div className="flex flex-col gap-2 min-w-2/12 md:min-w-1/12 ">
           <Label>
             Prix unitaire:<span className="text-red-500">*</span>
           </Label>
@@ -73,7 +92,7 @@ const ProductRow = React.memo(
           )}
         </div>
 
-        <div className="flex flex-col gap-2 min-w-1/12">
+        <div className="flex flex-col gap-2 min-w-1/12 md:max-w-1/12">
           <Label>
             Qté:<span className="text-red-500">*</span>
           </Label>
@@ -102,7 +121,7 @@ const ProductRow = React.memo(
         </div>
 
         {isTvaIncluded && (
-          <div className="flex flex-col gap-2 min-w-1/12">
+          <div className="flex flex-col gap-2 min-w-1/12 md:max-w-1/12">
             <Label>
               TVA:<span className="text-red-500">*</span>
             </Label>
@@ -131,7 +150,7 @@ const ProductRow = React.memo(
           </div>
         )}
 
-        <div className="flex flex-col gap-2 min-w-2/12">
+        <div className="flex flex-col gap-2 min-w-2/12 md:min-w-1/12">
           <Label>Total</Label>
           <Input
             readOnly

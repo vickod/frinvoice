@@ -11,7 +11,7 @@ type ProductRowProps = {
   control: any;
   register: any;
   errors: any;
-  isTvaIncluded: boolean;
+  // isTvaIncluded: boolean;
   setValue: any;
 };
 
@@ -21,12 +21,16 @@ const ProductRow = React.memo(
     control,
     register,
     errors,
-    isTvaIncluded,
+    // isTvaIncluded,
     setValue,
   }: ProductRowProps) => {
     const product = useWatch({
       control,
       name: `products.${index}`,
+    });
+    const isTvaIncluded = useWatch({
+      control,
+      name: "isTvaIncluded",
     });
 
     useEffect(() => {
@@ -169,5 +173,5 @@ const ProductRow = React.memo(
     );
   }
 );
-
+ProductRow.displayName = "FileInput";
 export default ProductRow;

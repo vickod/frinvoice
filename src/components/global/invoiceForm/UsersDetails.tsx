@@ -8,7 +8,7 @@ type UsersDetailsProps = {
   errors: any;
 };
 export default function UsersDetails({ register, errors }: UsersDetailsProps) {
-  console.log("USER DETAILS RENDERED");
+  // console.log("USER DETAILS RENDERED");
   return (
     <div className="flex max-md:flex-col max-md:gap-12 md:justify-between w-full gap-12 ">
       <div className="flex flex-col gap-4 md:w-1/2 w-full">

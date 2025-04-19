@@ -5,17 +5,20 @@ import React, { useEffect, useMemo } from "react";
 
 type SummaryCardProps = {
   control: any;
-  isTvaIncluded: boolean;
+  // isTvaIncluded: boolean;
   // currency: string;
   setValue: any;
 };
 const SummaryCard = ({
   control,
-  isTvaIncluded,
+  // isTvaIncluded,
   setValue,
 }: SummaryCardProps) => {
   const watchedProducts = useWatch({ control, name: "products" });
-
+  const isTvaIncluded = useWatch({
+    control,
+    name: "isTvaIncluded",
+  });
   const totalHtva = useMemo(
     () => getTotalHtva(watchedProducts),
     [watchedProducts]
@@ -35,7 +38,7 @@ const SummaryCard = ({
     setValue("total", total);
   }, [totalHtva, totalTva, total, setValue]);
 
-  console.log("SUMMARYCARD RENDERED");
+  // console.log("SUMMARYCARD RENDERED");
 
   return (
     <div className="mt-20">

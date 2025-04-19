@@ -4,7 +4,7 @@ import F2 from "../../../public/f10.jpg";
 import { Button } from "../ui/button";
 import Link from "next/link";
 export default function Header() {
-  console.log("header RENDERED");
+  // console.log("header RENDERED");
   return (
     <div className="h-[90vh] relative  ">
       <Image

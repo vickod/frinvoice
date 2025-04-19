@@ -53,7 +53,7 @@ const FileInput = ({ control, setValue, errors }: FileInputProps) => {
     setValue("logoEnt", undefined);
   }, [setValue]);
 
-  console.log("FILE INPUT RENDERED");
+  // console.log("FILE INPUT RENDERED");
   return (
     <div className="flex max-md:flex-col justify-center items-center mb-8 w-full">
       <div className="w-full flex flex-col gap-4 justify-start max-md:mt-5">

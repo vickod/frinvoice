@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 export default function Navbar() {
-  console.log("Navbar rendered");
+  // console.log("Navbar rendered");
   return (
     <div className="w-full h-24 border flex items-center fixed bg-white opacity-95 z-50">
       <div className="w-11/12 mx-auto flex justify-between items-center">

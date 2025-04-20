@@ -15,6 +15,7 @@ type InvoiceDetailsProps = {
   invoiceNumberName: string;
   createdDateName: string;
   dueDateName: string;
+  errors: any;
 };
 
 export default function InvoiceDetails({
@@ -22,6 +23,7 @@ export default function InvoiceDetails({
   invoiceNumberName,
   createdDateName,
   dueDateName,
+  errors,
 }: InvoiceDetailsProps) {
   const formatDate = (date: Date | undefined) => {
     if (!date) return "Sélectionnez une date";
@@ -50,6 +52,9 @@ export default function InvoiceDetails({
           )}
         />
       </div>
+      {errors.invoiceNumber && (
+        <p className="text-red-500 text-xs">{errors.invoiceNumber.message}</p>
+      )}
       <div className="flex gap-2 justify-between">
         <Label className="whitespace-nowrap text-neutral-600">Emise le:</Label>
         <Controller

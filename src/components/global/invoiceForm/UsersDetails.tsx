@@ -54,9 +54,15 @@ export default function UsersDetails({ register, errors }: UsersDetailsProps) {
         <div className="flex gap-2">
           <Input placeholder="№ de TVA" {...register("numberTva")} />
         </div>
+        {errors.numberTva && (
+          <p className="text-red-500 text-xs">{errors.numberTva.message}</p>
+        )}
         <div className="flex gap-2">
           <Input placeholder="IBAN" {...register("iban")} />
         </div>
+        {errors.iban && (
+          <p className="text-red-500 text-xs">{errors.iban.message}</p>
+        )}
       </div>
       <div className="flex flex-col gap-4 md:w-1/2 w-full ">
         <Label className="text-lg font-bold">Client:</Label>
@@ -99,8 +105,13 @@ export default function UsersDetails({ register, errors }: UsersDetailsProps) {
           <p className="text-red-500 text-xs">{errors.clientEmail.message}</p>
         )}
         <div className="flex gap-2">
-          <Input placeholder="№ de TVA" />
+          <Input placeholder="№ de TVA" {...register("clientNumberTva")} />
         </div>
+        {errors.clientNumberTva && (
+          <p className="text-red-500 text-xs">
+            {errors.clientNumberTva.message}
+          </p>
+        )}
       </div>
     </div>
   );

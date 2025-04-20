@@ -13,7 +13,11 @@ import { FormFieldsType } from "@/lib/zodSchemas";
 import { useReactToPrint } from "react-to-print";
 import InvoicePdf from "./InvoicePdf";
 
-const PdfDrawer = ({ formData }: { formData: FormFieldsType }) => {
+type PdfDrawerProps = {
+  formData: FormFieldsType;
+};
+
+const PdfDrawer = ({ formData }: PdfDrawerProps) => {
   const contentRef = useRef<HTMLDivElement>(null);
   const reactToPrintFn = useReactToPrint({ contentRef });
 

@@ -1,5 +1,4 @@
 "use client";
-
 import { SubmitHandler, useFieldArray, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Drawer, DrawerTrigger } from "@/components/ui/drawer";
@@ -10,7 +9,15 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { lazy, Suspense, useCallback, useState } from "react";
+import {
+  lazy,
+  Suspense,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  useTransition,
+} from "react";
 import { Button } from "../ui/button";
 import { FormFieldsType, schema } from "@/lib/zodSchemas";
 
@@ -22,10 +29,9 @@ import UsersDetails from "./invoiceForm/UsersDetails";
 import ProductRow from "./invoiceForm/ProductRow";
 import { CircleMinus, CirclePlus } from "lucide-react";
 import Comment from "./invoiceForm/Comment";
-// import PdfDrawer from "./PdfDrawer";
+import PdfDrawer from "./PdfDrawer";
 export default function InvoiceForm() {
   const [formData, setFormData] = useState<FormFieldsType | null>(null);
-  const [drawerOpen, setDrawerOpen] = useState(false);
 
   const {
     register,
@@ -78,10 +84,27 @@ export default function InvoiceForm() {
     },
     [remove]
   );
-
-  // const isTvaIncluded = watch("isTvaIncluded");
   // const currency = watch("currency");
-  const PdfDrawer = lazy(() => import("./PdfDrawer"));
+  // const PdfDrawer = lazy(() => import("./PdfDrawer"));
+  const hasErrors = Object.keys(errors).length > 0;
+  const drawerRef = useRef<HTMLDivElement>(null);
+
+  // useEffect(() => {
+  //   if (hasErrors && formData) {
+  //     setFormData(null);
+  //   }
+  // }, [hasErrors]);
+  useEffect(() => {
+    const drawerEl = drawerRef.current;
+
+    if (drawerEl) {
+      if (formData && !hasErrors) {
+        drawerEl.removeAttribute("inert");
+      } else {
+        drawerEl.setAttribute("inert", "");
+      }
+    }
+  }, [formData, hasErrors]);
 
   const onSubmit: SubmitHandler<FormFieldsType> = async (data) => {
     try {
@@ -122,7 +145,7 @@ export default function InvoiceForm() {
     }
   };
 
-  // console.log("INVOICE RENDERED");
+  console.log("INVOICE RENDERED", hasErrors);
   // console.log(getValues("products"));
   return (
     <div
@@ -146,6 +169,7 @@ export default function InvoiceForm() {
                 invoiceNumberName="invoiceNumber"
                 createdDateName="createdDate"
                 dueDateName="dueDate"
+                errors={errors}
               />
               <OptionalFields
                 control={control}
@@ -210,18 +234,19 @@ export default function InvoiceForm() {
                 <DrawerTrigger asChild>
                   <Button
                     type="submit"
-                    onClick={(e) => {
-                      e.currentTarget.blur();
-                    }}
+                    // onClick={(e) => {
+                    //   e.currentTarget.blur();
+                    // }}
+                    disabled={hasErrors}
                   >
                     Previsualiser
                   </Button>
                 </DrawerTrigger>
                 {/* {formData && <PdfDrawer formData={formData} />} */}
-                {formData && (
-                  <Suspense fallback={<div>Chargement PDF...</div>}>
-                    <PdfDrawer formData={formData} />
-                  </Suspense>
+                {formData && !hasErrors && (
+                  // <Suspense fallback={<div>Chargement PDF...</div>}>
+                  <PdfDrawer formData={formData} />
+                  // </Suspense>
                 )}
               </Drawer>
             </div>

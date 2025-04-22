@@ -34,7 +34,7 @@ export default function InvoicePdf({
 
         <ProductsRowsPdf formData={formData} />
 
-        <div className="mt-16 flex justify-between items-end">
+        <div className="mt-10 flex justify-between items-end">
           <PaymentNotePdf formData={formData} />
 
           <SummaryCardPdf formData={formData} />

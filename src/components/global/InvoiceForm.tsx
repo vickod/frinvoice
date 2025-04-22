@@ -30,6 +30,7 @@ import ProductRow from "./invoiceForm/ProductRow";
 import { CircleMinus, CirclePlus } from "lucide-react";
 import Comment from "./invoiceForm/Comment";
 import PdfDrawer from "./PdfDrawer";
+import { object } from "zod";
 export default function InvoiceForm() {
   const [formData, setFormData] = useState<FormFieldsType | null>(null);
 
@@ -54,13 +55,22 @@ export default function InvoiceForm() {
       paymentStatus: "topay",
       paymentMethod: "notIncluded",
       isTvaIncluded: false,
+      // products: [
+      //   {
+      //     description: "",
+      //     price: 0,
+      //     quantity: 0,
+      //     tva: 0,
+      //     total: 0,
+      //   },
+      // ],
       products: [
         {
           description: "",
-          price: 0,
-          quantity: 0,
+          price: undefined, // <-- maintenant en string
+          quantity: undefined,
           tva: 0,
-          total: 0,
+          total: "0",
         },
       ],
       totalHtva: 0,
@@ -75,7 +85,13 @@ export default function InvoiceForm() {
     name: "products",
   });
   const handleAppend = useCallback(() => {
-    append({ description: "", price: 0, quantity: 0, tva: 0, total: 0 });
+    append({
+      description: "",
+      price: "",
+      quantity: "",
+      tva: 0,
+      total: "0",
+    });
   }, [append]);
 
   const handleRemove = useCallback(
@@ -107,6 +123,7 @@ export default function InvoiceForm() {
   }, [formData, hasErrors]);
 
   const onSubmit: SubmitHandler<FormFieldsType> = async (data) => {
+    console.log(hasErrors, "hasErrors");
     try {
       const response = await fetch("api/formInvoice", {
         method: "POST",
@@ -147,6 +164,25 @@ export default function InvoiceForm() {
 
   console.log("INVOICE RENDERED", hasErrors);
   // console.log(getValues("products"));
+  type FieldError = {
+    message?: string;
+    [key: string]: any;
+  };
+
+  function extractErrorMessages(errors: Record<string, FieldError>): string[] {
+    const messages: string[] = [];
+
+    Object.values(errors).forEach((error) => {
+      if (typeof error?.message === "string") {
+        messages.push(error.message);
+      } else if (typeof error === "object" && error !== null) {
+        messages.push(...extractErrorMessages(error));
+      }
+    });
+
+    return messages;
+  }
+
   return (
     <div
       id="invoice"
@@ -249,6 +285,14 @@ export default function InvoiceForm() {
                   // </Suspense>
                 )}
               </Drawer>
+
+              <div className="mt-20">
+                {extractErrorMessages(errors).map((msg, i) => (
+                  <p key={i} className="text-red-500 text-sm">
+                    {msg}
+                  </p>
+                ))}
+              </div>
             </div>
           </form>
         </CardContent>

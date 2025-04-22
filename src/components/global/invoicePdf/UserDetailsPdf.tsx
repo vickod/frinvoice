@@ -7,8 +7,8 @@ type UserDetailsPdfProps = {
 
 const UserDetailsPdf = ({ formData, previewUrl }: UserDetailsPdfProps) => {
   return (
-    <div className="w-full flex justify-between text-black border-b pb-4">
-      <div className="w-2/3 flex gap-2">
+    <div className="w-full text-black border-b pb-4 ">
+      <div className=" flex gap-2 align-items-start">
         {previewUrl && (
           <div className=" ">
             <img
@@ -20,30 +20,57 @@ const UserDetailsPdf = ({ formData, previewUrl }: UserDetailsPdfProps) => {
         )}
 
         <div>
-          <p className="font-bold">{formData.name}</p>
-          <p className="">{formData.address && formData.address}</p>
-          <p>
-            {formData.cp == 0 || formData.cp == undefined ? "" : formData.cp}{" "}
-            {formData.city}, {formData.country}
-          </p>
-          <p>{formData.email && formData.email}</p>
-          {/* <p>123-456-789</p> */}
-          {/* <p>BE 4444 6666 8888</p> */}
+          <p className="font-bold text-md">{formData.name && formData.name}</p>
+          <p className="text-sm">{formData.address && formData.address}</p>
+
+          {formData.cp && formData.city ? (
+            <p className="text-sm">
+              {formData.cp}, {formData.city}{" "}
+            </p>
+          ) : (
+            <>
+              <p className="text-sm">{formData.cp && formData.cp}</p>
+              <p className="text-sm">{formData.city && formData.city}</p>
+            </>
+          )}
+
+          <p className="text-sm">{formData.country && formData.country}</p>
+          <p className="text-sm">{formData.email && formData.email}</p>
+          <p className="text-sm">{formData.numberTva && formData.numberTva}</p>
+          {formData.iban && (
+            <p className="text-sm font-bold text-neutral-500">
+              IBAN <span className="font-normal">{formData.iban}</span>
+            </p>
+          )}
         </div>
       </div>
-      <div className="w-1/3 flex flex-col items-end">
-        <div>
-          <h1 className="font-bold text-xl text-neutral-500">Client:</h1>
-          <p className="font-bold">
-            {formData.clientName && formData.clientName}
-          </p>
-          <p>{formData.clientAddress && formData.clientAddress}</p>
-          <p>
-            {formData.clientCp && formData.clientCp}{" "}
-            {formData.clientCity && formData.clientCity + ","}{" "}
-            {formData.clientCountry && formData.clientCountry}
-          </p>
-          <p>{formData.clientEmail && formData.clientEmail}</p>
+      <div className="flex justify-end mt-4">
+        <div className=" flex flex-col ">
+          <div>
+            <h1 className="font-bold text-lg text-neutral-500">Client:</h1>
+            <p className="font-bold text-md">
+              {formData.clientName && formData.clientName}
+            </p>
+            <p className="text-sm">
+              {formData.clientAddress && formData.clientAddress}
+            </p>
+            {formData.clientCp && formData.clientCity ? (
+              <p className="text-sm">
+                {formData.clientCp}, {formData.clientCity}{" "}
+              </p>
+            ) : (
+              <>
+                <p className="text-sm">{formData.clientCp}</p>
+                <p className="text-sm">{formData.clientCity}</p>
+              </>
+            )}
+            <p className="text-sm">
+              {formData.clientEmail && formData.clientEmail}
+            </p>
+            <p className="text-sm">
+              {formData.clientNumberTva && formData.clientNumberTva}
+            </p>
+          </div>
         </div>
       </div>
     </div>

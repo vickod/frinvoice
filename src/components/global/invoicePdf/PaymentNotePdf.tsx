@@ -4,48 +4,26 @@ import React from "react";
 const PaymentNotePdf = ({ formData }: { formData: FormFieldsType }) => {
   return (
     <div className="w-1/2 flex flex-col gap-2">
-      {/* {dueDate && (
-                  <Label className="w-fit font-bold ">
-                    Echeance de paiement le{" "}
-                    {dueDate && (
-                      <>
-                        {" "}
-                        <span className="font-bold">
-                          {new Intl.DateTimeFormat("fr-FR", {
-                            year: "numeric",
-                            month: "long",
-                            day: "numeric",
-                          }).format(dueDate)}
-                        </span>
-                      </>
-                    )}
-                  </Label>
-                )} */}
-
       <div className="mt-2 w-full flex flex-col gap-2">
-        {formData.paymentMethod !== "notIncluded" && (
-          <p className="">
-            <span>Mode de paiement : </span>
-            <span className="font-bold">
-              {formData.paymentMethod === "cash" ? "Espèces" : "Virement"}
-            </span>
-          </p>
-        )}
-        <div className="">
+        <div className="text-sm">
           {formData.paymentStatus === "paid" ? (
             <p>Aucun solde restant dû.</p>
           ) : (
-            <p>
-              Montant dû :{" "}
-              <span className="font-bold">{formData.total.toFixed(2)}</span> €.
-              Merci de régler ce solde
-              {formData.dueDate && (
-                <>
-                  {" "}
-                  <span className="block">
+            <>
+              <p>
+                Montant dû :{" "}
+                <span className="font-semibold">
+                  {formData.total.toFixed(2)}
+                </span>{" "}
+                €
+              </p>
+              <p>
+                Merci de régler ce solde
+                {formData.dueDate && (
+                  <span>
                     {" "}
-                    avant le{" "}
-                    <span className="font-bold">
+                    pour le{" "}
+                    <span className="font-semibold">
                       {new Intl.DateTimeFormat("fr-FR", {
                         year: "numeric",
                         month: "long",
@@ -54,9 +32,9 @@ const PaymentNotePdf = ({ formData }: { formData: FormFieldsType }) => {
                       .
                     </span>
                   </span>
-                </>
-              )}
-            </p>
+                )}
+              </p>
+            </>
           )}
         </div>
       </div>

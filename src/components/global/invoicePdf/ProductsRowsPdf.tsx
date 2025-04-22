@@ -12,7 +12,7 @@ import React from "react";
 
 const ProductsRowsPdf = ({ formData }: { formData: FormFieldsType }) => {
   return (
-    <div className="w-full">
+    <div className="w-full border-b">
       <Table className="w-full">
         <TableHeader>
           <TableRow className="bg-zinc-100">

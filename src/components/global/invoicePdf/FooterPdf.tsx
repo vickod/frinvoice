@@ -3,14 +3,16 @@ import React from "react";
 
 const FooterPdf = ({ formData }: { formData: FormFieldsType }) => {
   return (
-    <div className="border-t pt-2 mt-2 flex justify-between text-sm">
+    <div className="border-t dark:border-t-gray-200 pt-2 mt-2 flex justify-between text-sm text-black">
       <div>
-        <h1 className="font-bold">{formData.name && formData.name}</h1>
+        {formData.numberTva && formData.name && (
+          <>
+            <h1 className="font-semibold">{formData.name}</h1>
 
-        {formData.numberTva && (
-          <p>
-            <span className="font-bold">№ TVA</span> {formData.numberTva}
-          </p>
+            <p>
+              <span className="font-semibold">N°TVA:</span> {formData.numberTva}
+            </p>
+          </>
         )}
       </div>
       <div>
@@ -18,12 +20,14 @@ const FooterPdf = ({ formData }: { formData: FormFieldsType }) => {
           <p className="">
             {formData.paymentMethod === "virement" && formData.iban && (
               <>
-                <span className="font-bold">Mode de paiement : </span>Virement
+                <span className="font-semibold">Mode de paiement : </span>
+                Virement
               </>
             )}{" "}
             {formData.paymentMethod === "cash" && (
               <>
-                <span className="font-bold">Mode de paiement : </span> Espèces
+                <span className="font-semibold">Mode de paiement : </span>{" "}
+                Espèces
               </>
             )}
             <span className=""></span>
@@ -32,7 +36,7 @@ const FooterPdf = ({ formData }: { formData: FormFieldsType }) => {
 
         {formData.iban && (
           <p>
-            <span className="font-bold">IBAN</span> {formData.iban}
+            <span className="font-semibold">IBAN</span> {formData.iban}
           </p>
         )}
       </div>

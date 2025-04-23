@@ -55,7 +55,7 @@ const FileInput = ({ control, setValue, errors }: FileInputProps) => {
 
   // console.log("FILE INPUT RENDERED");
   return (
-    <div className="flex max-md:flex-col justify-center items-center mb-8 w-full">
+    <div className="flex max-md:flex-col justify-center items-center mb-8 w-full dark:text-zinc-200">
       <div className="w-full flex flex-col gap-4 justify-start max-md:mt-5">
         <Label className="text-lg font-bold whitespace-nowrap">
           Ajouter le logo de l'entreprise:
@@ -70,7 +70,7 @@ const FileInput = ({ control, setValue, errors }: FileInputProps) => {
                 accept="image/*"
                 ref={fileInputRef}
                 onChange={(e) => handleFileChange(e, field.onChange)}
-                className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:border file:border-gray-300 file:rounded file:bg-gray-100 file:text-sm"
+                className="block w-full text-sm text-gray-500 dark:text-zinc-200 file:mr-4 file:py-2 file:px-4 file:border file:border-gray-300 dark:file:border-none file:rounded file:bg-gray-100 dark:file:bg-zinc-900 file:text-sm file:cursor-pointer "
               />
             )}
           />

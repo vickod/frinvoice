@@ -12,15 +12,17 @@ import React from "react";
 
 const ProductsRowsPdf = ({ formData }: { formData: FormFieldsType }) => {
   return (
-    <div className="w-full border-b">
-      <Table className="w-full">
+    <div className="w-full border-b dark:border-gray-200">
+      <Table className="w-full  ">
         <TableHeader>
-          <TableRow className="bg-zinc-100">
-            <TableHead className="w-5/12">Description</TableHead>
-            <TableHead>Prix unitaire</TableHead>
-            <TableHead>Quantite</TableHead>
-            {formData.isTvaIncluded && <TableHead>TVA</TableHead>}
-            <TableHead className="text-right">Total</TableHead>
+          <TableRow className="bg-zinc-100 hover:!bg-zinc-100 ">
+            <TableHead className="w-5/12 text-zinc-500">Description</TableHead>
+            <TableHead className="text-zinc-500">Prix unitaire</TableHead>
+            <TableHead className="text-zinc-500">Quantite</TableHead>
+            {formData.isTvaIncluded && (
+              <TableHead className="text-zinc-500">TVA</TableHead>
+            )}
+            <TableHead className="text-right text-zinc-500">Total</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -29,8 +31,8 @@ const ProductsRowsPdf = ({ formData }: { formData: FormFieldsType }) => {
               key={`article${index}`}
               className={
                 index % 2 === 0
-                  ? "bg-white text-black"
-                  : "bg-zinc-50 text-black"
+                  ? "bg-white text-black hover:!bg-transparent"
+                  : "bg-zinc-50 text-black hover:!bg-transparent"
               }
             >
               <TableCell className=" break-words whitespace-normal pr-6  max-w-60">

@@ -64,139 +64,145 @@ const ProductRow = ({
   console.log("product", product);
   console.log(typeof product?.total === "string");
   return (
-    <div className=" w-full max-lg:mt-8 flex max-md:flex-col max-md:gap-6 justify-between gap-4">
-      <div className="flex flex-col gap-2 min-w-5/12 max-w-5/12 max-md:min-w-full ">
-        <Label>
-          Déscription:<span className="text-red-500">*</span>
-        </Label>
-        <Controller
-          name={`products.${index}.description`}
-          control={control}
-          defaultValue=""
-          render={({ field }) => (
-            <Textarea
-              {...field}
-              placeholder={`Produit / Service ${index + 1}`}
-            />
-          )}
-        />
-        {errors?.products?.[index]?.description && (
-          <p className="text-red-500 text-xs">
-            {errors.products[index].description.message}
+    <div className=" flex  max-lg:flex-col w-full md:gap-6 p-4">
+      <div className=" w-full max-lg:mt-8 flex max-md:flex-col max-md:gap-6 justify-between gap-4">
+        <div className="flex flex-col gap-2 min-w-5/12 max-w-5/12 max-md:min-w-full ">
+          <p className="text-sm font-semibold">
+            Déscription:<span className="text-red-500"> *</span>
           </p>
-        )}
-      </div>
-
-      <div className="flex flex-col gap-2 min-w-2/12 md:min-w-1/12 ">
-        <Label>
-          Prix unitaire:<span className="text-red-500">*</span>
-        </Label>
-        <Controller
-          name={`products.${index}.price`}
-          control={control}
-          defaultValue=""
-          render={({ field }) => (
-            // <Input
-            //   {...field}
-            //   onChange={(e) =>
-            //     field.onChange(
-            //       e.target.value === ""
-            //         ? undefined
-            //         : parseFloat(e.target.value)
-            //     )
-            //   }
-            // />
-            <Input
-              placeholder="0"
-              {...field}
-              onChange={(e) => {
-                formatInputValue(e, field);
-              }}
-            />
-          )}
-        />
-        {errors?.products?.[index]?.price && (
-          <p className="text-red-500 text-xs">
-            {errors.products[index].price.message}
-          </p>
-        )}
-      </div>
-
-      <div className="flex flex-col gap-2 min-w-1/12 md:max-w-1/12">
-        <Label>
-          Qté:<span className="text-red-500">*</span>
-        </Label>
-        <Controller
-          name={`products.${index}.quantity`}
-          control={control}
-          defaultValue=""
-          render={({ field }) => (
-            <Input
-              placeholder="0"
-              {...field}
-              onChange={(e) =>
-                // field.onChange(
-                //   e.target.value === "" ? undefined : parseFloat(e.target.value)
-                // )
-                formatInputValue(e, field)
-              }
-            />
-          )}
-        />
-        {errors?.products?.[index]?.quantity && (
-          <p className="text-red-500 text-xs">
-            {errors.products[index].quantity.message}
-          </p>
-        )}
-      </div>
-
-      {isTvaIncluded && (
-        <div className="flex flex-col gap-2 min-w-1/12 md:max-w-1/12">
-          <Label>
-            TVA:<span className="text-red-500">*</span>
-          </Label>
           <Controller
-            name={`products.${index}.tva`}
+            name={`products.${index}.description`}
             control={control}
-            defaultValue={0}
+            defaultValue=""
+            render={({ field }) => (
+              <Textarea
+                {...field}
+                placeholder={`Produit / Service ${index + 1}`}
+                className="dark:bg-neutral-900 "
+              />
+            )}
+          />
+          {errors?.products?.[index]?.description && (
+            <p className="text-red-500 text-xs">
+              {errors.products[index].description.message}
+            </p>
+          )}
+        </div>
+
+        <div className="flex flex-col gap-2 min-w-2/12 md:min-w-1/12 ">
+          <p className="text-sm font-semibold">
+            Prix unitaire:<span className="text-red-500 font-bold"> *</span>
+          </p>
+          <Controller
+            name={`products.${index}.price`}
+            control={control}
+            defaultValue=""
+            render={({ field }) => (
+              // <Input
+              //   {...field}
+              //   onChange={(e) =>
+              //     field.onChange(
+              //       e.target.value === ""
+              //         ? undefined
+              //         : parseFloat(e.target.value)
+              //     )
+              //   }
+              // />
+              <Input
+                placeholder="0"
+                {...field}
+                onChange={(e) => {
+                  formatInputValue(e, field);
+                }}
+                className="dark:bg-neutral-900"
+              />
+            )}
+          />
+          {errors?.products?.[index]?.price && (
+            <p className="text-red-500 text-xs">
+              {errors.products[index].price.message}
+            </p>
+          )}
+        </div>
+
+        <div className="flex flex-col gap-2 min-w-1/12 md:max-w-1/12">
+          <p className="text-sm font-semibold">
+            Qté:<span className="text-red-500 font-bold"> *</span>
+          </p>
+          <Controller
+            name={`products.${index}.quantity`}
+            control={control}
+            defaultValue=""
             render={({ field }) => (
               <Input
+                placeholder="0"
                 {...field}
+                className="dark:bg-neutral-900"
                 onChange={(e) =>
                   // field.onChange(
-                  //   e.target.value === ""
-                  //     ? undefined
-                  //     : parseFloat(e.target.value)
+                  //   e.target.value === "" ? undefined : parseFloat(e.target.value)
                   // )
-                  formatTvaInputValue(e, field)
+                  formatInputValue(e, field)
                 }
               />
             )}
           />
-          {errors?.products?.[index]?.tva && (
+          {errors?.products?.[index]?.quantity && (
             <p className="text-red-500 text-xs">
-              {errors.products[index].tva.message}
+              {errors.products[index].quantity.message}
             </p>
           )}
         </div>
-      )}
 
-      <div className="flex flex-col gap-2 min-w-2/12 md:min-w-1/12">
-        <Label>Total</Label>
-        <Input
-          className="cursor-default  bg-zinc-100 "
-          readOnly
-          placeholder="0"
-          {...register(`products.${index}.total`)}
-          value={
-            product?.price && product?.quantity
-              ? formatCurrency({
-                  amount: getItemTotal(product, isTvaIncluded),
-                  currency: "EUR",
-                })
-              : ""
-          }
-        />
+        {isTvaIncluded && (
+          <div className="flex flex-col gap-2 min-w-1/12 md:max-w-1/12">
+            <p className="text-sm font-semibold">
+              TVA:<span className="text-red-500 font-bold"> *</span>
+            </p>
+            <Controller
+              name={`products.${index}.tva`}
+              control={control}
+              defaultValue={0}
+              render={({ field }) => (
+                <Input
+                  className="dark:bg-neutral-900"
+                  {...field}
+                  onChange={(e) =>
+                    // field.onChange(
+                    //   e.target.value === ""
+                    //     ? undefined
+                    //     : parseFloat(e.target.value)
+                    // )
+                    formatTvaInputValue(e, field)
+                  }
+                />
+              )}
+            />
+            {errors?.products?.[index]?.tva && (
+              <p className="text-red-500 text-xs">
+                {errors.products[index].tva.message}
+              </p>
+            )}
+          </div>
+        )}
+
+        <div className="flex flex-col gap-2 min-w-2/12 md:min-w-1/12">
+          <p className="text-sm font-bold">Total:</p>
+          <Input
+            className="cursor-default  bg-zinc-100 dark:bg-neutral-900 "
+            readOnly
+            placeholder="0"
+            {...register(`products.${index}.total`)}
+            value={
+              product?.price && product?.quantity
+                ? formatCurrency({
+                    amount: getItemTotal(product, isTvaIncluded),
+                    currency: "EUR",
+                  })
+                : ""
+            }
+          />
+        </div>
       </div>
     </div>
   );

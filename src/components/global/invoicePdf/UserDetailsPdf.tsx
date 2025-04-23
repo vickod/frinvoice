@@ -7,7 +7,7 @@ type UserDetailsPdfProps = {
 
 const UserDetailsPdf = ({ formData, previewUrl }: UserDetailsPdfProps) => {
   return (
-    <div className="w-full text-black border-b pb-4 ">
+    <div className="w-full text-black border-b dark:border-gray-200 pb-4 ">
       <div className=" flex gap-2 align-items-start">
         {previewUrl && (
           <div className=" ">
@@ -36,12 +36,25 @@ const UserDetailsPdf = ({ formData, previewUrl }: UserDetailsPdfProps) => {
 
           <p className="text-sm">{formData.country && formData.country}</p>
           <p className="text-sm">{formData.email && formData.email}</p>
-          <p className="text-sm">{formData.numberTva && formData.numberTva}</p>
-          {formData.iban && (
-            <p className="text-sm font-bold text-neutral-500">
-              IBAN <span className="font-normal">{formData.iban}</span>
+          {formData.entrepriseNumber && (
+            <p className="">
+              <span className="font-semibold text-sm ">N° d'entreprise:</span>{" "}
+              {formData.entrepriseNumber}
             </p>
           )}
+          {/* <p className="text-sm">{formData.numberTva && formData.numberTva}</p> */}
+          {formData.numberTva && (
+            <p className="text-sm">
+              <span className="font-semibold  text-sm">TVA:</span>{" "}
+              {formData.numberTva}
+            </p>
+          )}
+          {/* {formData.iban && (
+            <p className="text-sm font-bold text-neutral-500">
+              IBAN{" "}
+              <span className="font-normal text-black">{formData.iban}</span>
+            </p>
+          )} */}
         </div>
       </div>
       <div className="flex justify-end mt-4">
@@ -64,12 +77,15 @@ const UserDetailsPdf = ({ formData, previewUrl }: UserDetailsPdfProps) => {
                 <p className="text-sm">{formData.clientCity}</p>
               </>
             )}
-            <p className="text-sm">
+            {/* <p className="text-sm">
               {formData.clientEmail && formData.clientEmail}
-            </p>
-            <p className="text-sm">
-              {formData.clientNumberTva && formData.clientNumberTva}
-            </p>
+            </p> */}
+            {formData.clientNumberTva && (
+              <p>
+                <span className="font-semibold  text-sm">TVA:</span>{" "}
+                {formData.clientNumberTva}
+              </p>
+            )}
           </div>
         </div>
       </div>

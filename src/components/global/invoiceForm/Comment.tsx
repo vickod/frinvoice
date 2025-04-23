@@ -6,17 +6,27 @@ import { Controller } from "react-hook-form";
 type CommentProps = {
   control: any;
   commentName: string;
+  errors: any;
 };
 
-const Comment = ({ control, commentName }: CommentProps) => {
+const Comment = ({ control, commentName, errors }: CommentProps) => {
   return (
     <div className="mt-10 flex flex-col gap-2">
-      <Label>Commentaires</Label>
+      <Label>Commentaires:</Label>
       <Controller
         name={commentName}
         control={control}
-        render={({ field }) => <Textarea {...field} />}
+        render={({ field }) => (
+          <Textarea
+            className="dark:bg-zinc-900"
+            {...field}
+            // placeholder="Pénalités de retard applicables en cas de non-paiement : taux légal + 40 EUR d'indemnité forfaitaire."
+          />
+        )}
       />
+      {errors?.comment && (
+        <p className="text-red-500 text-xs">{errors.comment.message}</p>
+      )}
     </div>
   );
 };

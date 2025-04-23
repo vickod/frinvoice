@@ -51,7 +51,7 @@ export default function OptionalFields({
         />
       </div> */}
       <div className="flex gap-2 justify-between ">
-        <Label className="whitespace-nowrap text-neutral-600">
+        <Label className="whitespace-nowrap text-neutral-600 dark:text-zinc-200">
           Statut de paiement:
         </Label>
         <Controller
@@ -69,17 +69,17 @@ export default function OptionalFields({
               <SelectTrigger className="w-full">
                 <SelectValue placeholder="Selectionnez un statut:" />
               </SelectTrigger>
-              <SelectContent className="">
-                {/* <SelectItem value="notIncluded">Ne pas inclure</SelectItem> */}
-                <SelectItem value="topay">A payer</SelectItem>
-                <SelectItem value="paid">Payé</SelectItem>
+              <SelectContent>
+                <SelectItem value="notIncluded">Ne pas inclure</SelectItem>
+                <SelectItem value="topay">Paiement attendu</SelectItem>
+                <SelectItem value="paid">Paiement confirmé</SelectItem>
               </SelectContent>
             </Select>
           )}
         />
       </div>
       <div className="flex gap-2 justify-between ">
-        <Label className="whitespace-nowrap text-neutral-600">
+        <Label className="whitespace-nowrap text-neutral-600 dark:text-zinc-200">
           Mode de paiement:
         </Label>
         <Controller
@@ -104,7 +104,10 @@ export default function OptionalFields({
         />
       </div>
       <div className="flex items-center space-x-2 justify-between">
-        <Label htmlFor="tva-mode" className="text-neutral-600">
+        <Label
+          htmlFor="tva-mode"
+          className="text-neutral-600 dark:text-zinc-200"
+        >
           Inclure le montant de la TVA:
         </Label>
         <Controller

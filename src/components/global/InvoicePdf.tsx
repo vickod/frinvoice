@@ -22,7 +22,7 @@ export default function InvoicePdf({
 
   return (
     <div
-      className="bg-white p-10 rounded shadow-md  flex flex-col justify-between border mx-auto"
+      className="bg-white p-10  shadow-md  flex flex-col justify-between border mx-auto "
       style={{ width: "794px", minHeight: "1123px" }}
       id="pdf-content"
       ref={contentRef}
@@ -34,7 +34,7 @@ export default function InvoicePdf({
 
         <ProductsRowsPdf formData={formData} />
 
-        <div className="mt-10 flex justify-between items-end">
+        <div className="mt-8 flex justify-between items-end">
           <PaymentNotePdf formData={formData} />
 
           <SummaryCardPdf formData={formData} />

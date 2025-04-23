@@ -34,12 +34,12 @@ const PdfDrawer = ({ formData }: PdfDrawerProps) => {
   }, [formData.logoEnt]);
 
   return (
-    <div className="flex mt-8 justify-end">
+    <div className="flex mt-8 justify-end ">
       <DrawerContent
         aria-describedby={undefined}
-        className="flex flex-col min-h-[90vh]  w-full bg-white p-6 rounded shadow-md"
+        className="flex flex-col min-h-[90vh]  w-full bg-white p-6 rounded shadow-md dark:bg-zinc-800"
       >
-        <div className="h-full overflow-y-scroll">
+        <div className="h-full overflow-y-scroll ">
           <div>
             <DrawerHeader className="">
               <VisuallyHidden>
@@ -56,11 +56,16 @@ const PdfDrawer = ({ formData }: PdfDrawerProps) => {
             </DrawerHeader>
           </div>
         </div>
-        <div className="mt-8">
-          <DrawerFooter className="max-w-[210mm] border-t  mx-auto ">
+        <div className="mt-8 border-t ">
+          <DrawerFooter className="max-w-[210mm] dark:border-white  mx-auto ">
             <div className="flex gap-4 justify-end ">
               <div>
-                <Button onClick={() => reactToPrintFn()}>Telecharger</Button>
+                <Button
+                  className="dark:text-white bg-green-500 hover:bg-green-600  dark:bg-emerald-700 dark:hover:bg-emerald-800"
+                  onClick={() => reactToPrintFn()}
+                >
+                  Telecharger
+                </Button>
               </div>
               <div>
                 <DrawerClose asChild>

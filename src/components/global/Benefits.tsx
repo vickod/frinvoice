@@ -7,14 +7,17 @@ import { Button } from "../ui/button";
 export default function Benefits() {
   // console.log("BENEFITS RENDERED");
   return (
-    <div id="benefits" className="mt-60 xl:w-9/12 w-11/12  mx-auto  mb-60 ">
-      <div className="w-full">
+    <div
+      id="benefits"
+      className="mt-60 xl:w-9/12 w-11/12  mx-auto  mb-60 dark:text-zinc-200  "
+    >
+      <div className="w-full ">
         <h1 className="text-5xl font-semibold text-center ">
           Pourquoi choisir Frinvoice ?
         </h1>
-        <div className="mt-20  grid xl:grid-cols-3 xl:grid-rows-2 sm:grid-cols-2  text-zinc-800 ">
+        <div className="mt-20  grid xl:grid-cols-3 xl:grid-rows-2 sm:grid-cols-2  text-zinc-800 dark:text-zinc-200 ">
           <div className="flex flex-col gap-4 sm:border-r max-sm:border-t h-60 p-8  ">
-            <h1 className="font-semibold text-xl md:text-2xl">
+            <h1 className="font-bold text-xl md:text- text-green-500 dark:text-emerald-700">
               100% Gratuit et sans contraintes
             </h1>
             <p>
@@ -24,7 +27,7 @@ export default function Benefits() {
             </p>
           </div>
           <div className="flex flex-col gap-4 xl:border-r max-sm:border-t h-60 p-8 ">
-            <h1 className="font-semibold text-xl md:text-2xl">
+            <h1 className="font-bold text-xl md:text- text-green-500 dark:text-emerald-700">
               Adapté à tous les utilisateurs
             </h1>
             <p>
@@ -34,7 +37,7 @@ export default function Benefits() {
             {/* <GiCheckMark className="size-10 text-green-500" /> */}
           </div>
           <div className="flex flex-col gap-4 max-xl:border-t min-sm:border-r xl:border-r-0   h-60 p-8 ">
-            <h1 className="font-semibold text-xl md:text-2xl">
+            <h1 className="font-bold text-xl md:text- text-green-500 dark:text-emerald-700">
               Impression rapide en un clic
             </h1>
             <p>
@@ -43,7 +46,7 @@ export default function Benefits() {
             </p>
           </div>
           <div className="flex flex-col gap-4 border-t xl:border-r h-60 p-8 ">
-            <h1 className="font-semibold text-xl md:text-2xl">
+            <h1 className="font-bold text-xl md:text- text-green-500 dark:text-emerald-700">
               Téléchargez votre facture en PDF
             </h1>
             <p>
@@ -52,7 +55,7 @@ export default function Benefits() {
             </p>
           </div>
           <div className="flex flex-col gap-4 border-t sm:border-r h-60 p-8 ">
-            <h1 className="font-semibold text-xl md:text-2xl">
+            <h1 className="font-bold text-xl md:text- text-green-500 dark:text-emerald-700">
               Visualisez en direct vos modifications
             </h1>
             <p>
@@ -61,7 +64,7 @@ export default function Benefits() {
             </p>
           </div>
           <div className="flex flex-col gap-4 border-t h-60 p-8 ">
-            <h1 className="font-semibold text-xl md:text-2xl">
+            <h1 className="font-bold text-xl md:text- text-green-500 dark:text-emerald-700">
               Créez une facture à votre image
             </h1>
             <p>

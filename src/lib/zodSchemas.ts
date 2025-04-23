@@ -8,7 +8,23 @@ import {z} from "zod"
 //   total: z.number().min(0, "Le total doit être supérieur ou égal à 0"),
 // });
 const productSchema = z.object({
-  description: z.string().trim().min(1, "La description est obligatoire").max(100, "ne peut pas dépasser 100 caracteres").regex(/^[A-Za-zÀ-ÖØ-öø-ÿ0-9\s]+$/, "Veuillez saisir une description valide"),
+  // description: z.string().trim().min(1, "La description est obligatoire").max(100, "ne peut pas dépasser 100 caracteres").regex(/^[A-Za-zÀ-ÖØ-öø-ÿ0-9\s]+$/, "Veuillez saisir une description valide"),
+  description: z
+      .string()
+      .trim()
+      .min(1, "La description est obligatoire")
+      .transform((val) => val === '' ? undefined : val)
+      .optional()
+      .refine(
+        (val) =>
+          !val || (
+            val.length >= 2 &&
+            val.length <= 100
+          ),
+        {
+          message: "La description doit contenir entre 2 et 100 caractères.",
+        }
+      ),
   
   
   price: z
@@ -69,7 +85,7 @@ const productSchema = z.object({
         (val) =>
           !val || (
             val.length >= 2 &&
-            val.length <= 50 &&
+            val.length <= 38 &&
             /^[A-Za-zÀ-ÖØ-öø-ÿ\s]+\s\d+$/.test(val)
           ),
         {
@@ -131,16 +147,27 @@ const productSchema = z.object({
       ),
       // numberTva: z.string().optional(),
       numberTva: z
-  .string()
-  .trim()
-  .transform((val) => val === '' ? undefined : val.replace(/\s+/g, '').toUpperCase())
-  .optional()
-  .refine(
-    (val) => !val || /^[A-Z]{2}[0-9A-Z]{8,12}$/.test(val),
-    {
-      message: "Numéro de TVA invalide (ex : BE1234567890)",
-    }
-  ),
+      .string()
+      .trim()
+      .transform((val) => val === '' ? undefined : val.replace(/\s+/g, '').replace(/\./g, '').toUpperCase())
+      .optional()
+      .refine(
+        (val) => !val || /^[A-Z0-9]{2,20}$/.test(val),
+        {
+          message: "Numéro de TVA invalide. Seuls les caractères alphanumériques sont autorisés (max 20 caractères).",
+        }
+      ),
+      entrepriseNumber: z
+      .string()
+      .trim()
+      .transform((val) => val === '' ? undefined : val.replace(/\s+/g, '').replace(/\./g, '').toUpperCase())
+      .optional()
+      .refine(
+        (val) => !val || /^[A-Z0-9]{1,20}$/.test(val),
+        {
+          message: "Numéro d'entreprise invalide. Seuls les caractères alphanumériques sont autorisés (max 20 caractères).",
+        }
+      ),
 
       // iban:z.string().optional(),
   //     iban: z
@@ -172,7 +199,7 @@ const productSchema = z.object({
         (val) =>
           !val || (
             val.length >= 2 &&
-            val.length <= 50 &&
+            val.length <= 38 &&
             /^[A-Za-zÀ-ÖØ-öø-ÿ\s]+\s\d+$/.test(val)
           ),
         {
@@ -227,23 +254,22 @@ const productSchema = z.object({
         }
       ),
 
-      clientEmail: z.string().trim().max(36,"trop long").optional().refine(
-        (val) => !val || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val),
-        { message: "Email invalide" }
-      ),
+      // clientEmail: z.string().trim().max(36,"trop long").optional().refine(
+      //   (val) => !val || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val),
+      //   { message: "Email invalide" }
+      // ),
 
-      clientNumberTva: z
+  clientNumberTva: z
   .string()
   .trim()
-  .transform((val) => val === '' ? undefined : val.replace(/\s+/g, '').toUpperCase())
+  .transform((val) => val === '' ? undefined : val.replace(/\s+/g, '').replace(/\./g, '').toUpperCase())
   .optional()
   .refine(
-    (val) => !val || /^[A-Z]{2}[0-9A-Z]{8,12}$/.test(val),
+    (val) => !val || /^[A-Z0-9]{2,20}$/.test(val),
     {
-      message: "Numéro de TVA invalide (ex : BE1234567890)",
+      message: "Numéro de TVA invalide. Seuls les caractères alphanumériques sont autorisés (max 20 caractères).",
     }
   ),
-
 
 
 
@@ -256,7 +282,7 @@ const productSchema = z.object({
       .refine(
         (val) => !val || val.length <= 20,
         {
-          message: "Le numéro de facture ne peut pas dépasser 20 caractères",
+          message: "Trop long",
         }
       ),
 

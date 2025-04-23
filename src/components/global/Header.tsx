@@ -30,7 +30,7 @@ export default function Header() {
         <div className="max-sm:mt-20"></div>
       </div>
 
-      <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-b from-transparent to-white"></div>
+      <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-b from-transparent to-white dark:to-black"></div>
     </div>
   );
 }

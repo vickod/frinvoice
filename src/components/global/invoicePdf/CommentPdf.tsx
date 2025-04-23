@@ -3,7 +3,7 @@ import React from "react";
 
 const CommentPdf = ({ formData }: { formData: FormFieldsType }) => {
   return (
-    <div className="mt-10">
+    <div className="mt-8 text-neutral-500">
       <p className="text-xs break-words">
         {formData.comment && formData.comment}
       </p>

@@ -52,18 +52,9 @@ export default function InvoiceForm() {
       createdDate: new Date(),
       dueDate: undefined,
       // currency: "EUR",
-      paymentStatus: "topay",
+      paymentStatus: "notIncluded",
       paymentMethod: "notIncluded",
       isTvaIncluded: false,
-      // products: [
-      //   {
-      //     description: "",
-      //     price: 0,
-      //     quantity: 0,
-      //     tva: 0,
-      //     total: 0,
-      //   },
-      // ],
       products: [
         {
           description: "",
@@ -188,7 +179,7 @@ export default function InvoiceForm() {
       id="invoice"
       className="min-h-[800px] p-2 md:w-11/12 lg:w-9/12  xl:w-8/12 mx-auto mb-20 -mt-40 z-20 relative"
     >
-      <Card className="shadow-2xl rounded-none">
+      <Card className="shadow-2xl  dark:bg-zinc-800 dark:text-zinc-200">
         <CardHeader>
           <CardTitle></CardTitle>
           <CardDescription></CardDescription>
@@ -219,18 +210,17 @@ export default function InvoiceForm() {
             {fields.map((field, index) => (
               <div
                 key={field.id}
-                className="mt-5 bg-zinc-50 rounded-xl  border"
+                className="mt-5 bg-zinc-50 rounded-xl  border dark:bg-zinc-900 "
               >
-                <div className=" flex  max-lg:flex-col w-full md:gap-6 p-4">
-                  <ProductRow
-                    index={index}
-                    control={control}
-                    register={register}
-                    errors={errors}
-                    // isTvaIncluded={isTvaIncluded}
-                    setValue={setValue}
-                  />
-                </div>
+                <ProductRow
+                  index={index}
+                  control={control}
+                  register={register}
+                  errors={errors}
+                  // isTvaIncluded={isTvaIncluded}
+                  setValue={setValue}
+                />
+
                 <div className="flex justify-between">
                   {fields.length < 3 && index === fields.length - 1 ? (
                     <button
@@ -238,7 +228,7 @@ export default function InvoiceForm() {
                       onClick={handleAppend}
                       className="cursor-pointer"
                     >
-                      <CirclePlus className="bg-white rounded-full text-green-500 relative -left-2 -bottom-2" />
+                      <CirclePlus className="bg-white rounded-full dark:bg-zinc-800 text-green-500 dark:text-emerald-700 dark:hover:text-emerald-800 relative -left-2 -bottom-2 hover:scale-110" />
                     </button>
                   ) : (
                     <span className="opacity-0">
@@ -251,7 +241,7 @@ export default function InvoiceForm() {
                       className="cursor-pointer"
                       onClick={() => handleRemove(index)}
                     >
-                      <CircleMinus className="bg-white rounded-full text-red-500 relative left-2 -bottom-2" />
+                      <CircleMinus className="bg-white dark:bg-zinc-800 rounded-full text-red-500 relative left-2 -bottom-2 hover:scale-110" />
                     </button>
                   )}
                 </div>
@@ -263,9 +253,9 @@ export default function InvoiceForm() {
               setValue={setValue}
               // currency={currency}
             />
-            <Comment control={control} commentName="comment" />
+            <Comment control={control} errors={errors} commentName="comment" />
 
-            <div className="flex mt-8 justify-end">
+            <div className="flex mt-8 justify-end ">
               <Drawer>
                 <DrawerTrigger asChild>
                   <Button
@@ -274,8 +264,9 @@ export default function InvoiceForm() {
                     //   e.currentTarget.blur();
                     // }}
                     disabled={hasErrors}
+                    className="bg-green-500 hover:bg-green-600 dark:bg-emerald-700 dark:hover:bg-emerald-800 text-white text-lg  py-6 px-6 rounded"
                   >
-                    Previsualiser
+                    Prévisualiser
                   </Button>
                 </DrawerTrigger>
                 {/* {formData && <PdfDrawer formData={formData} />} */}
@@ -286,13 +277,13 @@ export default function InvoiceForm() {
                 )}
               </Drawer>
 
-              <div className="mt-20">
+              {/* <div className="mt-20">
                 {extractErrorMessages(errors).map((msg, i) => (
                   <p key={i} className="text-red-500 text-sm">
                     {msg}
                   </p>
                 ))}
-              </div>
+              </div> */}
             </div>
           </form>
         </CardContent>

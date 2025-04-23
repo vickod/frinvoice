@@ -36,27 +36,38 @@ export default function InvoiceDetails({
 
   // console.log("INVOICE DETAILS RENDERED");
   return (
-    <div className="flex flex-col max-md:w-full md:w-1/2 gap-4">
+    <div className="flex flex-col max-md:w-full md:w-1/2 gap-4 dark:text-zinc-200">
       <div>
         <Label className="text-lg font-bold">Facture:</Label>
       </div>
       <div className="flex gap-2 justify-between">
-        <Label className="whitespace-nowrap text-neutral-600">
+        <Label className="whitespace-nowrap text-neutral-600 dark:text-zinc-200">
           № de facture:
         </Label>
-        <Controller
-          name={invoiceNumberName}
-          control={control}
-          render={({ field }) => (
-            <Input {...field} placeholder="" className="w-[280px]" />
+        <div className="flex flex-col gap-1">
+          <Controller
+            name={invoiceNumberName}
+            control={control}
+            render={({ field }) => (
+              <Input
+                {...field}
+                placeholder=""
+                className="w-[280px] dark:bg-zinc-900"
+              />
+            )}
+          />
+          {errors.invoiceNumber && (
+            <p className="text-red-500 text-xs">
+              {errors.invoiceNumber.message}
+            </p>
           )}
-        />
+        </div>
       </div>
-      {errors.invoiceNumber && (
-        <p className="text-red-500 text-xs">{errors.invoiceNumber.message}</p>
-      )}
+
       <div className="flex gap-2 justify-between">
-        <Label className="whitespace-nowrap text-neutral-600">Emise le:</Label>
+        <Label className="whitespace-nowrap text-neutral-600 dark:text-zinc-200">
+          Emise le:
+        </Label>
         <Controller
           name={createdDateName}
           control={control}
@@ -87,7 +98,9 @@ export default function InvoiceDetails({
       </div>
 
       <div className="flex gap-2 justify-between">
-        <Label className="whitespace-nowrap text-neutral-600">Due le:</Label>
+        <Label className="whitespace-nowrap text-neutral-600 dark:text-zinc-200">
+          Due le:
+        </Label>
         <Controller
           name={dueDateName}
           control={control}
@@ -96,7 +109,7 @@ export default function InvoiceDetails({
               <PopoverTrigger asChild>
                 <Button
                   variant="outline"
-                  className="w-[280px] text-left justify-between"
+                  className="w-[280px] text-left justify-between dark:bg-zinc-900  dark:hover:cursor-pointer"
                 >
                   <span>{formatDate(field.value)}</span>
                   <CalendarIcon />

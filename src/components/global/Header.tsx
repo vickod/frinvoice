@@ -27,7 +27,8 @@ export default function Header() {
             </Button>
           </Link>
         </div> */}
-        <div className="max-sm:mt-20"></div>
+        {/* invoice link */}
+        <div className="max-sm:mt-20 absolute" id="invoice"></div>
       </div>
 
       <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-b from-transparent to-white dark:to-black"></div>

@@ -1,5 +1,9 @@
 import React, { useCallback, useRef, useState } from "react";
-import { Controller, UseFormSetValue } from "react-hook-form";
+import {
+  Controller,
+  UseFormClearErrors,
+  UseFormSetValue,
+} from "react-hook-form";
 import { TiDeleteOutline } from "react-icons/ti";
 import { FormFieldsType } from "@/lib/zodSchemas";
 import { Label } from "@/components/ui/label";
@@ -7,10 +11,16 @@ import { Label } from "@/components/ui/label";
 type FileInputProps = {
   control: any;
   setValue: UseFormSetValue<FormFieldsType>;
+  clearErrors: UseFormClearErrors<FormFieldsType>;
   errors: any;
 };
 
-const FileInput = ({ control, setValue, errors }: FileInputProps) => {
+const FileInput = ({
+  control,
+  setValue,
+  errors,
+  clearErrors,
+}: FileInputProps) => {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [isFileLoaded, setIsFileLoaded] = useState(false);
 
@@ -51,7 +61,8 @@ const FileInput = ({ control, setValue, errors }: FileInputProps) => {
     if (fileInputRef.current) fileInputRef.current.value = "";
     setIsFileLoaded(false);
     setValue("logoEnt", undefined);
-  }, [setValue]);
+    clearErrors("logoEnt");
+  }, [setValue, clearErrors]);
 
   // console.log("FILE INPUT RENDERED");
   return (
@@ -60,6 +71,9 @@ const FileInput = ({ control, setValue, errors }: FileInputProps) => {
         <Label className="text-lg font-bold whitespace-nowrap">
           Ajouter le logo de l'entreprise:
         </Label>
+        {errors?.logoEnt && (
+          <p className="text-red-500 text-xs">{errors.logoEnt.message}</p>
+        )}
         <div className="flex items-center w-fit">
           <Controller
             name="logoEnt"
@@ -85,12 +99,9 @@ const FileInput = ({ control, setValue, errors }: FileInputProps) => {
           )}
         </div>
       </div>
-      {errors.logoEnt && (
-        <p className="text-red-500">{errors.logoEnt.message}</p>
-      )}
     </div>
   );
 };
 
 FileInput.displayName = "FileInput";
-export default React.memo(FileInput);
+export default FileInput;

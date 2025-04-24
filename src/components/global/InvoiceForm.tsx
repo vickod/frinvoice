@@ -39,6 +39,7 @@ export default function InvoiceForm() {
     handleSubmit,
     control,
     formState: { errors, isSubmitting },
+    clearErrors,
     reset,
     setError,
     setValue,
@@ -58,10 +59,10 @@ export default function InvoiceForm() {
       products: [
         {
           description: "",
-          price: undefined, // <-- maintenant en string
-          quantity: undefined,
+          price: 0,
+          quantity: 0,
           tva: 0,
-          total: "0",
+          total: 0,
         },
       ],
       totalHtva: 0,
@@ -78,10 +79,10 @@ export default function InvoiceForm() {
   const handleAppend = useCallback(() => {
     append({
       description: "",
-      price: "",
-      quantity: "",
+      price: 0,
+      quantity: 0,
       tva: 0,
-      total: "0",
+      total: 0,
     });
   }, [append]);
 
@@ -94,27 +95,30 @@ export default function InvoiceForm() {
   // const currency = watch("currency");
   // const PdfDrawer = lazy(() => import("./PdfDrawer"));
   const hasErrors = Object.keys(errors).length > 0;
-  const drawerRef = useRef<HTMLDivElement>(null);
-
-  // useEffect(() => {
-  //   if (hasErrors && formData) {
-  //     setFormData(null);
-  //   }
-  // }, [hasErrors]);
-  useEffect(() => {
-    const drawerEl = drawerRef.current;
-
-    if (drawerEl) {
-      if (formData && !hasErrors) {
-        drawerEl.removeAttribute("inert");
-      } else {
-        drawerEl.setAttribute("inert", "");
-      }
-    }
-  }, [formData, hasErrors]);
 
   const onSubmit: SubmitHandler<FormFieldsType> = async (data) => {
-    console.log(hasErrors, "hasErrors");
+    const file = data.logoEnt;
+
+    if (file) {
+      const maxSizeInMB = 5;
+      const validTypes = ["image/jpeg", "image/png", "image/webp"];
+
+      if (!validTypes.includes(file.type)) {
+        setError("logoEnt", {
+          type: "manual",
+          message: "Le fichier doit être une image JPEG, PNG ou WebP.",
+        });
+        return;
+      }
+
+      if (file.size > maxSizeInMB * 1024 * 1024) {
+        setError("logoEnt", {
+          type: "manual",
+          message: "Le fichier ne doit pas dépasser 5 Mo.",
+        });
+        return;
+      }
+    }
     try {
       const response = await fetch("api/formInvoice", {
         method: "POST",
@@ -126,25 +130,19 @@ export default function InvoiceForm() {
       const responseData = await response.json();
 
       if (responseData.errors) {
-        const errors = responseData.errors;
-        if (errors.name) {
-          setError("name", {
-            type: "server",
-            message: errors.name,
-          });
-        }
-        if (errors.address) {
-          setError("address", {
-            type: "server",
-            message: errors.address,
-          });
-        }
-        if (errors.email) {
-          setError("email", {
-            type: "server",
-            message: errors.email,
-          });
-        }
+        const serverErrors = responseData.errors as Record<
+          keyof FormFieldsType,
+          string
+        >;
+
+        Object.entries(serverErrors).forEach(([field, message]) => {
+          if (message) {
+            setError(field as keyof FormFieldsType, {
+              type: "server",
+              message,
+            });
+          }
+        });
       }
       setFormData(data);
     } catch (error) {
@@ -152,9 +150,15 @@ export default function InvoiceForm() {
       alert("Une erreur réseau est survenue.");
     }
   };
+  //
+  //
+  //
 
-  console.log("INVOICE RENDERED", hasErrors);
-  // console.log(getValues("products"));
+  //
+  //
+  //
+  //
+
   type FieldError = {
     message?: string;
     [key: string]: any;
@@ -175,10 +179,7 @@ export default function InvoiceForm() {
   }
 
   return (
-    <div
-      id="invoice"
-      className="min-h-[800px] p-2 md:w-11/12 lg:w-9/12  xl:w-8/12 mx-auto mb-20 -mt-40 z-20 relative"
-    >
+    <div className="min-h-[800px] p-2 md:w-11/12 lg:w-9/12  xl:w-8/12 mx-auto mb-20 -mt-40 z-20 relative">
       <Card className="shadow-2xl  dark:bg-zinc-800 dark:text-zinc-200">
         <CardHeader>
           <CardTitle></CardTitle>
@@ -186,7 +187,12 @@ export default function InvoiceForm() {
         </CardHeader>
         <CardContent className="w-full  ">
           <form onSubmit={handleSubmit(onSubmit)} className="w-full ">
-            <FileInput control={control} setValue={setValue} errors={errors} />
+            <FileInput
+              control={control}
+              setValue={setValue}
+              errors={errors}
+              clearErrors={clearErrors}
+            />
 
             <UsersDetails register={register} errors={errors} />
 
@@ -263,10 +269,11 @@ export default function InvoiceForm() {
                     // onClick={(e) => {
                     //   e.currentTarget.blur();
                     // }}
-                    disabled={hasErrors}
+                    disabled={hasErrors || isSubmitting}
                     className="bg-green-500 hover:bg-green-600 dark:bg-emerald-700 dark:hover:bg-emerald-800 text-white text-lg  py-6 px-6 rounded"
                   >
-                    Prévisualiser
+                    {isSubmitting ? "Génération..." : "Prévisualiser"}
+                    {/* Prévisualiser */}
                   </Button>
                 </DrawerTrigger>
                 {/* {formData && <PdfDrawer formData={formData} />} */}
@@ -277,17 +284,18 @@ export default function InvoiceForm() {
                 )}
               </Drawer>
 
-              {/* <div className="mt-20">
+              <div className="mt-20">
                 {extractErrorMessages(errors).map((msg, i) => (
                   <p key={i} className="text-red-500 text-sm">
                     {msg}
                   </p>
                 ))}
-              </div> */}
+              </div>
             </div>
           </form>
         </CardContent>
       </Card>
+      <div id="benefits" className="absolute mt-20"></div>
     </div>
   );
 }

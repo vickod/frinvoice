@@ -3,7 +3,16 @@ import { schema } from "@/lib/zodSchemas";
 import { NextResponse } from "next/server";
 
 export async function POST(request: Request){
-    const body: unknown = await request.json();
+    // const body: unknown = await request.json();
+    const bodyRaw: any = await request.json();
+
+    const body = {
+    ...bodyRaw,
+    createdDate: new Date(bodyRaw.createdDate),
+    dueDate: bodyRaw.dueDate ? new Date(bodyRaw.dueDate) : undefined,
+ 
+    };
+
     const result = schema.safeParse(body);
     
     let zodErrors = {}

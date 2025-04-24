@@ -11,7 +11,6 @@ type ProductRowProps = {
   control: any;
   register: any;
   errors: any;
-  // isTvaIncluded: boolean;
   setValue: any;
 };
 
@@ -20,7 +19,6 @@ const ProductRow = ({
   control,
   register,
   errors,
-  // isTvaIncluded,
   setValue,
 }: ProductRowProps) => {
   const product = useWatch({
@@ -47,7 +45,7 @@ const ProductRow = ({
     const raw = e.target.value;
     const cleaned = raw.replace(",", ".");
     if (/^-?\d*\.?\d*$/.test(cleaned) || cleaned === "") {
-      field.onChange(cleaned);
+      field.onChange(Number(cleaned));
     }
   };
   const formatTvaInputValue = (
@@ -61,8 +59,9 @@ const ProductRow = ({
       field.onChange(Number(raw));
     }
   };
-  console.log("product", product);
-  console.log(typeof product?.total === "string");
+
+  console.log(errors?.products?.[index]?.description?.message);
+
   return (
     <div className=" flex  max-lg:flex-col w-full md:gap-6 p-4">
       <div className=" w-full max-lg:mt-8 flex max-md:flex-col max-md:gap-6 justify-between gap-4">
@@ -73,11 +72,10 @@ const ProductRow = ({
           <Controller
             name={`products.${index}.description`}
             control={control}
-            defaultValue=""
             render={({ field }) => (
               <Textarea
                 {...field}
-                placeholder={`Produit / Service ${index + 1}`}
+                // placeholder={`Produit / Service ${index + 1}`}
                 className="dark:bg-neutral-900 "
               />
             )}
@@ -88,7 +86,6 @@ const ProductRow = ({
             </p>
           )}
         </div>
-
         <div className="flex flex-col gap-2 min-w-2/12 md:min-w-1/12 ">
           <p className="text-sm font-semibold">
             Prix unitaire:<span className="text-red-500 font-bold"> *</span>
@@ -140,7 +137,9 @@ const ProductRow = ({
                 className="dark:bg-neutral-900"
                 onChange={(e) =>
                   // field.onChange(
-                  //   e.target.value === "" ? undefined : parseFloat(e.target.value)
+                  //   e.target.value === ""
+                  //     ? undefined
+                  //     : parseFloat(e.target.value)
                   // )
                   formatInputValue(e, field)
                 }
@@ -208,4 +207,4 @@ const ProductRow = ({
   );
 };
 ProductRow.displayName = "FileInput";
-export default React.memo(ProductRow);
+export default ProductRow;

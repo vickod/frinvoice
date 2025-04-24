@@ -64,7 +64,7 @@ const PdfDrawer = ({ formData }: PdfDrawerProps) => {
                   className="dark:text-white bg-green-500 hover:bg-green-600  dark:bg-emerald-700 dark:hover:bg-emerald-800"
                   onClick={() => reactToPrintFn()}
                 >
-                  Telecharger
+                  Imprimer / PDF
                 </Button>
               </div>
               <div>

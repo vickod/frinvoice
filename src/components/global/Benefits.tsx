@@ -8,7 +8,7 @@ export default function Benefits() {
   // console.log("BENEFITS RENDERED");
   return (
     <div
-      id="benefits"
+      // id="benefits"
       className="mt-60 xl:w-9/12 w-11/12  mx-auto  mb-60 dark:text-zinc-200  "
     >
       <div className="w-full ">

@@ -29,7 +29,7 @@ export default function UsersDetails({ register, errors }: UsersDetailsProps) {
         </div>
 
         <div className="flex flex-col gap-1">
-          <p className="text-sm">Adresse: rue + numéro:</p>
+          <p className="text-sm">Adresse + numéro:</p>
           <Input {...register("address")} className="dark:bg-zinc-900" />
           {errors.address && (
             <p className="text-red-500 text-xs">{errors.address.message}</p>
@@ -109,7 +109,7 @@ export default function UsersDetails({ register, errors }: UsersDetailsProps) {
           )}
         </div>
         <div className="flex flex-col gap-1">
-          <p className="text-sm">Adresse: rue + numéro:</p>
+          <p className="text-sm">Adresse + numéro:</p>
           <Input className="dark:bg-zinc-900" {...register("clientAddress")} />
           {errors.clientAddress && (
             <p className="text-red-500 text-xs">

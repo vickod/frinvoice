@@ -157,6 +157,9 @@ const productSchema = z.object({
         { message: "Email invalide" }
       ),
       // numberTva: z.string().optional(),
+
+      phone: z.string().trim().optional(),
+
       numberTva: z
       .string()
       .trim()

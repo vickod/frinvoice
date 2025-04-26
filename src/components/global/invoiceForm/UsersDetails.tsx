@@ -71,6 +71,14 @@ export default function UsersDetails({ register, errors }: UsersDetailsProps) {
         </div>
 
         <div className="flex flex-col gap-1">
+          <p className="text-sm">Telephone:</p>
+          <Input className="dark:bg-zinc-900" {...register("phone")} />
+          {errors.phone && (
+            <p className="text-red-500 text-xs">{errors.phone.message}</p>
+          )}
+        </div>
+
+        <div className="flex flex-col gap-1">
           <p className="text-sm">N° TVA:</p>
           <Input className="dark:bg-zinc-900" {...register("numberTva")} />
           {errors.numberTva && (

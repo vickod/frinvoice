@@ -12,6 +12,10 @@ const FooterPdf = ({ formData }: { formData: FormFieldsType }) => {
             <p>
               <span className="font-semibold">N°TVA:</span> {formData.numberTva}
             </p>
+            <p>
+              <span className="font-semibold">Telephone:</span>{" "}
+              {formData.phone && formData.phone}
+            </p>
           </>
         )}
       </div>

@@ -158,7 +158,14 @@ const productSchema = z.object({
       ),
       // numberTva: z.string().optional(),
 
-      phone: z.string().trim().optional(),
+      phone: z
+      .string()
+      .trim()
+      .optional()
+      .refine(
+        (val) => !val || /^\+?[0-9\s\-().]{7,20}$/.test(val),
+        { message: "Numéro de téléphone invalide" }
+      ),
 
       numberTva: z
       .string()

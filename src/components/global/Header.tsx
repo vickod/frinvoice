@@ -10,7 +10,7 @@ export default function Header() {
       <Image
         src={F2}
         alt=""
-        className="max-h-[90vh] min-h-[90vh] object-cover "
+        className="max-h-[90vh] min-h-[90vh] object-cover  "
         priority
       />
       <div className="absolute inset-0 h-screen flex flex-col justify-center items-center gap-2  ">

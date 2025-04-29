@@ -3,23 +3,39 @@ import React from "react";
 
 const FooterPdf = ({ formData }: { formData: FormFieldsType }) => {
   return (
-    <div className="border-t dark:border-t-gray-200 pt-2 mt-2 flex justify-between text-sm text-black">
-      <div>
+    <div className="w-full border-t dark:border-t-gray-200 pt-2 mt-2 flex justify-between text-sm text-black">
+      {/* <div>
         {formData.numberTva && formData.name && (
           <>
             <h1 className="font-semibold">{formData.name}</h1>
 
-            <p>
-              <span className="font-semibold">N°TVA:</span> {formData.numberTva}
-            </p>
             <p>
               <span className="font-semibold">Telephone:</span>{" "}
               {formData.phone && formData.phone}
             </p>
           </>
         )}
+      </div> */}
+      <div className="w-full flex justify-between break-words gap-2 ">
+        {formData.name && (
+          <h1 className="font-semibold max-w-1/3  "> {formData.name}</h1>
+        )}
+        {/* <h1 className="font-semibold max-w-1/3  "> Contact:</h1> */}
+
+        {formData.email && (
+          <p className="">
+            <span className="font-semibold max-w-1/3 "></span>{" "}
+            {formData.email.toLowerCase()}
+          </p>
+        )}
+        {formData.phone && (
+          <p className="">
+            <span className="font-semibold max-w-1/3 "></span> {formData.phone}
+          </p>
+        )}
       </div>
-      <div>
+
+      {/* <div>
         {formData.paymentMethod !== "notIncluded" && (
           <p className="">
             {formData.paymentMethod === "virement" && formData.iban && (
@@ -43,7 +59,7 @@ const FooterPdf = ({ formData }: { formData: FormFieldsType }) => {
             <span className="font-semibold">IBAN</span> {formData.iban}
           </p>
         )}
-      </div>
+      </div> */}
     </div>
   );
 };

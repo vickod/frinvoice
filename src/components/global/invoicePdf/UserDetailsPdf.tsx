@@ -35,7 +35,7 @@ const UserDetailsPdf = ({ formData, previewUrl }: UserDetailsPdfProps) => {
           )}
 
           <p className="text-sm">{formData.country && formData.country}</p>
-          <p className="text-sm">{formData.email && formData.email}</p>
+          {/* <p className="text-sm">{formData.email && formData.email}</p> */}
           {formData.entrepriseNumber && (
             <p className="">
               <span className="font-semibold text-sm ">N° d'entreprise:</span>{" "}

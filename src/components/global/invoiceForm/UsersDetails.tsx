@@ -125,9 +125,9 @@ export default function UsersDetails({ register, errors }: UsersDetailsProps) {
             </p>
           )}
         </div>
-        {errors.clientAddress && (
+        {/* {errors.clientAddress && (
           <p className="text-red-500 text-xs">{errors.clientAddress.message}</p>
-        )}
+        )} */}
         <div className="flex gap-2 w-full">
           <div className="flex flex-col gap-1 w-1/2">
             <p className="text-sm">Code postal:</p>

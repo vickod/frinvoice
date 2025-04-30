@@ -18,7 +18,7 @@ export default function InvoicePdf({
   previewUrl,
   contentRef,
 }: InvoicePdfProps) {
-  console.log("PDFCONTENT RENDERED");
+  // console.log("PDFCONTENT RENDERED");
 
   return (
     <div

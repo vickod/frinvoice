@@ -24,19 +24,6 @@ const FileInput = ({
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [isFileLoaded, setIsFileLoaded] = useState(false);
 
-  // const handleFileChange = (
-  //   e: React.ChangeEvent<HTMLInputElement>,
-  //   onChange: (value: File | null) => void
-  // ) => {
-  //   const file = e.target.files?.[0];
-  //   if (file) {
-  //     setIsFileLoaded(true);
-  //     onChange(file);
-  //   } else {
-  //     setIsFileLoaded(false);
-  //   }
-  // };
-
   const handleFileChange = useCallback(
     (
       e: React.ChangeEvent<HTMLInputElement>,
@@ -49,14 +36,6 @@ const FileInput = ({
     []
   );
 
-  // const handleRemoveFile = () => {
-  //   if (fileInputRef.current) {
-  //     fileInputRef.current.value = "";
-  //   }
-  //   setIsFileLoaded(false);
-  //   setValue("logoEnt", undefined);
-  // };
-
   const handleRemoveFile = useCallback(() => {
     if (fileInputRef.current) fileInputRef.current.value = "";
     setIsFileLoaded(false);
@@ -64,7 +43,6 @@ const FileInput = ({
     clearErrors("logoEnt");
   }, [setValue, clearErrors]);
 
-  // console.log("FILE INPUT RENDERED");
   return (
     <div className="flex max-md:flex-col justify-center items-center mb-8 w-full dark:text-zinc-200">
       <div className="w-full flex flex-col gap-4 justify-start max-md:mt-5">

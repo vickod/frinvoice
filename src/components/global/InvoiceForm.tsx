@@ -31,6 +31,7 @@ import { CircleMinus, CirclePlus } from "lucide-react";
 import Comment from "./invoiceForm/Comment";
 import PdfDrawer from "./PdfDrawer";
 import { object } from "zod";
+import formatDate from "@/utils/formatDate";
 export default function InvoiceForm() {
   const [formData, setFormData] = useState<FormFieldsType | null>(null);
 
@@ -96,45 +97,121 @@ export default function InvoiceForm() {
   // const PdfDrawer = lazy(() => import("./PdfDrawer"));
   const hasErrors = Object.keys(errors).length > 0;
 
+  // const onSubmit: SubmitHandler<FormFieldsType> = async (data) => {
+  //   const file = data.logoEnt;
+
+  //   if (file) {
+  //     const maxSizeInMB = 5;
+  //     const validTypes = ["image/jpeg", "image/png", "image/webp"];
+
+  //     if (!validTypes.includes(file.type)) {
+  //       setError("logoEnt", {
+  //         type: "manual",
+  //         message: "Le fichier doit être une image JPEG, PNG ou WebP.",
+  //       });
+  //       return;
+  //     }
+
+  //     if (file.size > maxSizeInMB * 1024 * 1024) {
+  //       setError("logoEnt", {
+  //         type: "manual",
+  //         message: "Le fichier ne doit pas dépasser 5 Mo.",
+  //       });
+  //       return;
+  //     }
+  //   }
+  //   try {
+  //     const response = await fetch("api/formInvoice", {
+  //       method: "POST",
+  //       body: JSON.stringify(data),
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //     });
+  //     const responseData = await response.json();
+
+  //     if (responseData.errors) {
+  //       const serverErrors = responseData.errors as Record<
+  //         keyof FormFieldsType,
+  //         string
+  //       >;
+
+  //       Object.entries(serverErrors).forEach(([field, message]) => {
+  //         if (message) {
+  //           setError(field as keyof FormFieldsType, {
+  //             type: "server",
+  //             message,
+  //           });
+  //         }
+  //       });
+  //     }
+  //     setFormData(data);
+  //   } catch (error) {
+  //     console.error("Erreur réseau :", error);
+  //     alert("Une erreur réseau est survenue.");
+  //   }
+  // };
+  //
+  //
+  //
   const onSubmit: SubmitHandler<FormFieldsType> = async (data) => {
-    const file = data.logoEnt;
-
-    if (file) {
-      const maxSizeInMB = 5;
-      const validTypes = ["image/jpeg", "image/png", "image/webp"];
-
-      if (!validTypes.includes(file.type)) {
-        setError("logoEnt", {
-          type: "manual",
-          message: "Le fichier doit être une image JPEG, PNG ou WebP.",
-        });
-        return;
-      }
-
-      if (file.size > maxSizeInMB * 1024 * 1024) {
-        setError("logoEnt", {
-          type: "manual",
-          message: "Le fichier ne doit pas dépasser 5 Mo.",
-        });
-        return;
-      }
-    }
     try {
+      const formData = new FormData();
+      data.logoEnt instanceof File && formData.append("logoEnt", data.logoEnt);
+      data.invoiceNumber &&
+        formData.append("invoiceNumber", data.invoiceNumber);
+      data.name && formData.append("name", data.name);
+      data.address && formData.append("address", data.address);
+      data.cp && formData.append("cp", data.cp);
+      data.city && formData.append("city", data.city);
+      data.country && formData.append("country", data.country);
+      data.email && formData.append("email", data.email);
+      data.phone && formData.append("phone", data.phone);
+      data.numberTva && formData.append("numberTva", data.numberTva);
+      data.entrepriseNumber &&
+        formData.append("entrepriseNumber", data.entrepriseNumber);
+      data.iban && formData.append("iban", data.iban);
+      data.clientName && formData.append("clientName", data.clientName);
+      data.clientAddress &&
+        formData.append("clientAddress", data.clientAddress);
+      data.clientCp && formData.append("clientCp", data.clientCp);
+      data.clientCity && formData.append("clientCity", data.clientCity);
+      data.clientCountry &&
+        formData.append("clientCountry", data.clientCountry);
+      data.clientNumberTva &&
+        formData.append("clientNumberTva", data.clientNumberTva);
+      // data.clientPhone && formData.append("clientPhone", data.clientPhone);
+      data.invoiceNumber &&
+        formData.append("invoiceNumber", data.invoiceNumber);
+      formData.append("createdDate", data.createdDate.toISOString());
+      formData.append(
+        "dueDate",
+        data.dueDate ? data.dueDate.toISOString() : ""
+      );
+      data.paymentStatus &&
+        formData.append("paymentStatus", data.paymentStatus);
+      data.paymentMethod &&
+        formData.append("paymentMethod", data.paymentMethod);
+      data.isTvaIncluded &&
+        formData.append("isTvaIncluded", String(data.isTvaIncluded));
+      data.products &&
+        formData.append("products", JSON.stringify(data.products));
+      data.totalHtva && formData.append("totalHtva", String(data.totalHtva));
+      data.totalTva && formData.append("totalTva", String(data.totalTva));
+      data.total && formData.append("total", String(data.total));
+      // formData.append("currency", data.currency);
+      data.comment && formData.append("comment", data.comment);
+
       const response = await fetch("api/formInvoice", {
         method: "POST",
-        body: JSON.stringify(data),
-        headers: {
-          "Content-Type": "application/json",
-        },
+        body: formData,
       });
       const responseData = await response.json();
-
       if (responseData.errors) {
         const serverErrors = responseData.errors as Record<
           keyof FormFieldsType,
           string
         >;
-
         Object.entries(serverErrors).forEach(([field, message]) => {
           if (message) {
             setError(field as keyof FormFieldsType, {
@@ -150,9 +227,6 @@ export default function InvoiceForm() {
       alert("Une erreur réseau est survenue.");
     }
   };
-  //
-  //
-  //
 
   //
   //
@@ -280,6 +354,7 @@ export default function InvoiceForm() {
                 {formData && !hasErrors && (
                   // <Suspense fallback={<div>Chargement PDF...</div>}>
                   <PdfDrawer formData={formData} />
+
                   // </Suspense>
                 )}
               </Drawer>

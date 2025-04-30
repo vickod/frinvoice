@@ -34,7 +34,6 @@ export default function InvoiceDetails({
     }).format(date);
   };
 
-  // console.log("INVOICE DETAILS RENDERED");
   return (
     <div className="flex flex-col max-md:w-full md:w-1/2 gap-4 dark:text-zinc-200">
       <div>

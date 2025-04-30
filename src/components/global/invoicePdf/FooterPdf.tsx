@@ -3,7 +3,7 @@ import React from "react";
 
 const FooterPdf = ({ formData }: { formData: FormFieldsType }) => {
   return (
-    <div className="w-full border-t dark:border-t-gray-200 pt-2 mt-2 flex justify-between text-sm text-black">
+    <div className="w-full border-t dark:border-t-gray-200 pt-2 mt-2 flex justify-between text-xs text-black">
       {/* <div>
         {formData.numberTva && formData.name && (
           <>

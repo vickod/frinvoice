@@ -39,6 +39,31 @@ const PaymentNotePdf = ({ formData }: { formData: FormFieldsType }) => {
             ""
           )}
         </div>
+        <div className="text-sm">
+          {formData.paymentMethod !== "notIncluded" && (
+            <p className="">
+              {formData.paymentMethod === "virement" && formData.iban && (
+                <>
+                  <span className="font-semibold">Mode de paiement:</span> Par
+                  virement
+                </>
+              )}{" "}
+              {formData.paymentMethod === "cash" && (
+                <>
+                  <span className="font-semibold">Mode de paiement:</span>{" "}
+                  Espèces
+                </>
+              )}
+              <span className=""></span>
+            </p>
+          )}
+
+          {formData.iban && formData.paymentMethod !== "cash" && (
+            <p>
+              <span className="font-semibold">IBAN:</span> {formData.iban}
+            </p>
+          )}
+        </div>
       </div>
     </div>
   );

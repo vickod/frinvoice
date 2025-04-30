@@ -60,8 +60,6 @@ const ProductRow = ({
     }
   };
 
-  console.log(errors?.products?.[index]?.description?.message);
-
   return (
     <div className=" flex  max-lg:flex-col w-full md:gap-6 p-4">
       <div className=" w-full max-lg:mt-8 flex max-md:flex-col max-md:gap-6 justify-between gap-4">

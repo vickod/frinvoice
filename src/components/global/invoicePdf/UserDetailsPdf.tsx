@@ -1,4 +1,5 @@
 import { FormFieldsType } from "@/lib/zodSchemas";
+import capitalizeWords from "@/utils/functions";
 
 type UserDetailsPdfProps = {
   formData: FormFieldsType;
@@ -8,7 +9,23 @@ type UserDetailsPdfProps = {
 const UserDetailsPdf = ({ formData, previewUrl }: UserDetailsPdfProps) => {
   return (
     <div className="w-full text-black border-b dark:border-gray-200 pb-4 ">
-      <div className=" flex gap-2 align-items-start">
+      <div
+        className={
+          previewUrl &&
+          formData.name &&
+          formData.address &&
+          formData.cp &&
+          formData.city &&
+          formData.country &&
+          formData.email &&
+          formData.phone &&
+          formData.entrepriseNumber &&
+          formData.numberTva &&
+          formData.iban
+            ? " flex gap-2 items-center"
+            : "flex gap-2 items-start"
+        }
+      >
         {previewUrl && (
           <div className=" ">
             <img
@@ -20,21 +37,29 @@ const UserDetailsPdf = ({ formData, previewUrl }: UserDetailsPdfProps) => {
         )}
 
         <div>
-          <p className="font-bold text-md">{formData.name && formData.name}</p>
-          <p className="text-sm">{formData.address && formData.address}</p>
+          <p className="font-semibold text-md">
+            {formData.name && formData.name}
+          </p>
+          <p className="text-sm">
+            {formData.address && capitalizeWords(formData.address)}
+          </p>
 
           {formData.cp && formData.city ? (
             <p className="text-sm">
-              {formData.cp}, {formData.city}{" "}
+              {formData.cp}, {capitalizeWords(formData.city)}{" "}
             </p>
           ) : (
             <>
               <p className="text-sm">{formData.cp && formData.cp}</p>
-              <p className="text-sm">{formData.city && formData.city}</p>
+              <p className="text-sm">
+                {formData.city && capitalizeWords(formData.city)}
+              </p>
             </>
           )}
 
-          <p className="text-sm">{formData.country && formData.country}</p>
+          <p className="text-sm">
+            {formData.country && capitalizeWords(formData.country)}
+          </p>
           {/* <p className="text-sm">{formData.email && formData.email}</p> */}
           {formData.entrepriseNumber && (
             <p className="">
@@ -55,26 +80,37 @@ const UserDetailsPdf = ({ formData, previewUrl }: UserDetailsPdfProps) => {
               <span className="font-normal text-black">{formData.iban}</span>
             </p>
           )} */}
+          {formData.iban && formData.paymentMethod === "cash" && (
+            <p>
+              <span className="font-semibold text-sm">IBAN:</span>{" "}
+              {formData.iban}
+            </p>
+          )}
         </div>
       </div>
       <div className="flex justify-end mt-4">
         <div className=" flex flex-col ">
           <div>
-            <h1 className="font-bold text-lg text-neutral-500">Client:</h1>
-            <p className="font-bold text-md">
+            <h1 className="font-semibold text-lg text-neutral-500">Client:</h1>
+            <p className="font-semibold text-md">
               {formData.clientName && formData.clientName}
             </p>
             <p className="text-sm">
-              {formData.clientAddress && formData.clientAddress}
+              {formData.clientAddress &&
+                capitalizeWords(formData.clientAddress)}
             </p>
             {formData.clientCp && formData.clientCity ? (
               <p className="text-sm">
-                {formData.clientCp}, {formData.clientCity}{" "}
+                {formData.clientCp}, {capitalizeWords(formData.clientCity)}{" "}
               </p>
             ) : (
               <>
-                <p className="text-sm">{formData.clientCp}</p>
-                <p className="text-sm">{formData.clientCity}</p>
+                <p className="text-sm">
+                  {formData.clientCp && formData.clientCp}
+                </p>
+                <p className="text-sm">
+                  {formData.clientCity && capitalizeWords(formData.clientCity)}
+                </p>
               </>
             )}
             {/* <p className="text-sm">

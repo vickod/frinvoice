@@ -8,10 +8,10 @@ export default function Footer() {
     <div id="contact" className=" bg-gray-500 dark:bg-neutral-900">
       <h1 className="text-3xl font-bold text-center pt-8 mb-8 ">Contact</h1>
       <div className=" flex gap-8 justify-center mb-8 ">
-        <Link href="">
+        <Link href="https://github.com/vickod">
           <FaGithub size="26" className="transition-all  text-white " />
         </Link>
-        <Link href="">
+        <Link href="https://be.linkedin.com/in/victor-odin-dev">
           <FaLinkedin size="26" className="transition-all  text-white" />
         </Link>
       </div>

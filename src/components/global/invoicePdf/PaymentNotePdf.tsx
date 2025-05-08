@@ -5,9 +5,34 @@ const PaymentNotePdf = ({ formData }: { formData: FormFieldsType }) => {
   return (
     <div className="w-1/2 flex flex-col gap-2">
       <div className="mt-2 w-full flex flex-col gap-2 text-black">
+        <div className="text-sm">
+          {formData.paymentMethod !== "notIncluded" && (
+            <p className="">
+              {formData.paymentMethod === "virement" && (
+                <>
+                  <span className="font-semibold">Mode de paiement:</span>{" "}
+                  Virement
+                </>
+              )}{" "}
+              {formData.paymentMethod === "cash" && (
+                <>
+                  <span className="font-semibold">Mode de paiement:</span>{" "}
+                  Espèces
+                </>
+              )}
+              <span className=""></span>
+            </p>
+          )}
+
+          {formData.iban && formData.paymentMethod === "virement" && (
+            <p>
+              <span className="font-semibold">IBAN:</span> {formData.iban}
+            </p>
+          )}
+        </div>
         <div className="text-sm ">
           {formData.paymentStatus === "paid" ? (
-            <p>Aucun solde restant dû.</p>
+            <p className="font-semibold">Aucun solde restant dû.</p>
           ) : formData.paymentStatus === "topay" ? (
             <>
               <p>
@@ -37,31 +62,6 @@ const PaymentNotePdf = ({ formData }: { formData: FormFieldsType }) => {
             </>
           ) : (
             ""
-          )}
-        </div>
-        <div className="text-sm">
-          {formData.paymentMethod !== "notIncluded" && (
-            <p className="">
-              {formData.paymentMethod === "virement" && formData.iban && (
-                <>
-                  <span className="font-semibold">Mode de paiement:</span> Par
-                  virement
-                </>
-              )}{" "}
-              {formData.paymentMethod === "cash" && (
-                <>
-                  <span className="font-semibold">Mode de paiement:</span>{" "}
-                  Espèces
-                </>
-              )}
-              <span className=""></span>
-            </p>
-          )}
-
-          {formData.iban && formData.paymentMethod !== "cash" && (
-            <p>
-              <span className="font-semibold">IBAN:</span> {formData.iban}
-            </p>
           )}
         </div>
       </div>

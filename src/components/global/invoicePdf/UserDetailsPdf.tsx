@@ -80,7 +80,7 @@ const UserDetailsPdf = ({ formData, previewUrl }: UserDetailsPdfProps) => {
               <span className="font-normal text-black">{formData.iban}</span>
             </p>
           )} */}
-          {formData.iban && formData.paymentMethod === "cash" && (
+          {formData.iban && formData.paymentMethod !== "virement" && (
             <p>
               <span className="font-semibold text-sm">IBAN:</span>{" "}
               {formData.iban}

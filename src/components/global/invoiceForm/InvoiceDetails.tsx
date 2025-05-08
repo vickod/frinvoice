@@ -7,6 +7,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import formatDate from "@/utils/formatDate";
 import { CalendarIcon } from "lucide-react";
 import { Controller } from "react-hook-form";
 
@@ -25,15 +26,6 @@ export default function InvoiceDetails({
   dueDateName,
   errors,
 }: InvoiceDetailsProps) {
-  const formatDate = (date: Date | undefined) => {
-    if (!date) return "Sélectionnez une date";
-    return new Intl.DateTimeFormat("fr-FR", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    }).format(date);
-  };
-
   return (
     <div className="flex flex-col max-md:w-full md:w-1/2 gap-4 dark:text-zinc-200">
       <div>
@@ -87,7 +79,6 @@ export default function InvoiceDetails({
                   mode="single"
                   disabled
                   selected={field.value}
-                  // onSelect={field.onChange}
                   fromDate={new Date()}
                 />
               </PopoverContent>

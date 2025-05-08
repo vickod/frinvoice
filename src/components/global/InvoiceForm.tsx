@@ -359,13 +359,13 @@ export default function InvoiceForm() {
                 )}
               </Drawer>
 
-              <div className="mt-20">
+              {/* <div className="mt-20">
                 {extractErrorMessages(errors).map((msg, i) => (
                   <p key={i} className="text-red-500 text-sm">
                     {msg}
                   </p>
                 ))}
-              </div>
+              </div> */}
             </div>
           </form>
         </CardContent>

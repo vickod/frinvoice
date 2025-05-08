@@ -16,7 +16,9 @@ export default function Footer() {
         </Link>
       </div>
       <div className="text-center pb-4">
-        <p>© 2025 Frinvoice. Tous droits réservés.</p>
+        <p className="text-muted-foreground">
+          © 2025 Frinvoice. Tous droits réservés.
+        </p>
       </div>
     </div>
   );

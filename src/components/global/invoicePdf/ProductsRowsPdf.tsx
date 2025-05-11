@@ -8,7 +8,6 @@ import {
 } from "@/components/ui/table";
 import { FormFieldsType } from "@/lib/zodSchemas";
 import { formatCurrency } from "@/utils/formatCurrency";
-import React from "react";
 
 const ProductsRowsPdf = ({ formData }: { formData: FormFieldsType }) => {
   return (

@@ -72,7 +72,7 @@ const FileInput = ({
               onClick={handleRemoveFile}
               className="ml-2 px-2 py-1 rounded"
             >
-              <TiDeleteOutline className="size-6 text-red-500 cursor-pointer" />
+              <TiDeleteOutline className="size-7 text-red-500 dark:text-red-700 cursor-pointer" />
             </button>
           )}
         </div>

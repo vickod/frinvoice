@@ -1,9 +1,5 @@
-import Image from "next/image";
-import React from "react";
-import Logo from "../../../public/logo.png";
 import Link from "next/link";
 import { MdOutlineMenu } from "react-icons/md";
-import { PiInvoiceLight } from "react-icons/pi";
 import { PiInvoiceDuotone } from "react-icons/pi";
 import {
   DropdownMenu,
@@ -16,9 +12,8 @@ import {
 import { ModeToggle } from "../ModeToggle";
 
 export default function Navbar() {
-  // console.log("Navbar rendered");
   return (
-    <div className="w-full h-24 border flex items-center fixed bg-white opacity-95 z-50 dark:bg-zinc-900">
+    <div className="w-full h-24 border flex items-center fixed bg-gray-100 opacity-95 z-50 dark:bg-zinc-900">
       <div className="w-11/12 mx-auto flex justify-between items-center">
         <div className="flex items-center gap-1">
           <Link href="/">
@@ -30,7 +25,7 @@ export default function Navbar() {
           </p>
         </div>
         <div className="flex items-center gap-4 dark:text-zinc-200">
-          <div>
+          <div className="text-emerald-700 font-semibold dark:text-green-500">
             <ul className="flex gap-8 max-md:hidden">
               <li className="text-xl">
                 <Link href="#invoice">Créer une facture</Link>
@@ -69,7 +64,6 @@ export default function Navbar() {
                       Contact
                     </Link>
                   </DropdownMenuItem>
-                  {/* <DropdownMenuItem>Subscription</DropdownMenuItem> */}
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>

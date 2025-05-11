@@ -19,7 +19,6 @@ export default function Header() {
           en quelques clics
         </h1>
 
-        {/* invoice link */}
         <div className="max-sm:mt-20 absolute" id="invoice"></div>
       </div>
 

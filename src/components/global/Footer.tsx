@@ -3,7 +3,6 @@ import { FaGithub, FaLinkedin } from "react-icons/fa";
 import React from "react";
 
 export default function Footer() {
-  // console.log("FOOTER RENDERED");
   return (
     <div id="contact" className=" bg-gray-500 dark:bg-neutral-900">
       <h1 className="text-3xl font-bold text-center pt-8 mb-8 ">Contact</h1>
@@ -16,7 +15,7 @@ export default function Footer() {
         </Link>
       </div>
       <div className="text-center pb-4">
-        <p className="text-muted-foreground">
+        <p className="dark:text-muted-foreground">
           © 2025 Frinvoice. Tous droits réservés.
         </p>
       </div>

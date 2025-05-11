@@ -28,7 +28,7 @@ const PdfDrawer = ({ formData }: PdfDrawerProps) => {
 
   return (
     <div className=" w-screen h-screen relative ">
-      <div className="fixed bottom-0 left-0 w-screen h-screen bg-white dark:bg-zinc-800 z-50 p-4 border-t ">
+      <div className="fixed bottom-0 left-0 w-screen h-screen bg-gray-100 dark:bg-zinc-800 z-50 p-4 border-t ">
         <div className="h-[90%] w-full overflow-y-auto ">
           <InvoicePdf
             formData={formData}

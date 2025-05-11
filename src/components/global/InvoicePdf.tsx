@@ -18,8 +18,6 @@ export default function InvoicePdf({
   previewUrl,
   contentRef,
 }: InvoicePdfProps) {
-  // console.log("PDFCONTENT RENDERED");
-
   return (
     <div
       className="bg-white p-10  shadow-md  flex flex-col justify-between border mx-auto "

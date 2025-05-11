@@ -1,5 +1,4 @@
 import { FormFieldsType } from "@/lib/zodSchemas";
-import React from "react";
 
 type UserDetailsPdfProps = {
   formData: FormFieldsType;

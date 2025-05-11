@@ -30,11 +30,8 @@ export default function InvoiceForm() {
     control,
     formState: { errors, isSubmitting },
     clearErrors,
-    reset,
     setError,
     setValue,
-    getValues,
-    watch,
   } = useForm<FormFieldsType>({
     resolver: zodResolver(schema),
     mode: "onSubmit",
@@ -161,29 +158,24 @@ export default function InvoiceForm() {
     }
   };
 
-  //
-  //
-  //
-  //
-
   type FieldError = {
     message?: string;
     [key: string]: any;
   };
 
-  function extractErrorMessages(errors: Record<string, FieldError>): string[] {
-    const messages: string[] = [];
+  // function extractErrorMessages(errors: Record<string, FieldError>): string[] {
+  //   const messages: string[] = [];
 
-    Object.values(errors).forEach((error) => {
-      if (typeof error?.message === "string") {
-        messages.push(error.message);
-      } else if (typeof error === "object" && error !== null) {
-        messages.push(...extractErrorMessages(error));
-      }
-    });
+  //   Object.values(errors).forEach((error) => {
+  //     if (typeof error?.message === "string") {
+  //       messages.push(error.message);
+  //     } else if (typeof error === "object" && error !== null) {
+  //       messages.push(...extractErrorMessages(error));
+  //     }
+  //   });
 
-    return messages;
-  }
+  //   return messages;
+  // }
 
   return (
     <div>
@@ -242,7 +234,7 @@ export default function InvoiceForm() {
                         onClick={handleAppend}
                         className="cursor-pointer"
                       >
-                        <CirclePlus className="bg-white rounded-full dark:bg-zinc-800 text-green-500 dark:text-emerald-700 dark:hover:text-emerald-800 relative -left-2 -bottom-2 hover:scale-110" />
+                        <CirclePlus className="bg-white rounded-full dark:bg-zinc-800 text-green-500 dark:text-emerald-700  relative -left-2 -bottom-2 hover:scale-110" />
                       </button>
                     ) : (
                       <span className="opacity-0">
@@ -255,7 +247,7 @@ export default function InvoiceForm() {
                         className="cursor-pointer"
                         onClick={() => handleRemove(index)}
                       >
-                        <CircleMinus className="bg-white dark:bg-zinc-800 rounded-full text-red-500 relative left-2 -bottom-2 hover:scale-110" />
+                        <CircleMinus className="bg-white dark:bg-zinc-800 rounded-full text-red-500 dark:text-red-700 relative left-2 -bottom-2 hover:scale-110" />
                       </button>
                     )}
                   </div>
@@ -274,17 +266,17 @@ export default function InvoiceForm() {
                   disabled={hasErrors || isSubmitting}
                   className="bg-green-500 hover:bg-green-600 dark:bg-emerald-700 dark:hover:bg-emerald-800 text-white text-lg  py-6 px-6 rounded"
                 >
-                  {isSubmitting ? "Génération..." : "Prévisualiser"}
+                  {isSubmitting ? "Chargement..." : "Prévisualiser"}
                 </Button>
               </div>
 
-              <div className="mt-4">
+              {/* <div className="mt-4">
                 {extractErrorMessages(errors).map((msg, i) => (
                   <p key={i} className="text-red-500 text-sm">
                     {msg}
                   </p>
                 ))}
-              </div>
+              </div> */}
             </form>
           </CardContent>
         </Card>
@@ -296,7 +288,7 @@ export default function InvoiceForm() {
         // </Suspense>
       )}
 
-      <div id="benefits" className="absolute mt-40"></div>
+      <div id="benefits" className="absolute mt-20"></div>
     </div>
   );
 }

@@ -60,26 +60,20 @@ const UserDetailsPdf = ({ formData, previewUrl }: UserDetailsPdfProps) => {
           <p className="text-sm">
             {formData.country && capitalizeWords(formData.country)}
           </p>
-          {/* <p className="text-sm">{formData.email && formData.email}</p> */}
           {formData.entrepriseNumber && (
             <p className="">
               <span className="font-semibold text-sm ">N° d'entreprise:</span>{" "}
               {formData.entrepriseNumber}
             </p>
           )}
-          {/* <p className="text-sm">{formData.numberTva && formData.numberTva}</p> */}
+
           {formData.numberTva && (
             <p className="text-sm">
               <span className="font-semibold  text-sm">TVA:</span>{" "}
               {formData.numberTva}
             </p>
           )}
-          {/* {formData.iban && (
-            <p className="text-sm font-bold text-neutral-500">
-              IBAN{" "}
-              <span className="font-normal text-black">{formData.iban}</span>
-            </p>
-          )} */}
+
           {formData.iban && formData.paymentMethod !== "virement" && (
             <p>
               <span className="font-semibold text-sm">IBAN:</span>{" "}
@@ -113,9 +107,7 @@ const UserDetailsPdf = ({ formData, previewUrl }: UserDetailsPdfProps) => {
                 </p>
               </>
             )}
-            {/* <p className="text-sm">
-              {formData.clientEmail && formData.clientEmail}
-            </p> */}
+
             {formData.clientNumberTva && (
               <p>
                 <span className="font-semibold  text-sm">TVA:</span>{" "}

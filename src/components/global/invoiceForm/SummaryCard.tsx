@@ -5,15 +5,9 @@ import React, { useEffect, useMemo } from "react";
 
 type SummaryCardProps = {
   control: any;
-  // isTvaIncluded: boolean;
-  // currency: string;
   setValue: any;
 };
-const SummaryCard = ({
-  control,
-  // isTvaIncluded,
-  setValue,
-}: SummaryCardProps) => {
+const SummaryCard = ({ control, setValue }: SummaryCardProps) => {
   const watchedProducts = useWatch({ control, name: "products" });
   const isTvaIncluded = useWatch({
     control,
@@ -37,8 +31,6 @@ const SummaryCard = ({
     setValue("totalTva", totalTva);
     setValue("total", total);
   }, [totalHtva, totalTva, total, setValue]);
-
-  // console.log("SUMMARYCARD RENDERED");
 
   return (
     <div className="mt-20">
@@ -76,15 +68,6 @@ const SummaryCard = ({
           </span>
         </div>
       </div>
-
-      {/* <div>
-        {Object.keys(errors).length > 0 && (
-          <div className="text-red-500">
-            Il y a des erreurs dans le formulaire. Veuillez vérifier tous les
-            champs.
-          </div>
-        )}
-      </div> */}
     </div>
   );
 };

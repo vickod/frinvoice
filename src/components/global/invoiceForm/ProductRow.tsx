@@ -20,10 +20,6 @@ const ProductRow = ({
   errors,
   setValue,
 }: ProductRowProps) => {
-  // const product = useWatch({
-  //   control,
-  //   name: `products.${index}`,
-  // });
   const isTvaIncluded = useWatch({
     control,
     name: "isTvaIncluded",
@@ -75,11 +71,7 @@ const ProductRow = ({
             name={`products.${index}.description`}
             control={control}
             render={({ field }) => (
-              <Textarea
-                {...field}
-                // placeholder={`Produit / Service ${index + 1}`}
-                className="dark:bg-neutral-900 "
-              />
+              <Textarea {...field} className="dark:bg-neutral-900 " />
             )}
           />
           {errors?.products?.[index]?.description && (

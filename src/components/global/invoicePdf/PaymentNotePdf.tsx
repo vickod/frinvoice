@@ -1,5 +1,4 @@
 import { FormFieldsType } from "@/lib/zodSchemas";
-import React from "react";
 
 const PaymentNotePdf = ({ formData }: { formData: FormFieldsType }) => {
   return (

@@ -1,19 +1,11 @@
 import React from "react";
-import Invoice from "../../../public/invoice.png";
-import Image from "next/image";
-import { GiCheckMark } from "react-icons/gi";
-import { Button } from "../ui/button";
 
 export default function Benefits() {
-  // console.log("BENEFITS RENDERED");
   return (
-    <div
-      // id="benefits"
-      className="mt-60 xl:w-9/12 w-11/12  mx-auto  mb-60 dark:text-zinc-200  "
-    >
+    <div className="mt-60 xl:w-9/12 w-11/12  mx-auto  mb-60 dark:text-zinc-200  ">
       <div className="w-full ">
         <h1 className="text-5xl font-semibold text-center ">
-          Pourquoi choisir Frinvoice ?
+          Pourquoi Frinvoice ?
         </h1>
         <div className="mt-20  grid xl:grid-cols-3 xl:grid-rows-2 sm:grid-cols-2  text-zinc-800 dark:text-zinc-200 ">
           <div className="flex flex-col gap-4 sm:border-r max-sm:border-t h-60 p-8  ">
@@ -34,7 +26,6 @@ export default function Benefits() {
               Conçu pour répondre aux besoins variés, ce service s'adapte aussi
               bien aux entreprises qu'aux particuliers en quête d'efficacité.
             </p>
-            {/* <GiCheckMark className="size-10 text-green-500" /> */}
           </div>
           <div className="flex flex-col gap-4 max-xl:border-t min-sm:border-r xl:border-r-0   h-60 p-8 ">
             <h1 className="font-bold text-xl md:text- text-green-500 dark:text-emerald-700">

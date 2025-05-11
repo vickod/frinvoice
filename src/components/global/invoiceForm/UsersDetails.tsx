@@ -8,7 +8,6 @@ type UsersDetailsProps = {
   errors: any;
 };
 export default function UsersDetails({ register, errors }: UsersDetailsProps) {
-  // console.log("USER DETAILS RENDERED");
   return (
     <div className="flex max-md:flex-col max-md:gap-12 md:justify-between w-full gap-12 ">
       <div className="flex flex-col gap-4 md:w-1/2 w-full">
@@ -125,9 +124,6 @@ export default function UsersDetails({ register, errors }: UsersDetailsProps) {
             </p>
           )}
         </div>
-        {/* {errors.clientAddress && (
-          <p className="text-red-500 text-xs">{errors.clientAddress.message}</p>
-        )} */}
         <div className="flex gap-2 w-full">
           <div className="flex flex-col gap-1 w-1/2">
             <p className="text-sm">Code postal:</p>

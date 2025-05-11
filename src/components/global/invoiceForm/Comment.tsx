@@ -17,11 +17,7 @@ const Comment = ({ control, commentName, errors }: CommentProps) => {
         name={commentName}
         control={control}
         render={({ field }) => (
-          <Textarea
-            className="dark:bg-zinc-900"
-            {...field}
-            // placeholder="Pénalités de retard applicables en cas de non-paiement : taux légal + 40 EUR d'indemnité forfaitaire."
-          />
+          <Textarea className="dark:bg-zinc-900" {...field} />
         )}
       />
       {errors?.comment && (

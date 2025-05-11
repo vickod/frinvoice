@@ -1,7 +1,6 @@
 import { Controller, useWatch } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
 import { formatCurrency } from "@/utils/formatCurrency";
 import { getItemTotal } from "@/utils/Calculations";
 import React, { useEffect } from "react";
@@ -21,22 +20,27 @@ const ProductRow = ({
   errors,
   setValue,
 }: ProductRowProps) => {
-  const product = useWatch({
-    control,
-    name: `products.${index}`,
-  });
+  // const product = useWatch({
+  //   control,
+  //   name: `products.${index}`,
+  // });
   const isTvaIncluded = useWatch({
     control,
     name: "isTvaIncluded",
   });
+  const price = useWatch({ control, name: `products.${index}.price` });
+  const quantity = useWatch({ control, name: `products.${index}.quantity` });
+  const tva = useWatch({ control, name: `products.${index}.tva` });
 
   useEffect(() => {
-    const { price, quantity, tva } = product;
-
     if (price !== undefined && quantity !== undefined && tva !== undefined) {
-      setValue(`products.${index}.total`, getItemTotal(product, isTvaIncluded));
+      setValue(
+        `products.${index}.total`,
+        getItemTotal({ price, quantity, tva }, isTvaIncluded)
+      );
     }
-  }, [product?.price, product?.quantity, product?.tva, isTvaIncluded]);
+  }, [price, quantity, tva, isTvaIncluded]);
+  const total = useWatch({ control, name: `products.${index}.total` });
 
   const formatInputValue = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -93,16 +97,6 @@ const ProductRow = ({
             control={control}
             defaultValue=""
             render={({ field }) => (
-              // <Input
-              //   {...field}
-              //   onChange={(e) =>
-              //     field.onChange(
-              //       e.target.value === ""
-              //         ? undefined
-              //         : parseFloat(e.target.value)
-              //     )
-              //   }
-              // />
               <Input
                 placeholder="0"
                 {...field}
@@ -133,14 +127,7 @@ const ProductRow = ({
                 placeholder="0"
                 {...field}
                 className="dark:bg-neutral-900"
-                onChange={(e) =>
-                  // field.onChange(
-                  //   e.target.value === ""
-                  //     ? undefined
-                  //     : parseFloat(e.target.value)
-                  // )
-                  formatInputValue(e, field)
-                }
+                onChange={(e) => formatInputValue(e, field)}
               />
             )}
           />
@@ -164,14 +151,7 @@ const ProductRow = ({
                 <Input
                   className="dark:bg-neutral-900"
                   {...field}
-                  onChange={(e) =>
-                    // field.onChange(
-                    //   e.target.value === ""
-                    //     ? undefined
-                    //     : parseFloat(e.target.value)
-                    // )
-                    formatTvaInputValue(e, field)
-                  }
+                  onChange={(e) => formatTvaInputValue(e, field)}
                 />
               )}
             />
@@ -189,20 +169,22 @@ const ProductRow = ({
             className="cursor-default  bg-zinc-100 dark:bg-neutral-900 "
             readOnly
             placeholder="0"
-            {...register(`products.${index}.total`)}
+            {...register(`products.${index}.total`, { valueAsNumber: true })}
             value={
-              product?.price && product?.quantity
-                ? formatCurrency({
-                    amount: getItemTotal(product, isTvaIncluded),
-                    currency: "EUR",
-                  })
-                : ""
+              typeof total === "number" && !isNaN(total) && total !== 0
+                ? formatCurrency({ amount: total, currency: "EUR" })
+                : "0"
             }
           />
+          {errors?.products?.[index]?.total && (
+            <p className="text-red-500 text-xs">
+              {errors.products[index].total.message}
+            </p>
+          )}
         </div>
       </div>
     </div>
   );
 };
-ProductRow.displayName = "FileInput";
+// ProductRow.displayName = "FileInput";
 export default ProductRow;

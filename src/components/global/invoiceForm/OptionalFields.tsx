@@ -24,7 +24,6 @@ export default function OptionalFields({
   paymentMethodName,
   isTvaIncludedName,
 }: OptionalFieldsProps) {
-  // console.log("OPTIONAL FIELDS RENDERED");
   return (
     <div className="flex flex-col gap-4 max-md:w-full md:w-1/2 mb-14 ">
       <Label className="text-lg font-bold">Options:</Label>
@@ -59,9 +58,6 @@ export default function OptionalFields({
           control={control}
           render={({ field }) => (
             <Select
-              // defaultValue="notInclude"
-              // onValueChange={(value) => setIsPaid(value)}
-
               {...field}
               value={field.value}
               onValueChange={field.onChange}

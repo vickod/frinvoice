@@ -29,7 +29,7 @@ export function getTotalHtva(arr: totalProps[]) {
   }, 0);
   return totalHtva <= 300_000_000_000 && totalHtva > -1 ? totalHtva : 0;
 }
-export function getTotal(arr: totalProps[], isTvaIncluded: boolean) {
+export function getTotal(arr: totalProps[]) {
   const total = arr.reduce((prev, curr) => {
     return (prev += curr?.total || 0);
   }, 0);

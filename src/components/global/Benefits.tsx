@@ -4,7 +4,7 @@ export default function Benefits() {
   return (
     <div className="mt-60 xl:w-9/12 w-11/12  mx-auto  mb-60 dark:text-zinc-200  ">
       <div className="w-full ">
-        <h1 className="text-5xl font-semibold text-center ">
+        <h1 className="text-5xl max-sm:text-4xl font-semibold text-center ">
           Pourquoi Frinvoice ?
         </h1>
         <div className="mt-20  grid xl:grid-cols-3 xl:grid-rows-2 sm:grid-cols-2  text-zinc-800 dark:text-zinc-200 ">

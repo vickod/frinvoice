@@ -13,11 +13,11 @@ export function ModeToggle() {
       variant="outline"
       size="icon"
       onClick={() => setTheme(theme === "light" ? "dark" : "light")}
-      className=""
+      className="rounded-full"
     >
-      <SunMoon className="absolute scale-100 dark:scale-0" />
+      <SunMoon className="absolute scale-100 dark:scale-0 " />
 
-      <MoonIcon className="absolute scale-0 dark:scale-100" />
+      <MoonIcon className="absolute scale-0 dark:scale-100 " />
     </Button>
   );
 }

@@ -5,7 +5,7 @@ type UserDetailsPdfProps = {
 };
 const InvoiceDetailsPdf = ({ formData }: UserDetailsPdfProps) => {
   return (
-    <div className="flex flex-col gap-4 mt-8 mb-4">
+    <div className="flex flex-col gap-4 mt-4 mb-4">
       <div className="w-full ">
         <div>
           <h1 className="text-3xl font-bold text-neutral-500">

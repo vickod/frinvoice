@@ -10,7 +10,7 @@ export async function POST(request: Request) {
     let parsedProducts = [];
     try {
       parsedProducts = JSON.parse(formData.get("products")?.toString() || "[]");
-    } catch (parseError) {
+    } catch {
       return NextResponse.json(
         { error: "Le champ 'products' n'est pas un JSON valide." },
         { status: 400 }
@@ -38,9 +38,11 @@ export async function POST(request: Request) {
       clientCity: formData.get("clientCity")?.toString() || undefined,
       clientCountry: formData.get("clientCountry")?.toString() || undefined,
       clientNumberTva: formData.get("clientNumberTva")?.toString() || undefined,
-      // createdDate: formData.get("createdDate") ? new Date(formData.get("createdDate")!.toString()) : undefined,
+
       createdDate: new Date(),
-      dueDate: formData.get("dueDate") ? new Date(formData.get("dueDate")!.toString()) : undefined,
+      dueDate: formData.get("dueDate")
+        ? new Date(formData.get("dueDate")!.toString())
+        : undefined,
       paymentStatus: formData.get("paymentStatus")?.toString(),
       paymentMethod: formData.get("paymentMethod")?.toString(),
       isTvaIncluded: formData.get("isTvaIncluded") === "true",
@@ -63,8 +65,10 @@ export async function POST(request: Request) {
       return NextResponse.json({ errors: zodErrors }, { status: 400 });
     }
 
-    return NextResponse.json({ success: true, data: result.data }, { status: 200 });
-
+    return NextResponse.json(
+      { success: true, data: result.data },
+      { status: 200 }
+    );
   } catch (error) {
     return NextResponse.json(
       {

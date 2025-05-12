@@ -8,7 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { lazy, Suspense, useCallback, useContext, useState } from "react";
+import { useCallback, useState } from "react";
 import { Button } from "../ui/button";
 import { FormFieldsType, schema } from "@/lib/zodSchemas";
 import FileInput from "./invoiceForm/FileInput";
@@ -20,10 +20,10 @@ import ProductRow from "./invoiceForm/ProductRow";
 import { CircleMinus, CirclePlus } from "lucide-react";
 import Comment from "./invoiceForm/Comment";
 import PdfDrawer from "./PdfDrawer";
-import { DrawerContext } from "@/context/DrawerContext";
+
 export default function InvoiceForm() {
   const [formData, setFormData] = useState<FormFieldsType | null>(null);
-  const { isDrawerOpen, setIsDrawerOpen } = useContext(DrawerContext);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const {
     register,
     handleSubmit,
@@ -79,8 +79,7 @@ export default function InvoiceForm() {
     },
     [remove]
   );
-  // const currency = watch("currency");
-  // const PdfDrawer = lazy(() => import("./PdfDrawer"));
+
   const hasErrors = Object.keys(errors).length > 0;
 
   const onSubmit: SubmitHandler<FormFieldsType> = async (data) => {
@@ -109,7 +108,6 @@ export default function InvoiceForm() {
         formData.append("clientCountry", data.clientCountry);
       data.clientNumberTva &&
         formData.append("clientNumberTva", data.clientNumberTva);
-      // data.clientPhone && formData.append("clientPhone", data.clientPhone);
       data.invoiceNumber &&
         formData.append("invoiceNumber", data.invoiceNumber);
       formData.append("createdDate", data.createdDate.toISOString());
@@ -128,7 +126,6 @@ export default function InvoiceForm() {
       data.totalHtva && formData.append("totalHtva", String(data.totalHtva));
       data.totalTva && formData.append("totalTva", String(data.totalTva));
       data.total && formData.append("total", String(data.total));
-      // formData.append("currency", data.currency);
       data.comment && formData.append("comment", data.comment);
 
       const response = await fetch("api/formInvoice", {
@@ -158,27 +155,8 @@ export default function InvoiceForm() {
     }
   };
 
-  type FieldError = {
-    message?: string;
-    [key: string]: any;
-  };
-
-  // function extractErrorMessages(errors: Record<string, FieldError>): string[] {
-  //   const messages: string[] = [];
-
-  //   Object.values(errors).forEach((error) => {
-  //     if (typeof error?.message === "string") {
-  //       messages.push(error.message);
-  //     } else if (typeof error === "object" && error !== null) {
-  //       messages.push(...extractErrorMessages(error));
-  //     }
-  //   });
-
-  //   return messages;
-  // }
-
   return (
-    <div>
+    <div className="w-full">
       <div className="min-h-[800px] p-2 md:w-11/12 lg:w-9/12  xl:w-8/12 mx-auto  -mt-40 z-20 relative">
         <Card className="shadow-2xl  dark:bg-zinc-800 dark:text-zinc-200">
           <CardHeader>
@@ -269,23 +247,17 @@ export default function InvoiceForm() {
                   {isSubmitting ? "Chargement..." : "Prévisualiser"}
                 </Button>
               </div>
-
-              {/* <div className="mt-4">
-                {extractErrorMessages(errors).map((msg, i) => (
-                  <p key={i} className="text-red-500 text-sm">
-                    {msg}
-                  </p>
-                ))}
-              </div> */}
             </form>
           </CardContent>
         </Card>
       </div>
 
       {isDrawerOpen && formData && !hasErrors && (
-        // <Suspense fallback={<div>Chargement PDF...</div>}>
-        <PdfDrawer formData={formData} />
-        // </Suspense>
+        <PdfDrawer
+          formData={formData}
+          isDrawerOpen={isDrawerOpen}
+          setIsDrawerOpen={setIsDrawerOpen}
+        />
       )}
 
       <div id="benefits" className="absolute mt-20"></div>

@@ -21,10 +21,7 @@ const SummaryCard = ({ control, setValue }: SummaryCardProps) => {
     () => getTotalTva(watchedProducts, isTvaIncluded),
     [watchedProducts, isTvaIncluded]
   );
-  const total = useMemo(
-    () => getTotal(watchedProducts, isTvaIncluded),
-    [watchedProducts, isTvaIncluded]
-  );
+  const total = useMemo(() => getTotal(watchedProducts), [watchedProducts]);
 
   useEffect(() => {
     setValue("totalHtva", totalHtva);
@@ -62,7 +59,7 @@ const SummaryCard = ({ control, setValue }: SummaryCardProps) => {
           <span className="font-bold">Total</span>
           <span className="font-bold">
             {formatCurrency({
-              amount: getTotal(watchedProducts, isTvaIncluded),
+              amount: getTotal(watchedProducts),
               currency: "EUR",
             })}
           </span>

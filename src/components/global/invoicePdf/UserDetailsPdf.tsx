@@ -28,6 +28,7 @@ const UserDetailsPdf = ({ formData, previewUrl }: UserDetailsPdfProps) => {
       >
         {previewUrl && (
           <div className=" ">
+            {/* eslint-disable-next-line @next/next/no-img-element -- using blob URL for preview, not supported by next/image */}
             <img
               src={previewUrl}
               alt="logo image"

@@ -33,7 +33,7 @@ export default function InvoiceDetails({
       </div>
       <div className="flex gap-2 justify-between">
         <Label className="whitespace-nowrap text-neutral-600 dark:text-zinc-200">
-          № de facture:
+          № facture:
         </Label>
         <div className="flex flex-col gap-1">
           <Controller
@@ -43,7 +43,7 @@ export default function InvoiceDetails({
               <Input
                 {...field}
                 placeholder=""
-                className="w-[280px] dark:bg-zinc-900"
+                className="w-[280px] max-sm:max-w-[180px]  dark:bg-zinc-900"
               />
             )}
           />

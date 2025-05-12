@@ -12,10 +12,10 @@ export default function Header() {
         priority
       />
       <div className="absolute inset-0 h-screen flex flex-col justify-center items-center gap-2  ">
-        <h1 className="text-5xl sm:text-6xl font-bold text-zinc-50 text-center text-shadow">
+        <h1 className="text-4xl sm:text-6xl font-bold text-zinc-50 text-center text-shadow">
           Créez des factures gratuites
         </h1>
-        <h1 className="text-5xl sm:text-6xl font-bold text-zinc-50 text-center text-shadow">
+        <h1 className="text-4xl sm:text-6xl font-bold text-zinc-50 text-center text-shadow">
           en quelques clics
         </h1>
 

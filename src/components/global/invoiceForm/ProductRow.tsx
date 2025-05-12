@@ -35,7 +35,7 @@ const ProductRow = ({
         getItemTotal({ price, quantity, tva }, isTvaIncluded)
       );
     }
-  }, [price, quantity, tva, isTvaIncluded]);
+  }, [price, quantity, tva, isTvaIncluded, index, setValue]);
   const total = useWatch({ control, name: `products.${index}.total` });
 
   const formatInputValue = (
@@ -71,7 +71,11 @@ const ProductRow = ({
             name={`products.${index}.description`}
             control={control}
             render={({ field }) => (
-              <Textarea {...field} className="dark:bg-neutral-900 " />
+              <Textarea
+                placeholder={`Produit / Prestation ${index + 1}`}
+                {...field}
+                className="dark:bg-neutral-900 "
+              />
             )}
           />
           {errors?.products?.[index]?.description && (
@@ -178,5 +182,4 @@ const ProductRow = ({
     </div>
   );
 };
-// ProductRow.displayName = "FileInput";
 export default ProductRow;

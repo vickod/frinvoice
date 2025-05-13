@@ -32,7 +32,7 @@ export default function InvoiceDetails({
         <Label className="text-lg font-bold">Facture:</Label>
       </div>
       <div className="flex gap-2 justify-between">
-        <Label className="whitespace-nowrap text-neutral-600 dark:text-zinc-200">
+        <Label className="whitespace-nowrap text-neutral-600 dark:text-zinc-400">
           № facture:
         </Label>
         <div className="flex flex-col gap-1">
@@ -56,7 +56,7 @@ export default function InvoiceDetails({
       </div>
 
       <div className="flex gap-2 justify-between">
-        <Label className="whitespace-nowrap text-neutral-600 dark:text-zinc-200">
+        <Label className="whitespace-nowrap text-neutral-600 dark:text-zinc-400">
           Emise le:
         </Label>
         <Controller
@@ -88,7 +88,7 @@ export default function InvoiceDetails({
       </div>
 
       <div className="flex gap-2 justify-between">
-        <Label className="whitespace-nowrap text-neutral-600 dark:text-zinc-200">
+        <Label className="whitespace-nowrap text-neutral-600 dark:text-zinc-400">
           Due le:
         </Label>
         <Controller

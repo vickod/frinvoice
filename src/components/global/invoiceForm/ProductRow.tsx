@@ -64,7 +64,7 @@ const ProductRow = ({
     <div className=" flex  max-lg:flex-col w-full md:gap-6 p-4">
       <div className=" w-full max-lg:mt-8 flex max-md:flex-col max-md:gap-6 justify-between gap-4">
         <div className="flex flex-col gap-2 min-w-5/12 max-w-5/12 max-md:min-w-full ">
-          <p className="text-sm font-semibold">
+          <p className="text-sm font-semibold text-neutral-600 dark:text-zinc-400">
             Déscription:<span className="text-red-500"> *</span>
           </p>
           <Controller
@@ -85,7 +85,7 @@ const ProductRow = ({
           )}
         </div>
         <div className="flex flex-col gap-2 min-w-2/12 md:min-w-1/12 ">
-          <p className="text-sm font-semibold">
+          <p className="text-sm font-semibold text-neutral-600 dark:text-zinc-400">
             Prix unitaire:<span className="text-red-500 font-bold"> *</span>
           </p>
           <Controller
@@ -111,7 +111,7 @@ const ProductRow = ({
         </div>
 
         <div className="flex flex-col gap-2 min-w-1/12 md:max-w-1/12">
-          <p className="text-sm font-semibold">
+          <p className="text-sm font-semibold text-neutral-600 dark:text-zinc-400">
             Qté:<span className="text-red-500 font-bold"> *</span>
           </p>
           <Controller
@@ -160,7 +160,9 @@ const ProductRow = ({
         )}
 
         <div className="flex flex-col gap-2 min-w-2/12 md:min-w-1/12">
-          <p className="text-sm font-bold">Total:</p>
+          <p className="text-sm font-bold text-neutral-600 dark:text-zinc-400">
+            Total:
+          </p>
           <Input
             className="cursor-default  bg-zinc-100 dark:bg-neutral-900 "
             readOnly

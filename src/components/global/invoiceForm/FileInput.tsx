@@ -62,7 +62,7 @@ const FileInput = ({
                 accept="image/*"
                 ref={fileInputRef}
                 onChange={(e) => handleFileChange(e, field.onChange)}
-                className="block w-full text-sm text-gray-500 dark:text-zinc-200 file:mr-4 file:py-2 file:px-4 file:border file:border-gray-300 dark:file:border-none file:rounded file:bg-gray-100 dark:file:bg-zinc-900 file:text-sm file:cursor-pointer "
+                className="block w-full text-sm text-gray-500 dark:text-zinc-400 file:mr-4 file:py-2 file:px-4 file:border file:border-gray-300 dark:file:border-none file:rounded file:bg-gray-100 dark:file:bg-zinc-900 file:text-sm file:cursor-pointer "
               />
             )}
           />

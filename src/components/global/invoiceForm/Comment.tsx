@@ -12,7 +12,9 @@ type CommentProps = {
 const Comment = ({ control, commentName, errors }: CommentProps) => {
   return (
     <div className="mt-10 flex flex-col gap-2">
-      <Label className="text-neutral-600">Commentaires:</Label>
+      <Label className="text-neutral-600 dark:text-zinc-400">
+        Commentaires:
+      </Label>
       <Controller
         name={commentName}
         control={control}

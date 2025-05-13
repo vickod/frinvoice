@@ -50,7 +50,7 @@ export default function OptionalFields({
         />
       </div> */}
       <div className="flex gap-2 justify-between ">
-        <Label className="whitespace-nowrap text-neutral-600 dark:text-zinc-200">
+        <Label className="whitespace-nowrap text-neutral-600 dark:text-zinc-400">
           Statut de paiement:
         </Label>
         <Controller
@@ -75,7 +75,7 @@ export default function OptionalFields({
         />
       </div>
       <div className="flex gap-2 justify-between ">
-        <Label className="whitespace-nowrap text-neutral-600 dark:text-zinc-200">
+        <Label className="whitespace-nowrap text-neutral-600 dark:text-zinc-400">
           Mode de paiement:
         </Label>
         <Controller
@@ -102,7 +102,7 @@ export default function OptionalFields({
       <div className="flex items-center space-x-2 justify-between">
         <Label
           htmlFor="tva-mode"
-          className="text-neutral-600 dark:text-zinc-200"
+          className="text-neutral-600 dark:text-zinc-400"
         >
           Inclure le montant de la TVA:
         </Label>

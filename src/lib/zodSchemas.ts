@@ -6,20 +6,42 @@ const productSchema = z.object({
     .trim()
     .min(1, "Déscription invalide")
     .max(100, "La description ne peut pas dépasser 100 caractères"),
+
   price: z
-    .number({
-      invalid_type_error: "Le prix doit être un nombre",
+    .string({
       required_error: "Le prix est requis",
     })
-    .min(0.01, { message: "Prix invalide" })
-    .max(1_000_000, { message: "Le prix ne peut pas dépasser 1 000 000 €" }),
-  quantity: z
-    .number({
-      required_error: "La quantité est requise",
-      invalid_type_error: "Quantité invalide",
+    .trim()
+    .transform((val) => val.replace(",", "."))
+    .refine((val) => /^\d+(\.\d{1,2})?$/.test(val), {
+      message: "Prix invalide",
     })
-    .min(1, { message: "Quantité invalide" })
-    .max(100_000, { message: "La quantité ne peut pas dépasser 100 000" }),
+    .refine(
+      (val) => {
+        const num = parseFloat(val);
+        return !isNaN(num) && num >= 0.01 && num <= 1_000_000;
+      },
+      {
+        message: "min 0.01 et max 1 000 000",
+      }
+    ),
+  quantity: z
+    .string({
+      required_error: "La quantité est requise",
+    })
+    .trim()
+    .refine((val) => /^[1-9]\d*$/.test(val), {
+      message: "Quantité invalide",
+    })
+    .refine(
+      (val) => {
+        const num = parseInt(val, 10);
+        return num >= 1 && num <= 100_000;
+      },
+      {
+        message: "Min 1 et max 100 000",
+      }
+    ),
   tva: z
     .number()
     .min(0, "La TVA doit être positive")

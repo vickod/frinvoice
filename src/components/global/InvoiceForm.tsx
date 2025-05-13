@@ -46,8 +46,8 @@ export default function InvoiceForm() {
       products: [
         {
           description: "",
-          price: 0,
-          quantity: 0,
+          price: "",
+          quantity: "",
           tva: 0,
           total: 0,
         },
@@ -66,8 +66,8 @@ export default function InvoiceForm() {
   const handleAppend = useCallback(() => {
     append({
       description: "",
-      price: 0,
-      quantity: 0,
+      price: "",
+      quantity: "",
       tva: 0,
       total: 0,
     });

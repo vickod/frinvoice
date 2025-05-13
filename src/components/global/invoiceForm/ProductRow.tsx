@@ -45,8 +45,10 @@ const ProductRow = ({
     const raw = e.target.value;
     const cleaned = raw.replace(",", ".");
     if (/^-?\d*\.?\d*$/.test(cleaned) || cleaned === "") {
-      field.onChange(Number(cleaned));
+      // field.onChange(Number(cleaned));
+      field.onChange(cleaned);
     }
+    return cleaned;
   };
   const formatTvaInputValue = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -94,10 +96,11 @@ const ProductRow = ({
             defaultValue=""
             render={({ field }) => (
               <Input
+                type="text"
                 placeholder="0"
                 {...field}
                 onChange={(e) => {
-                  formatInputValue(e, field);
+                  Number(formatInputValue(e, field));
                 }}
                 className="dark:bg-neutral-900"
               />
@@ -136,7 +139,7 @@ const ProductRow = ({
 
         {isTvaIncluded && (
           <div className="flex flex-col gap-2 min-w-1/12 md:max-w-1/12">
-            <p className="text-sm font-semibold">
+            <p className="text-sm font-semibold text-neutral-600 dark:text-zinc-400">
               TVA:<span className="text-red-500 font-bold"> *</span>
             </p>
             <Controller

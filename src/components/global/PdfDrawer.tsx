@@ -16,7 +16,12 @@ const PdfDrawer = ({
   setIsDrawerOpen,
 }: PdfDrawerProps) => {
   const contentRef = useRef<HTMLDivElement>(null);
-  const reactToPrintFn = useReactToPrint({ contentRef });
+  const reactToPrintFn = useReactToPrint({
+    contentRef,
+    documentTitle: `Facture-${formData.clientName}-${new Date()
+      .toLocaleDateString("fr-FR")
+      .replaceAll("/", "-")}`,
+  });
 
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [animate, setAnimate] = useState(false);

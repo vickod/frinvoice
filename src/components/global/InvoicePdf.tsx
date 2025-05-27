@@ -20,7 +20,7 @@ export default function InvoicePdf({
 }: InvoicePdfProps) {
   return (
     <div
-      className="bg-white p-10  shadow-md  flex flex-col justify-between border mx-auto "
+      className="bg-white p-10 shadow-md  flex flex-col justify-between border mx-auto  "
       style={{ width: "794px", minHeight: "1123px" }}
       id="pdf-content"
       ref={contentRef}

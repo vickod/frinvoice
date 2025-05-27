@@ -63,31 +63,39 @@ const PdfDrawer = ({
   return (
     <div className=" w-screen h-screen absolute ">
       <div
-        className={`fixed bottom-0 left-0 w-screen h-screen bg-gray-100 dark:bg-zinc-800 z-50 p-4 border-t transform transition-transform duration-500 ease-in-out ${
-          animate ? "translate-y-0" : "translate-y-full "
-        }`}
+        className={`fixed bottom-0 left-0 w-screen h-[98%] bg-gray-100 dark:bg-zinc-800 z-50 pt-10 pb-8 px-4 border-t transform transition-transform 
+          flex flex-col justify-between
+          duration-500 ease-in-out ${
+            animate ? "translate-y-0" : "translate-y-full "
+          }`}
       >
-        <div className="h-[88%] w-full overflow-y-auto  ">
-          <InvoicePdf
-            formData={formData}
-            previewUrl={previewUrl}
-            contentRef={contentRef}
-          />
-        </div>
-        <div className="border-b dark:border-gray-500 w-full mx-auto mt-4"></div>
-        <div className="flex gap-4 justify-end mt-6 mx-auto max-w-[794px] ">
-          <div>
-            <Button
-              className="dark:text-white bg-green-500 hover:bg-green-600  dark:bg-emerald-700 dark:hover:bg-emerald-800"
-              onClick={() => reactToPrintFn()}
-            >
-              Imprimer / PDF
-            </Button>
+        <div className="relative w-full h-full overflow-auto    ">
+          <div className="max-sm:h-full w-full justify-center items-center flex ">
+            <div className="  scale-[0.4] sm:scale-[0.76] md:scale-[0.90] lg:scale-[0.98] min-w-[794px] min-h-[1123px]  ">
+              <InvoicePdf
+                formData={formData}
+                previewUrl={previewUrl}
+                contentRef={contentRef}
+              />
+            </div>
           </div>
-          <div>
-            <Button variant="outline" onClick={handleClose}>
-              Fermer
-            </Button>
+        </div>
+        <div className="">
+          <div className="border-b dark:border-gray-500 w-full mx-auto mt-4"></div>
+          <div className="flex gap-4 justify-end mt-6 mx-auto max-w-[794px] ">
+            <div>
+              <Button
+                className="dark:text-white bg-green-500 hover:bg-green-600  dark:bg-emerald-700 dark:hover:bg-emerald-800"
+                onClick={() => reactToPrintFn()}
+              >
+                Imprimer / PDF
+              </Button>
+            </div>
+            <div>
+              <Button variant="outline" onClick={handleClose}>
+                Fermer
+              </Button>
+            </div>
           </div>
         </div>
       </div>

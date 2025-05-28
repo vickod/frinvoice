@@ -13,7 +13,7 @@ import { ModeToggle } from "../ModeToggle";
 
 export default function Navbar() {
   return (
-    <div className="w-full h-24 border flex items-center fixed bg-gray-100 opacity-95 z-50 dark:bg-zinc-900">
+    <div className="w-full h-24 border flex items-center fixed bg-gray-50 opacity-95 z-50 dark:bg-zinc-900">
       <div className="w-11/12 mx-auto flex justify-between items-center">
         <div className="flex items-center gap-1">
           <Link href="/">

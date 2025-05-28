@@ -138,7 +138,7 @@ html {
     text-shadow: 0 0 8px #00ffff, 0 0 16px #00ffff, 0 0 24px #00ffff;
   }
   .text-shadow {
-    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5); /* Ombre subtile */
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5); 
   }
 }
 

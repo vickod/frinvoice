@@ -10,7 +10,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Frinvoice v1.0",
+  title: "Frinvoice",
   description: "Application for creating invoices for printing or pdf export",
   icons: {
     icon: "/favicon.ico",

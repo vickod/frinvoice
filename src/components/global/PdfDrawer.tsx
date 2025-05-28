@@ -71,7 +71,7 @@ const PdfDrawer = ({
       >
         <div className="relative w-full h-full overflow-auto    ">
           <div className="max-sm:h-full w-full justify-center items-center flex ">
-            <div className="  scale-[0.4] sm:scale-[0.76] md:scale-[0.90] lg:scale-[0.98] min-w-[794px] min-h-[1123px]  ">
+            <div className="  scale-[0.4] sm:scale-[0.76] md:scale-[0.90] lg:scale-[0.98] min-w-[794px] min-h-[1123px] ">
               <InvoicePdf
                 formData={formData}
                 previewUrl={previewUrl}

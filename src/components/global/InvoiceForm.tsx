@@ -9,7 +9,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { useCallback, useState } from "react";
-import { Button } from "../ui/button";
 import { FormFieldsType, schema } from "@/lib/zodSchemas";
 import FileInput from "./invoiceForm/FileInput";
 import OptionalFields from "./invoiceForm/OptionalFields";
@@ -20,6 +19,7 @@ import ProductRow from "./invoiceForm/ProductRow";
 import { CircleMinus, CirclePlus } from "lucide-react";
 import Comment from "./invoiceForm/Comment";
 import PdfDrawer from "./PdfDrawer";
+import { ThreeCircles } from "react-loader-spinner";
 
 export default function InvoiceForm() {
   const [formData, setFormData] = useState<FormFieldsType | null>(null);
@@ -239,13 +239,34 @@ export default function InvoiceForm() {
               />
 
               <div className="flex mt-8 justify-end ">
-                <Button
+                <button
                   type="submit"
                   disabled={hasErrors || isSubmitting}
-                  className="bg-green-500 hover:bg-green-600 dark:bg-emerald-700 dark:hover:bg-emerald-800 text-white text-lg  py-6 px-6 rounded"
+                  className={`bg-green-500 hover:bg-green-600 dark:bg-emerald-700 dark:hover:bg-emerald-800 text-white text-lg  py-2  rounded ${
+                    isSubmitting
+                      ? "pr-2 pl-4 flex justify-center items-center "
+                      : "px-4"
+                  }`}
                 >
-                  {isSubmitting ? "Chargement..." : "Prévisualiser"}
-                </Button>
+                  {isSubmitting ? (
+                    <>
+                      <span>Chargement</span>
+                      <span className="ml-2">
+                        <ThreeCircles
+                          visible={true}
+                          height="30"
+                          width="30"
+                          color="#4fa94d"
+                          ariaLabel="three-circles-loading"
+                          wrapperStyle={{}}
+                          wrapperClass=""
+                        />
+                      </span>
+                    </>
+                  ) : (
+                    "Prévisualiser"
+                  )}
+                </button>
               </div>
             </form>
           </CardContent>
